@@ -41,5 +41,5 @@ jobs:
         run: poetry install
 
       - name: Set SPEC_VERSION env var
-        run: echo "USE THIS TO SET VERSION NUMBER <TODO>""
+        run: echo "USE THIS TO SET VERSION NUMBER <TODO>"
 
