@@ -1,0 +1,114 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambda-python3.9
+
+  Sample SAM Template for lambda-python3.9
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+
+Parameters:
+  EndpointUrl:
+    Type: String
+    Description: EndpointUrl
+    Default: none
+
+# Example of Mappings
+# Mappings:
+#   EnvVariables:
+#     stage:
+#         var1: user1
+#         API_BASE_URL: https://baseurl1.com
+#     prod:
+#         var1: user2
+#         API_BASE_URL: https://baseurl2.com
+
+# SAM Connectors: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/reference-sam-connector.html
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-connector.html
+# More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+# More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+
+Resources:
+  MainFunction:
+    Type: AWS::Serverless::Function 
+    
+    # Embedded connectors
+    Connectors: 
+      InvokeAdd:
+        Properties:
+          Destination:
+            Id: AddFunction
+          Permissions:
+            - Write
+      InvokeMultiply:
+        Properties:
+          Destination:
+            Id: MultiplyFunction
+          Permissions:
+            - Write
+      InvokePower:
+        Properties:
+          Destination:
+            Id: PowerFunction
+          Permissions:
+            - Write
+    Properties:
+      CodeUri: lambdas/main/
+      Handler: main_lambda.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          EndpointUrl: !Ref EndpointUrl
+      Events:
+        HelloWorld:
+          Type: Api 
+          Properties:
+            Path: /calculate
+            Method: get
+        
+  AddFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/add/
+      Handler: add_lambda.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+
+  MultiplyFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/multiply/
+      Handler: multiply_lambda.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+
+  PowerFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/power/
+      Handler: power_lambda.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for the Main function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  HelloWorldFunction:
+    Description: "Main Lambda Function ARN"
+    Value: !GetAtt MainFunction.Arn
+  HelloWorldFunctionIamRole:
+    Description: "Implicit IAM Role created for the Main function"
+    Value: !GetAtt MainFunctionRole.Arn
