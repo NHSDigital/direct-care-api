@@ -35,7 +35,7 @@ Parameters:
 Resources:
   MainFunction:
     Type: AWS::Serverless::Function 
-    
+
     # Embedded connectors
     Connectors: 
       InvokeAdd:
@@ -56,17 +56,20 @@ Resources:
             Id: PowerFunction
           Permissions:
             - Write
+
     Properties:
       CodeUri: lambdas/main/
       Handler: main_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
+      Layers:
+        - !Ref SharedLayer
       Environment:
         Variables:
           EndpointUrl: !Ref EndpointUrl
       Events:
-        HelloWorld:
+        Calculate:
           Type: Api 
           Properties:
             Path: /calculate
@@ -80,6 +83,8 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
+      Layers:
+        - !Ref SharedLayer
 
   MultiplyFunction:
     Type: AWS::Serverless::Function 
@@ -89,6 +94,8 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
+      Layers:
+        - !Ref SharedLayer
 
   PowerFunction:
     Type: AWS::Serverless::Function 
@@ -98,18 +105,28 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
+      Layers:
+        - !Ref SharedLayer
 
+  SharedLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: lambdas/shared/
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9              # Required to have AWS SAM build this layer
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
+  DirectCareApi:
     Description: "API Gateway endpoint URL for Prod stage for the Main function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/calculate/"
+  DirectCareFunction:
     Description: "Main Lambda Function ARN"
     Value: !GetAtt MainFunction.Arn
-  HelloWorldFunctionIamRole:
+  DirectCareFunctionIamRole:
     Description: "Implicit IAM Role created for the Main function"
     Value: !GetAtt MainFunctionRole.Arn

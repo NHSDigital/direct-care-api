@@ -10,15 +10,15 @@ install:
 build:
 	sam build
 
-start-api: remove-docker-config build
+start-api:
 	local_endpoint_ip=$$(make -s local_endpoint_ip) && \
 	echo "$$local_endpoint_ip" && \
-	sam local start-api --parameter-overrides "ParameterKey=EndpointUrl,ParameterValue=http://$$local_endpoint_ip:3001"
+	sam local start-api --parameter-overrides "ParameterKey=EndpointUrl,ParameterValue=http://$$local_endpoint_ip:3001" > logs/api.log 2>&1 &
 
-curl: build
+curl:
 	curl -s 'http://localhost:3000/calculate?a=5&b=7'
 
-invoke: build
+invoke:
 	local_endpoint_ip=$$(make -s local_endpoint_ip) && \
 	echo "$$local_endpoint_ip" && \
 	echo '{"queryStringParameters": {"a":3, "b":4}}' | sam local invoke --parameter-overrides "ParameterKey=EndpointUrl,ParameterValue=http://$$local_endpoint_ip:3001" --event - MainFunction 
@@ -30,11 +30,21 @@ invoke-workers:
 	echo '{"a":3, "b":4}' | sam local invoke --event - MultiplyFunction && \
 	echo '{"a":3, "b":4}' | sam local invoke --event - PowerFunction
 
-start-lambda: remove-docker-config build
+start-lambda:
 	# https://github.com/aws/aws-sam-cli/issues/510#issuecomment-860236830
 	# https://whatibroke.com/2019/01/15/overriding-global-variables-aws-sam-local/
 	# https://github.com/aws/aws-sam-cli/issues/2436
-	sam local start-lambda --host 0.0.0.0 
+	sam local start-lambda --host 0.0.0.0  > logs/lambda.log 2>&1 &
+
+stop-api:
+	kill $$(ps -wwo pid,args | grep "[s]am local start-api" | awk '{print $$1}')
+
+stop-lambda:
+	kill $$(ps -wwo pid,args | grep "[s]am local start-lambda" | awk '{print $$1}')
+
+up: build start-api start-lambda
+
+down: stop-api stop-lambda
 
 local_endpoint_ip:
 	@/sbin/ifconfig eth0 | grep 'inet ' | awk '{$$1=$$1};1' | cut -d' ' -f2
