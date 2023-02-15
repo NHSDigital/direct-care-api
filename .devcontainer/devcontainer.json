@@ -42,7 +42,8 @@
 
 			}
 		}
-	}
+	},
+	"postAttachCommand": "rm ~/.docker/config.json"
 
 	
 
