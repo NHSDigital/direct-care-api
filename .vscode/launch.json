@@ -3,51 +3,94 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "sam-demo:PowerFunction",
+            "name": "direct-care-api:AddFunction",
             "invokeTarget": {
                 "target": "template",
                 "templatePath": "${workspaceFolder}/template.yaml",
-                "logicalId": "PowerFunction"
+                "logicalId": "AddFunction"
             },
             "lambda": {
-                "payload": {},
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
                 "environmentVariables": {}
             }
         },
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "lambda-python3.9:HelloWorldFunction (python3.9)",
+            "name": "direct-care-api:PowerFunction",
             "invokeTarget": {
                 "target": "template",
-                "templatePath": "${workspaceFolder}/lambda-python3.9/template.yaml",
-                "logicalId": "HelloWorldFunction"
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "PowerFunction"
             },
             "lambda": {
-                "payload": {},
-                "environmentVariables": {},
-                "runtime": "python3.9"
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
+                "environmentVariables": {}
             }
         },
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "API lambda-python3.9:HelloWorldFunction (python3.9)",
+            "name": "direct-care-api:MultiplyFunction",
             "invokeTarget": {
-                "target": "api",
-                "templatePath": "${workspaceFolder}/lambda-python3.9/template.yaml",
-                "logicalId": "HelloWorldFunction"
-            },
-            "api": {
-                "path": "/hello",
-                "httpMethod": "get",
-                "payload": {
-                    "json": {}
-                }
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "MultiplyFunction"
             },
             "lambda": {
-                "runtime": "python3.9"
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
+                "environmentVariables": {}
             }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "direct-care-api:MainFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "MainFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "name": "Attach to SAM CLI",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 9001
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/lambdas/main",
+                    "remoteRoot": "/var/task"
+                }
+            ],
+            "justMyCode": true
         }
     ]
 }
