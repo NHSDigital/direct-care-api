@@ -1,0 +1,80 @@
+[tool.poetry]
+name = "sam-demo"
+version = "0.1.0"
+description = ""
+authors = ["me"]
+license = "???"
+
+
+[build-system]
+requires = ["poetry>=1.1"]
+build-backend = "poetry.masonry.api"
+
+
+[tool.poetry.dependencies]
+python = "^3.9"
+boto3 = "^1.13.19"
+boto3-stubs = {extras = ["s3", "ssm", "secretsmanager", "dynamodb", "stepfunctions", "sqs", "lambda", "logs", "sns", "events", "kms", "firehose", "athena"], version = "^1"}
+pytest = "*"
+requests = "*"
+types-requests = "*"
+mypy = "*"
+black = "*"
+pylint = "*"
+cfn-lint = "*"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "lambdas/main",
+  "lambdas/add",
+  "lambdas/multiply",
+  "lambdas/power",
+  "lambdas/shared",
+]
+
+[tool.pylint.main]
+ignore-paths = [
+    '.*/?\.venv/.*',
+    '.*/?\.git/.*',
+    '.aws-sam/.*',
+    '.pytest_cache/.*',
+]
+py-version = "3.9"
+recursive = true
+
+[tool.pylint.basic]
+good-names = [
+    "_",
+]
+
+[tool.pylint.messages_control]
+max-line-length = 120
+max-module-lines = 1000
+max-public-methods = 25
+max-args = 8
+min-similarity-lines = 30
+max-returns = 10
+max-branches = 15
+max-attributes = 15
+disable = [
+    "fixme",
+    "missing-class-docstring",
+    "missing-module-docstring",
+    "missing-function-docstring",
+    "too-few-public-methods",
+    "duplicate-code"
+]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+show_error_codes = true
+exclude = [
+    "lambdas/(main|add|multiply|power)/shared/.*",
+]
+
+
+[tool.isort]
+profile = "black"
+known_third_party = []

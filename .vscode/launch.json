@@ -1,0 +1,96 @@
+{
+    "configurations": [
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "direct-care-api:AddFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "AddFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "direct-care-api:PowerFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "PowerFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "direct-care-api:MultiplyFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "MultiplyFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "direct-care-api:MainFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "MainFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "a": 3,
+                        "b": 4
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "name": "Attach to SAM CLI",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 9001
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/lambdas/main",
+                    "remoteRoot": "/var/task"
+                }
+            ],
+            "justMyCode": true
+        }
+    ]
+}
