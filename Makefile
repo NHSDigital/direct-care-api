@@ -60,7 +60,8 @@ lint:
 	poetry run cfn-lint template.yaml
 
 test:
-	poetry run pytest lambdas
+	mkdir -p reports
+	poetry run pytest lambdas --junitxml=reports/junit.xml
 
 clean:
 	rm -rf .aws-sam || true
