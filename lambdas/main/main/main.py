@@ -42,6 +42,18 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     return "power", response_payload["body"]["result"]
 
 
+async def pds(lambda_client, nhs_number: int) -> Tuple[str, int]:
+    """Async function to invoke the Personal Demogrpahic Service lambda"""
+    lambda_payload = {"a": param_a, "b": param_b}
+    response = lambda_client.invoke(
+        FunctionName="PdsFunction",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(lambda_payload).encode("utf-8"),
+    )
+    response_payload = json.loads(response["Payload"].read().decode("utf-8"))
+    return "pds", response_payload["body"]["result"]
+
+
 async def process(event: Dict) -> Dict:
     """Orchestration function"""
 
@@ -54,6 +66,7 @@ async def process(event: Dict) -> Dict:
 
     param_a = int(event["queryStringParameters"]["a"])
     param_b = int(event["queryStringParameters"]["b"])
+    nhs_number = int(event["queryStringParameters"]["nhs_number"])
 
     results = await asyncio.gather(
         add(lambda_client, param_a, param_b),
