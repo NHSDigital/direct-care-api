@@ -42,6 +42,17 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     return "power", response_payload["body"]["result"]
 
 
+async def sds(lambda_client, ods: str) -> Tuple[str, int]:
+    """Async function to invoke the SDS lambda"""
+    lambda_payload = {"ods": ods, }
+    response = lambda_client.invoke(
+        FunctionName="SdsFunction",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(lambda_payload).encode("utf-8"),
+    )
+    response_payload = json.loads(response["Payload"].read().decode("utf-8"))
+    return "sds", response_payload["body"]["result"]
+
 async def process(event: Dict) -> Dict:
     """Orchestration function"""
 
@@ -54,11 +65,13 @@ async def process(event: Dict) -> Dict:
 
     param_a = int(event["queryStringParameters"]["a"])
     param_b = int(event["queryStringParameters"]["b"])
+    ods = str(event["queryStringParameters"]["ods"])
 
     results = await asyncio.gather(
         add(lambda_client, param_a, param_b),
         multiply(lambda_client, param_a, param_b),
         power(lambda_client, param_a, param_b),
+        sds(lambda_client, ods)
     )
     print({result[0]: result[1] for result in results})
     return {result[0]: result[1] for result in results}
