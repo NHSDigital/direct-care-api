@@ -1,5 +1,8 @@
 {
     "editor.formatOnSave": true,
     "python.formatting.provider": "black",
-    "python.formatting.blackPath": "/workspaces/direct-care-api/.venv/bin/black"
+    "python.formatting.blackPath": "/workspaces/direct-care-api/.venv/bin/black",
+    "python.linting.mypyEnabled": true,
+    "mypy.dmypyExecutable": "/workspaces/direct-care-api/.venv/bin/dmypy",
+    "python.linting.mypyPath": "/workspaces/direct-care-api/.venv/bin/mypy"
 }
