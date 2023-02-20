@@ -44,7 +44,7 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
 
 async def pds(lambda_client, nhs_number: int) -> Tuple[str, int]:
     """Async function to invoke the Personal Demogrpahic Service lambda"""
-    lambda_payload = {"a": param_a, "b": param_b}
+    lambda_payload = {"nhs_number": nhs_number}
     response = lambda_client.invoke(
         FunctionName="PdsFunction",
         InvocationType="RequestResponse",
@@ -72,6 +72,7 @@ async def process(event: Dict) -> Dict:
         add(lambda_client, param_a, param_b),
         multiply(lambda_client, param_a, param_b),
         power(lambda_client, param_a, param_b),
+        pds(lambda_client, nhs_number),
     )
     print({result[0]: result[1] for result in results})
     return {result[0]: result[1] for result in results}

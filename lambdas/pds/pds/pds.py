@@ -15,8 +15,7 @@ def check_nhs_number(nhs_number):
 def get_pds_patient_data(nhs_number):
     """Retirieve JSON Body from PDS API"""
     headers = {"X-Request-ID": str(uuid.uuid4())}
-
-    return requests.get(f"{SANDBOX_URL}/Patient/{nhs_number}", headers=headers)
+    return requests.get(url=f"{SANDBOX_URL}/Patient/{nhs_number}", headers=headers)
 
 
 def get_ods_code(body):
@@ -30,12 +29,17 @@ def handler(event, _context) -> Dict:
 
     is_valid_nhs_number = is_valid(str(nhs_number))
     if is_valid_nhs_number:
-        respone = get_pds_patient_data(nhs_number)
-
-        status_code = respone.status_code
-
-        body = json.loads(respone.text)
-        ods_code = get_ods_code(body)
+        try:
+            respone = get_pds_patient_data(nhs_number)
+            status_code = respone.status_code
+            body = json.loads(respone.text)
+            ods_code = get_ods_code(body)
+        except requests.exceptions.HTTPError as err:
+            status_code = respone.status_code
+            raise err
+        except requests.RequestException as err:
+            status_code = respone.status_code
+            raise err
 
     else:
         status_code = 404
