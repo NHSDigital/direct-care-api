@@ -3,7 +3,7 @@ import logging
 import sys
 from typing import List
 
-from .formatters import StructuredFormatter, JSONFormatter
+from .formatters import JSONFormatter, StructuredFormatter
 
 # pylint: disable=C0301
 _filter_are_errors = staticmethod(lambda r: r.levelno >= logging.ERROR)  # type: ignore [no-any-return]

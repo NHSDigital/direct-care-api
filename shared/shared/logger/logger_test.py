@@ -1,20 +1,20 @@
 # pylint: disable=C0116, C0115, C0114
 import logging
 from typing import Generator, Iterable, List, Tuple
+
 import pytest
 from pydantic import BaseModel
 
-
 from . import (
+    Constants,
+    LogLevel,
     action_logging,
     add_fields,
-    Constants,
     log_action,
-    LogLevel,
     logging_context,
 )
-from .logger import app_logger
 from .handlers import capturing_log_handlers
+from .logger import app_logger
 
 
 @pytest.fixture(scope="function", name="log_capture")

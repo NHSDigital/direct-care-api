@@ -4,7 +4,7 @@ import logging
 from contextlib import contextmanager
 from functools import wraps
 from inspect import BoundArguments
-from typing import Callable, Optional, Union, List, Tuple, Dict, Any
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from .caller_info import find_caller_info
 from .constants import Constants

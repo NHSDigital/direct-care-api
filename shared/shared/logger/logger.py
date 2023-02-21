@@ -2,7 +2,7 @@
 import logging
 import os
 import sys
-from typing import Callable, Union, Tuple, List, Type
+from typing import Callable, List, Tuple, Type, Union
 
 from .caller_info import find_caller_info
 from .constants import Constants

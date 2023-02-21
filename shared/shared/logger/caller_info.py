@@ -3,7 +3,7 @@ import io
 import logging
 import os
 import traceback
-from typing import Tuple, Union, Callable
+from typing import Callable, Tuple, Union
 
 
 def find_caller_info(

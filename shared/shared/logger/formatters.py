@@ -3,7 +3,7 @@ import json
 import logging
 import traceback
 from collections import OrderedDict
-from datetime import datetime, date
+from datetime import date, datetime
 
 from ..version_data import FULL_VERSION_STRING
 

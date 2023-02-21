@@ -7,10 +7,8 @@ from typing import Any, AnyStr, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 from weakref import WeakKeyDictionary
 
-from .logger import find_caller_info
 from .constants import Constants
-from .logger import app_logger
-
+from .logger import app_logger, find_caller_info
 
 CallerInfo = Tuple[str, int, str, Optional[str]]
 

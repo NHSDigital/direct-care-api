@@ -1,8 +1,10 @@
 # pylint: disable=C0114
 import inspect
-from functools import wraps
 import json
+from functools import wraps
+
 from requests import HTTPError, Response
+
 from . import add_fields
 
 
