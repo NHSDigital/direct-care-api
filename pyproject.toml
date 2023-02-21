@@ -4,8 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["me"]
 license = "???"
-
-
 [build-system]
 requires = ["poetry>=1.1"]
 build-backend = "poetry.masonry.api"
@@ -22,6 +20,7 @@ mypy = "*"
 black = "*"
 pylint = "*"
 cfn-lint = "*"
+pydantic = "^1.10.5"
 
 [tool.pytest.ini_options]
 pythonpath = [
