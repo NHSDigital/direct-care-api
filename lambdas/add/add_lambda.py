@@ -1,5 +1,5 @@
 from typing import Dict
-from add.add import handler
+from .add.add import handler
 
 
 def lambda_handler(event, context) -> Dict:
