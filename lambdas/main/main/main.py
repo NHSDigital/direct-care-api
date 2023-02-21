@@ -65,7 +65,7 @@ async def process(event: Dict) -> Dict:
 
     param_a = int(event["queryStringParameters"]["a"])
     param_b = int(event["queryStringParameters"]["b"])
-    ods = str(event["queryStringParameters"]["ods"])
+    ods = str(event["queryStringParameters"]["ods"]) # the ods will change once we have a value from pds
 
     results = await asyncio.gather(
         add(lambda_client, param_a, param_b),

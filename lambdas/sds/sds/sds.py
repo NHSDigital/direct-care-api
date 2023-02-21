@@ -8,15 +8,13 @@ def my_requests():
                 "Accept": "application/fhir+json "}
     method = "get"
     data = {}
-    response = requests.request(method, BASE_URL, json= data, headers=headers)
+    response = requests.request(method, BASE_URL, json=data, headers=headers)
     return response
 
 def handler(event, _context) -> Dict:
     """
     Invokes a lambda
     """
-    
-
     return {
         "statusCode": 200,
         "body": {
