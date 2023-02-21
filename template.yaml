@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   lambda-python3.9
@@ -34,10 +34,10 @@ Parameters:
 
 Resources:
   MainFunction:
-    Type: AWS::Serverless::Function 
+    Type: AWS::Serverless::Function
 
     # Embedded connectors
-    Connectors: 
+    Connectors:
       InvokeAdd:
         Properties:
           Destination:
@@ -59,7 +59,7 @@ Resources:
 
     Properties:
       CodeUri: lambdas/main/
-      Handler: main_lambda.lambda_handler
+      Handler: app.main_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -70,16 +70,16 @@ Resources:
           EndpointUrl: !Ref EndpointUrl
       Events:
         Calculate:
-          Type: Api 
+          Type: Api
           Properties:
             Path: /calculate
             Method: get
-        
+
   AddFunction:
-    Type: AWS::Serverless::Function 
+    Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/add/
-      Handler: add_lambda.lambda_handler
+      CodeUri: lambdas/add
+      Handler: app.add_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -87,10 +87,10 @@ Resources:
         - !Ref SharedLayer
 
   MultiplyFunction:
-    Type: AWS::Serverless::Function 
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambdas/multiply/
-      Handler: multiply_lambda.lambda_handler
+      Handler: app.multiply_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -98,10 +98,10 @@ Resources:
         - !Ref SharedLayer
 
   PowerFunction:
-    Type: AWS::Serverless::Function 
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambdas/power/
-      Handler: power_lambda.lambda_handler
+      Handler: app.power_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -115,7 +115,7 @@ Resources:
       CompatibleRuntimes:
         - python3.9
     Metadata:
-      BuildMethod: python3.9              # Required to have AWS SAM build this layer
+      BuildMethod: python3.9 # Required to have AWS SAM build this layer
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
