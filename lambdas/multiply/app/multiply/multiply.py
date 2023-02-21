@@ -1,6 +1,11 @@
 from typing import Dict
 
-from shared.logger import log_action
+from shared.logger.lambda_context_logging_filter import LambdaContextLoggingFilter
+from shared.logger import log_action, app_logger
+
+context_logger = LambdaContextLoggingFilter()
+app_logger.setup("multiply_lambda")
+app_logger.logger().addFilter(context_logger)
 
 
 @log_action()
