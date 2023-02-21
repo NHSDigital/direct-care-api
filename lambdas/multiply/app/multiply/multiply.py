@@ -1,14 +1,13 @@
 from typing import Dict
 
-from shared.utils import log_message
+from shared.logger import log_action
 
 
+@log_action()
 def handler(event, _context) -> Dict:
     """Mulitple a by b"""
     param_a = event["a"]
     param_b = event["b"]
-
-    log_message("hello from multiply")
 
     return {
         "statusCode": 200,

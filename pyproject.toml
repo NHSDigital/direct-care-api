@@ -68,13 +68,14 @@ disable = [
 
 [tool.mypy]
 python_version = "3.9"
-warn_return_any = true
+warn_return_any = false
 warn_unused_configs = true
 show_error_codes = true
 exclude = [
-    "lambdas/(main|add|multiply|power)/shared/.*",
+    "lambdas/shared/.*",
 ]
-
+# ignore_missing_imports = true
+mypy_path = "lambdas"
 
 [tool.isort]
 profile = "black"

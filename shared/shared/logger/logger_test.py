@@ -5,7 +5,7 @@ import pytest
 from pydantic import BaseModel
 
 
-from shared.logger import (
+from . import (
     action_logging,
     add_fields,
     Constants,

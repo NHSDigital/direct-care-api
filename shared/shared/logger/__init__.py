@@ -6,10 +6,10 @@ from functools import wraps
 from inspect import BoundArguments
 from typing import Callable, Optional, Union, List, Tuple, Dict, Any
 
-from shared.logger.caller_info import find_caller_info
-from shared.logger.constants import Constants
-from shared.logger.context import logging_context
-from shared.logger.logger import app_logger as _app_logger
+from .caller_info import find_caller_info
+from .constants import Constants
+from .context import logging_context
+from .logger import app_logger as _app_logger
 
 DEFAULT_LOG_LEVEL = Constants.DEFAULT_LOG_LEVEL
 LOG_AT_LEVEL = Constants.LOG_AT_LEVEL
