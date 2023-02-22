@@ -50,10 +50,13 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     response_payload = json.loads(response["Payload"].read().decode("utf-8"))
     return "power", response_payload["body"]["result"]
 
+
 @log_action()
 async def sds(lambda_client, ods: str) -> Tuple[str, int]:
     """Async function to invoke the SDS lambda"""
-    lambda_payload = {"ods": ods, }
+    lambda_payload = {
+        "ods": ods,
+    }
     response = lambda_client.invoke(
         FunctionName="SdsFunction",
         InvocationType="RequestResponse",
@@ -61,6 +64,7 @@ async def sds(lambda_client, ods: str) -> Tuple[str, int]:
     )
     response_payload = json.loads(response["Payload"].read().decode("utf-8"))
     return "sds", response_payload["body"]["result"]
+
 
 @log_action()
 async def pds(lambda_client, nhs_number: int) -> Tuple[str, int]:
@@ -73,6 +77,19 @@ async def pds(lambda_client, nhs_number: int) -> Tuple[str, int]:
     )
     response_payload = json.loads(response["Payload"].read().decode("utf-8"))
     return "pds", response_payload["body"]["result"]
+
+
+@log_action()
+async def ssp(lambda_client, ssp_input: str) -> Tuple[str, int]:
+    """Async function to invoke the Personal Demogrpahic Service lambda"""
+    lambda_payload = {"ssp_input": ssp_input}
+    response = lambda_client.invoke(
+        FunctionName="PdsFunction",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(lambda_payload).encode("utf-8"),
+    )
+    response_payload = json.loads(response["Payload"].read().decode("utf-8"))
+    return "ssp", response_payload["body"]["result"]
 
 
 @log_action()
@@ -89,7 +106,10 @@ async def process(event: Dict) -> Dict:
     param_a = int(event["queryStringParameters"]["a"])
     param_b = int(event["queryStringParameters"]["b"])
     nhs_number = int(event["queryStringParameters"]["nhs_number"])
-    ods = str(event["queryStringParameters"]["ods"]) # the ods will change once we have a value from pds
+    ods = str(
+        event["queryStringParameters"]["ods"]
+    )  # the ods will change once we have a value from pds
+    ssp_input = str(event["queryStringParameters"]["ssp_input"])
 
     results = await asyncio.gather(
         add(lambda_client, param_a, param_b),
@@ -97,6 +117,7 @@ async def process(event: Dict) -> Dict:
         power(lambda_client, param_a, param_b),
         pds(lambda_client, nhs_number),
         sds(lambda_client, ods),
+        ssp(lambda_client, ssp_input),
     )
     print({result[0]: result[1] for result in results})
     return {result[0]: result[1] for result in results}
