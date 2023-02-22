@@ -1,3 +1,4 @@
+# pylint: disable=C0116
 """Nothing in here yet"""
 
 

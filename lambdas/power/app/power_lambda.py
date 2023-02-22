@@ -1,6 +1,6 @@
 from typing import Dict
 
-from main.main import handler
+from .power.power import handler
 
 
 def lambda_handler(event, context) -> Dict:

@@ -6,19 +6,16 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
-		"args": { 
-		}
+		"args": {}
 	},
-	"mounts": [
-		
-	],
+	"mounts": [],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:latest": {
 			"version": "latest",
 			"enableNonRootDocker": "true",
 			"moby": "true"
-		}		
+		}
 	},
 	"customizations": {
 		"vscode": {
@@ -26,7 +23,8 @@
 				"AmazonWebServices.aws-toolkit-vscode",
 				"redhat.vscode-yaml",
 				"ms-python.python",
-				"ms-vscode.makefile-tools"
+				"ms-vscode.makefile-tools",
+				"ms-python.pylint"
 			],
 			"settings": {
 				"python.defaultInterpreterPath": "/workspaces/vscode/.venv/bin/python",
@@ -34,31 +32,20 @@
 				"python.linting.mypyPath": "/workspaces/vscode/.venv/bin/mypy",
 				"python.linting.pylintEnabled": true,
 				"python.analysis.autoSearchPaths": true,
-				"python.analysis.extraPaths": [
-					
-				],
+				"python.analysis.extraPaths": [],
 				"python.testing.unittestEnabled": false,
-    			"python.testing.pytestEnabled": true
-
+				"python.testing.pytestEnabled": true
 			}
 		}
 	},
 	"postAttachCommand": "rm ~/.docker/config.json"
-
-	
-
-	
 	// "features": {},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": ""
-
 	// Configure tool-specific properties.
 	// "customizations": {},
-
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
