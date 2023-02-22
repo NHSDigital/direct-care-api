@@ -84,3 +84,13 @@ sync: guard-stack_name
 
 sync-watch: guard-stack_name
 	sam sync --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev --watch
+
+delete-sam-stack: guard-stack_name
+	sam delete --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev
+
+get-sam-endpoint: guard-stack_name
+	@sam list endpoints --region eu-west-2  --profile nhs-direct-care-dev --stack-name=anthonydev --output json \
+		| jq -r '.[] | select(.LogicalResourceId=="ServerlessRestApi") | .CloudEndpoint[] | select(. |endswith("Prod"))'
+
+curl-sam: guard-sam_endpoint
+	curl -s "$$sam_endpoint/calculate?a=5&b=7"
