@@ -1,0 +1,12 @@
+[MAIN]
+
+
+# Python code to execute, usually for sys.path manipulation such as
+# pygtk.require().
+init-hook='import sys; sys.path.append("lambdas")
+
+[MASTER]
+extension-pkg-whitelist=pydantic
+
+[MESSAGES CONTROL]
+disable=C0114, C0116

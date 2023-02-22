@@ -10,9 +10,29 @@
                 "logicalId": "SdsFunction"
             },
             "lambda": {
-                "payload": {"json": {
-                    "ods": "X2633",
-                }},
+                "payload": {
+                    "json": {
+                        "ods": "Y12345",
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "direct-care-api:PdsFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "PdsFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "nhs_number": 9000000009,
+                    }
+                },
                 "environmentVariables": {}
             }
         },

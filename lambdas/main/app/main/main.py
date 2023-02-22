@@ -4,8 +4,15 @@ import os
 from typing import Dict, Tuple
 
 import boto3
+from shared.logger import app_logger, log_action
+from shared.logger.lambda_context_logging_filter import LambdaContextLoggingFilter
+
+context_logger = LambdaContextLoggingFilter()
+app_logger.setup("main_lambda")
+app_logger.logger().addFilter(context_logger)
 
 
+@log_action()
 async def add(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Add lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
@@ -18,6 +25,7 @@ async def add(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     return "add", response_payload["body"]["result"]
 
 
+@log_action()
 async def multiply(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Multiply lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
@@ -30,6 +38,7 @@ async def multiply(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]
     return "multiply", response_payload["body"]["result"]
 
 
+@log_action()
 async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Power lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
@@ -41,7 +50,7 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     response_payload = json.loads(response["Payload"].read().decode("utf-8"))
     return "power", response_payload["body"]["result"]
 
-
+@log_action()
 async def sds(lambda_client, ods: str) -> Tuple[str, int]:
     """Async function to invoke the SDS lambda"""
     lambda_payload = {"ods": ods, }
@@ -53,6 +62,20 @@ async def sds(lambda_client, ods: str) -> Tuple[str, int]:
     response_payload = json.loads(response["Payload"].read().decode("utf-8"))
     return "sds", response_payload["body"]["result"]
 
+@log_action()
+async def pds(lambda_client, nhs_number: int) -> Tuple[str, int]:
+    """Async function to invoke the Personal Demogrpahic Service lambda"""
+    lambda_payload = {"nhs_number": nhs_number}
+    response = lambda_client.invoke(
+        FunctionName="PdsFunction",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(lambda_payload).encode("utf-8"),
+    )
+    response_payload = json.loads(response["Payload"].read().decode("utf-8"))
+    return "pds", response_payload["body"]["result"]
+
+
+@log_action()
 async def process(event: Dict) -> Dict:
     """Orchestration function"""
 
@@ -65,18 +88,21 @@ async def process(event: Dict) -> Dict:
 
     param_a = int(event["queryStringParameters"]["a"])
     param_b = int(event["queryStringParameters"]["b"])
+    nhs_number = int(event["queryStringParameters"]["nhs_number"])
     ods = str(event["queryStringParameters"]["ods"]) # the ods will change once we have a value from pds
 
     results = await asyncio.gather(
         add(lambda_client, param_a, param_b),
         multiply(lambda_client, param_a, param_b),
         power(lambda_client, param_a, param_b),
-        sds(lambda_client, ods)
+        pds(lambda_client, nhs_number),
+        sds(lambda_client, ods),
     )
     print({result[0]: result[1] for result in results})
     return {result[0]: result[1] for result in results}
 
 
+@log_action()
 def handler(event, _context) -> Dict:
     """Lambda entry point"""
     return {

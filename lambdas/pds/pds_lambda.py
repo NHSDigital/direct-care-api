@@ -1,6 +1,5 @@
 from typing import Dict
-
-from multiply.multiply import handler
+from pds.pds import handler
 
 
 def lambda_handler(event, context) -> Dict:
