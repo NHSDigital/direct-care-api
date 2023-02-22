@@ -3,6 +3,24 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
+            "name": "direct-care-api:SspFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "SspFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "ssp_input": "hello world"
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
             "name": "direct-care-api:SdsFunction",
             "invokeTarget": {
                 "target": "template",
@@ -12,7 +30,7 @@
             "lambda": {
                 "payload": {
                     "json": {
-                        "ods": "Y12345",
+                        "ods": "Y12345"
                     }
                 },
                 "environmentVariables": {}
@@ -30,7 +48,7 @@
             "lambda": {
                 "payload": {
                     "json": {
-                        "nhs_number": 9000000009,
+                        "nhs_number": 9000000009
                     }
                 },
                 "environmentVariables": {}

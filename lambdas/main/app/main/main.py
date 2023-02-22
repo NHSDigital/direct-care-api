@@ -81,10 +81,10 @@ async def pds(lambda_client, nhs_number: int) -> Tuple[str, int]:
 
 @log_action()
 async def ssp(lambda_client, ssp_input: str) -> Tuple[str, int]:
-    """Async function to invoke the Personal Demogrpahic Service lambda"""
+    """Async function to invoke the Spine Secure Proxy lambda"""
     lambda_payload = {"ssp_input": ssp_input}
     response = lambda_client.invoke(
-        FunctionName="PdsFunction",
+        FunctionName="SspFunction",
         InvocationType="RequestResponse",
         Payload=json.dumps(lambda_payload).encode("utf-8"),
     )

@@ -68,6 +68,12 @@ Resources:
             Id: SdsFunction
           Permissions:
             - Write
+      InvokeSsp:
+        Properties:
+          Destination:
+            Id: SspFunction
+          Permissions:
+            - Write
 
     Properties:
       CodeUri: lambdas/main/
@@ -132,10 +138,21 @@ Resources:
         - !Ref SharedLayer
 
   SdsFunction:
-    Type: AWS::Serverless::Function 
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambdas/sds/
       Handler: sds_lambda.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref SharedLayer
+
+  SspFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/ssp/
+      Handler: ssp_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
