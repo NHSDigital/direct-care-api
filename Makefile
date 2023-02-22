@@ -81,3 +81,6 @@ clean:
 
 sync: guard-stack_name
 	sam sync --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev
+
+sync-watch: guard-stack_name
+	sam sync --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev --watch
