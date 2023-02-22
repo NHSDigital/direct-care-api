@@ -8,7 +8,9 @@
 		"context": "..",
 		"args": {}
 	},
-	"mounts": [],
+	"mounts": [
+		"source=${env:HOME}${env:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind"
+	],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:latest": {
@@ -38,7 +40,10 @@
 			}
 		}
 	},
-	"postAttachCommand": "rm ~/.docker/config.json"
+	"postAttachCommand": [
+		"rm ~/.docker/config.json",
+		"echo 'source /workspaces/direct-care-api/scripts/aws_mfa_update.sh' >> ~/.bashrc"
+	]
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

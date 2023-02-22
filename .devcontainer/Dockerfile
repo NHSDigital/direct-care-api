@@ -9,7 +9,7 @@ RUN apt-get update \
     openjdk-8-jdk jq apt-transport-https ca-certificates gnupg-agent \
     software-properties-common bash-completion python3-pip make libbz2-dev \
     libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev \
-    xz-utils tk-dev liblzma-dev netcat 
+    xz-utils tk-dev liblzma-dev netcat awscli
 
 RUN wget -O /tmp/aws-sam-cli.zip https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip && \
     unzip /tmp/aws-sam-cli.zip -d /tmp/aws-sam-cli && \

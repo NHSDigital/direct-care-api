@@ -68,6 +68,9 @@ Resources:
       Environment:
         Variables:
           EndpointUrl: !Ref EndpointUrl
+          AddFunction_ARN: !Sub ${AddFunction.Arn}
+          MultiplyFunction_ARN: !Sub ${MultiplyFunction.Arn}
+          PowerFunction_ARN: !Sub ${PowerFunction.Arn}
       Events:
         Calculate:
           Type: Api

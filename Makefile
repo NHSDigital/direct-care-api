@@ -1,6 +1,12 @@
 SHELL:=/bin/bash -O globstar
 .SHELLFLAGS = -ecu
 
+guard-%:
+	@ if [ "${${*}}" = "" ]; then \
+		echo "Environment variable $* not set"; \
+		exit 1; \
+	fi
+
 remove-docker-config:
 	rm -f /home/vscode/.docker/config.json
 
@@ -72,3 +78,6 @@ clean:
 	find . -type d -name '.mypy_cache' | xargs rm -rf || true
 	find . -type d -name '.pytest_cache' | xargs rm -rf || true
 	find . -type d -name '__pycache__' | xargs rm -rf || true
+
+sync: guard-stack_name
+	sam sync --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev
