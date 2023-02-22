@@ -4,8 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["me"]
 license = "???"
-
-
 [build-system]
 requires = ["poetry>=1.1"]
 build-backend = "poetry.masonry.api"
@@ -21,8 +19,10 @@ types-requests = "*"
 mypy = "*"
 black = "*"
 pylint = "*"
-cfn-lint = "*"
-nhs-number = "^1.2.1"
+cfn-lint = "0.72.6"
+pydantic = "^1.10.5"
+aws-sam-translator = "1.59.0"
+jsonschema = "4.17.3"
 
 [tool.pytest.ini_options]
 pythonpath = [
@@ -68,13 +68,14 @@ disable = [
 
 [tool.mypy]
 python_version = "3.9"
-warn_return_any = true
+warn_return_any = false
 warn_unused_configs = true
 show_error_codes = true
 exclude = [
-    "lambdas/(main|add|multiply|power)/shared/.*",
+    "lambdas/shared/.*",
 ]
-
+# ignore_missing_imports = true
+mypy_path = "lambdas"
 
 [tool.isort]
 profile = "black"

@@ -1,4 +1,4 @@
-from .add import handler
+from .add.add import handler
 
 
 def test_lambda_handler():

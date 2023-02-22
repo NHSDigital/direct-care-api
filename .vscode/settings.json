@@ -3,6 +3,15 @@
     "python.formatting.provider": "black",
     "python.formatting.blackPath": "/workspaces/direct-care-api/.venv/bin/black",
     "python.linting.mypyEnabled": true,
-    "mypy.dmypyExecutable": "/workspaces/direct-care-api/.venv/bin/dmypy",
-    "python.linting.mypyPath": "/workspaces/direct-care-api/.venv/bin/mypy"
+    "python.linting.mypyPath": "/workspaces/direct-care-api/.venv/bin/mypy",
+    "pylint.importStrategy": "fromEnvironment",
+    "pylint.path": [
+        "/workspaces/direct-care-api/.venv/bin/pylint"
+    ],
+    "python.linting.pylintPath": "/workspaces/direct-care-api/.venv/bin/pylint",
+    "pylint.severity": {
+        "convention": "Warning",
+        "refactor": "Warning"
+    },
+    "python.linting.pylintCategorySeverity.convention": "Warning"
 }

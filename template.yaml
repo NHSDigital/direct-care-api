@@ -65,7 +65,7 @@ Resources:
 
     Properties:
       CodeUri: lambdas/main/
-      Handler: main_lambda.lambda_handler
+      Handler: app.main_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -84,8 +84,8 @@ Resources:
   AddFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/add/
-      Handler: add_lambda.lambda_handler
+      CodeUri: lambdas/add
+      Handler: app.add_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -96,7 +96,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambdas/multiply/
-      Handler: multiply_lambda.lambda_handler
+      Handler: app.multiply_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -107,7 +107,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambdas/power/
-      Handler: power_lambda.lambda_handler
+      Handler: app.power_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
@@ -128,7 +128,7 @@ Resources:
   SharedLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      ContentUri: lambdas/shared/
+      ContentUri: shared/
       CompatibleRuntimes:
         - python3.9
     Metadata:
