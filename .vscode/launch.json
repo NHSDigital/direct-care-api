@@ -3,6 +3,24 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
+            "name": "direct-care-api:SdsFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "SdsFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "json": {
+                        "ods": "Y12345",
+                    }
+                },
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
             "name": "direct-care-api:PdsFunction",
             "invokeTarget": {
                 "target": "template",
