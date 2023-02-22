@@ -7,11 +7,6 @@ from nhs_number import is_valid
 SANDBOX_URL = "https://sandbox.api.service.nhs.uk/personal-demographics/FHIR/R4"
 
 
-def check_nhs_number(nhs_number):
-    """Check NHS Number"""
-    return is_valid(str(nhs_number))
-
-
 def get_pds_patient_data(nhs_number):
     """Retirieve JSON Body from PDS API"""
     headers = {"X-Request-ID": str(uuid.uuid4())}
