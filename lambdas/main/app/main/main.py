@@ -4,8 +4,15 @@ import os
 from typing import Dict, Tuple
 
 import boto3
+from shared.logger import app_logger, log_action
+from shared.logger.lambda_context_logging_filter import LambdaContextLoggingFilter
+
+context_logger = LambdaContextLoggingFilter()
+app_logger.setup("main_lambda")
+app_logger.logger().addFilter(context_logger)
 
 
+@log_action()
 async def add(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Add lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
@@ -18,6 +25,7 @@ async def add(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     return "add", response_payload["body"]["result"]
 
 
+@log_action()
 async def multiply(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Multiply lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
@@ -30,6 +38,7 @@ async def multiply(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]
     return "multiply", response_payload["body"]["result"]
 
 
+@log_action()
 async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Power lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
@@ -42,6 +51,7 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     return "power", response_payload["body"]["result"]
 
 
+@log_action()
 async def process(event: Dict) -> Dict:
     """Orchestration function"""
 
@@ -64,6 +74,7 @@ async def process(event: Dict) -> Dict:
     return {result[0]: result[1] for result in results}
 
 
+@log_action()
 def handler(event, _context) -> Dict:
     """Lambda entry point"""
     return {

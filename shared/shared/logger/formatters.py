@@ -94,4 +94,4 @@ class JSONFormatter(StructuredFormatter):
     def format(self, record: logging.LogRecord) -> str:  # type: ignore [override]
         record = super().format(record)  # type: ignore [assignment]
 
-        return json.dumps(record, default=json_serializer)
+        return f"{json.dumps(record, default=json_serializer)}\n"
