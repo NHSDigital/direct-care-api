@@ -12,4 +12,5 @@ app_logger.logger().addFilter(context_logger)
 
 @log_action(log_args=["event", "context"])
 def lambda_handler(event, context) -> Dict:
+    context_logger.context = context
     return handler(event, context)
