@@ -41,13 +41,19 @@ device_body = get_sds_device_data()
 
 def extract_nhsMhsPartyKey(body=device_body):
     """Extracts the nhsPartyKey value from the /Device of SDS FHIR API response"""
-    party_key = body["entry"][0]["resource"]["identifier"][1]["value"]
-    return party_key
+    if len(body["entry"]):
+        party_key = body["entry"][0]["resource"]["identifier"][1]["value"]
+        return party_key
+    else: 
+        raise KeyError
 
 def extract_asid(body=device_body):
     """Extracts the ASID value from the /Device of SDS FHIR API response"""
-    asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
-    return asid_number
+    if len(body["entry"]):
+        asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
+        return asid_number
+    else: 
+        raise KeyError
 
 def get_sds_endpoint_data():
     """Retrieves the whole response from the /Endpoint endpoint"""
