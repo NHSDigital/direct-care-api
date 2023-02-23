@@ -2,6 +2,8 @@ from typing import Dict
 import uuid
 import requests as r
 
+# pylint: disable= line-too-long, invalid-name
+
 BASE_URL = "https://sandbox.api.service.nhs.uk/spine-directory/FHIR/R4"
 DEVICE_URL = f"{BASE_URL}/Device"
 ENDPOINT_URL = f"{BASE_URL}/Endpoint"
@@ -15,11 +17,11 @@ def get_sds_device_data(ods_code):
     ORG = f"https://fhir.nhs.uk/Id/ods-organization-code|{ods_code}"
     device_payload = {"organization": ORG, "identifier": [SERVICE_INTERACTION_ID_STRUCTURED]}
     device_headers = {"X-Correlation-Id": uuid.uuid4(), "apikey": API_KEY} # API reference doesn't specify uuid as a str
-    
     try:
         device_req = r.get(url=DEVICE_URL,
             params=device_payload,
-            headers=device_headers)
+            headers=device_headers,
+            timeout=500)
         device_req.raise_for_status()
         resp_json = device_req.json()
     except r.exceptions.HTTPError as errh:
@@ -37,18 +39,16 @@ def get_sds_device_data(ods_code):
 
     return resp_json
 
-device_body = get_sds_device_data()
+device_body = get_sds_device_data
 
 def extract_nhsMhsPartyKey(body=device_body):
     """Extracts the nhsPartyKey value from the /Device of SDS FHIR API response"""
-   
     party_key = body["entry"][0]["resource"]["identifier"][1]["value"]
     return party_key
 
 
 def extract_asid(body=device_body):
     """Extracts the ASID value from the /Device of SDS FHIR API response"""
-    
     asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
     return asid_number
 
@@ -63,10 +63,10 @@ def get_sds_endpoint_data(nhsMhsPartyKey):
 
     endpoint_req = r.get(url=ENDPOINT_URL,
                 params=device_payload,
-                headers=device_headers)
+                headers=device_headers, timeout=500)
     return endpoint_req.json()
 
-endpoint_body = get_sds_endpoint_data()
+endpoint_body = get_sds_endpoint_data
 
 def extract_adress(body=endpoint_body):
     """Extracts the address value from the /Endpoint of SDS FHIR API response"""
@@ -77,7 +77,6 @@ def handler(event, _context) -> Dict:
     """
     Invokes a lambda
     """
-    
     return {
         "statusCode": "all good",
         "body": {
