@@ -35,7 +35,7 @@ Parameters:
     Default: "NHSDigital/direct-care-api"
   MainGitBranch:
     Type: String
-    Default: "main"
+    Default: "sam_deployment"
   SamTemplate:
     Type: String
     Default: "template.yaml"
@@ -44,7 +44,7 @@ Parameters:
     Default: "eu-west-2"
   TestingStackName:
     Type: String
-    Default: "dev"
+    Default: "direct-care-api"
   TestingPipelineExecutionRole:
     Type: String
     Default: "arn:aws:iam::436014718090:role/aws-sam-cli-managed-dev-pipe-PipelineExecutionRole-18KH3LWMG1IOK"
@@ -65,7 +65,7 @@ Parameters:
     Default: "eu-west-2"
   ProdStackName:
     Type: String
-    Default: "int"
+    Default: "direct-care-api"
   ProdPipelineExecutionRole:
     Type: String
     Default: "arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-pipe-PipelineExecutionRole-1IYPX8GCW6EBK"
