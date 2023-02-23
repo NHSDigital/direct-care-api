@@ -41,21 +41,18 @@ device_body = get_sds_device_data()
 
 def extract_nhsMhsPartyKey(body=device_body):
     """Extracts the nhsPartyKey value from the /Device of SDS FHIR API response"""
-    if len(body["entry"]):
-        party_key = body["entry"][0]["resource"]["identifier"][1]["value"]
-        return party_key
-    else: 
-        raise KeyError
+   
+    party_key = body["entry"][0]["resource"]["identifier"][1]["value"]
+    return party_key
+
 
 def extract_asid(body=device_body):
     """Extracts the ASID value from the /Device of SDS FHIR API response"""
-    if len(body["entry"]):
-        asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
-        return asid_number
-    else: 
-        raise KeyError
+    
+    asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
+    return asid_number
 
-def get_sds_endpoint_data():
+def get_sds_endpoint_data(nhsMhsPartyKey):
     """Retrieves the whole response from the /Endpoint endpoint"""
     nhsMhsPartyKey = extract_nhsMhsPartyKey()
 
@@ -67,21 +64,7 @@ def get_sds_endpoint_data():
     endpoint_req = r.get(url=ENDPOINT_URL,
                 params=device_payload,
                 headers=device_headers)
-    if endpoint_req.status_code == 200:
-        try:
-            return endpoint_req.json()
-        except r.exceptions.HTTPError as err:
-            status_code = endpoint_req.status_code
-            print(err)
-        except r.RequestException as err:
-            status_code = endpoint_req.status_code
-            print(err)
-        except Exception as err: 
-            status_code = 500
-            print(err)
-    else:
-        status_code = 404
-        return status_code
+    return endpoint_req.json()
 
 endpoint_body = get_sds_endpoint_data()
 
