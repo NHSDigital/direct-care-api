@@ -10,15 +10,28 @@ devPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |sele
 devArtifactsBucket=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:ArtifactsBucket").Value'`
 devCloudFormationExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:CloudFormationExecutionRole").Value'`
 
+cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-int`
+
+
+intPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:PipelineExecutionRole").Value'`
+intArtifactsBucket=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:ArtifactsBucket").Value'`
+intCloudFormationExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:CloudFormationExecutionRole").Value'`
+
 echo "devPipelineExecutionRole       : $devPipelineExecutionRole"
 echo "devArtifactsBucket             : $devArtifactsBucket"
 echo "devCloudFormationExecutionRole : $devCloudFormationExecutionRole"
+echo "intPipelineExecutionRole       : $intPipelineExecutionRole"
+echo "intArtifactsBucket             : $intArtifactsBucket"
+echo "intCloudFormationExecutionRole : $intCloudFormationExecutionRole"
 
 
 cp $SCRIPT_DIR/../resources/ci_pipeline_params_template.json /tmp/ci_pipeline_params.json
 sed -i "s#@devPipelineExecutionRole#$devPipelineExecutionRole#g" /tmp/ci_pipeline_params.json
 sed -i "s#@devArtifactsBucket#$devArtifactsBucket#g" /tmp/ci_pipeline_params.json
 sed -i "s#@devCloudFormationExecutionRole#$devCloudFormationExecutionRole#g" /tmp/ci_pipeline_params.json
+sed -i "s#@intPipelineExecutionRole#$intPipelineExecutionRole#g" /tmp/ci_pipeline_params.json
+sed -i "s#@intArtifactsBucket#$intArtifactsBucket#g" /tmp/ci_pipeline_params.json
+sed -i "s#@intCloudFormationExecutionRole#$intCloudFormationExecutionRole#g" /tmp/ci_pipeline_params.json
 
 aws cloudformation deploy \
 		--profile nhs-direct-care-pipelines \

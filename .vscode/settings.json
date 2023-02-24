@@ -13,5 +13,8 @@
         "convention": "Warning",
         "refactor": "Warning"
     },
-    "python.linting.pylintCategorySeverity.convention": "Warning"
+    "python.linting.pylintCategorySeverity.convention": "Warning",
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json": "cloudformation/*"
+    }
 }

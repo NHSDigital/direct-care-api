@@ -42,16 +42,12 @@ Parameters:
     Default: "eu-west-2"
   TestingStackName:
     Type: String
-    Default: "direct-care-api"
   TestingPipelineExecutionRole:
     Type: String
-    Default: "arn:aws:iam::436014718090:role/aws-sam-cli-managed-dev-pipe-PipelineExecutionRole-18KH3LWMG1IOK"
   TestingCloudFormationExecutionRole:
     Type: String
-    Default: "arn:aws:iam::436014718090:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionR-GGEE7EHS6BHC"
   TestingArtifactBucket:
     Type: String
-    Default: "aws-sam-cli-managed-dev-pipeline-artifactsbucket-1fqcuh5s5v0ut"
   TestingImageRepository:
     Type: String
     # If there are functions with "Image" PackageType in your template,
@@ -66,13 +62,10 @@ Parameters:
     Default: "direct-care-api"
   ProdPipelineExecutionRole:
     Type: String
-    Default: "arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-pipe-PipelineExecutionRole-1IYPX8GCW6EBK"
   ProdCloudFormationExecutionExeRole:
     Type: String
-    Default: "arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-p-CloudFormationExecutionR-1FQ4IXL22V6FR"
   ProdArtifactBucket:
     Type: String
-    Default: "aws-sam-cli-managed-int-pipeline-artifactsbucket-5btgicdjbd5g"
   ProdImageRepository:
     Type: String
     # If there are functions with "Image" PackageType in your template,
@@ -158,7 +151,7 @@ Resources:
                 RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
                 StackName: !Ref AWS::StackName
                 ChangeSetName: !Sub ${AWS::StackName}-ChangeSet
-                TemplatePath: SourceCodeAsZip::codepipeline.yaml
+                TemplatePath: SourceCodeAsZip::cloudformation/resources/ci_pipeline.yaml
                 Capabilities: CAPABILITY_NAMED_IAM
                 ParameterOverrides: !Sub |
                   {
