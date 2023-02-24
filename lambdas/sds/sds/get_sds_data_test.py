@@ -1,7 +1,8 @@
 import unittest
 
-# pylint: disable= line-too-long, invalid-name
+from .sds import extract_adress, extract_asid, extract_nhsMhsPartyKey
 
+# pylint: disable= line-too-long, invalid-name
 class TestExtractionMethods(unittest.TestCase):
     """Tests the methods which extract data from the response bodies"""
 
@@ -24,7 +25,7 @@ class TestExtractionMethods(unittest.TestCase):
                 ]}
         }]}
         actual = "YES-0000806"
-        expected = "YES-0000806"
+        expected = extract_nhsMhsPartyKey(body)
         self.assertEqual(actual, expected)
 
     def test_extract_asid(self):
@@ -46,7 +47,7 @@ class TestExtractionMethods(unittest.TestCase):
                 ]}
         }]}
         actual = "928942012545"
-        expected = "928942012545"
+        expected = extract_asid(body)
         self.assertEqual(actual, expected)
 
     def test_extract_adress(self):
@@ -75,5 +76,5 @@ class TestExtractionMethods(unittest.TestCase):
         ]
     }
         actual = "https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliablerequest"
-        expected = "https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliablerequest"
+        expected = extract_adress(body)
         self.assertEqual(actual, expected)
