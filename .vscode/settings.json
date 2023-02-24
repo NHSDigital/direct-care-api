@@ -14,5 +14,8 @@
         "refactor": "Warning"
     },
     "python.linting.pylintCategorySeverity.convention": "Warning",
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "terminal.integrated.env.linux": {
+        "PYTHONPATH": "/workspaces/direct-care-api/lambdas/"
+    }
 }
