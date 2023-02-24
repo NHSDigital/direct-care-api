@@ -9,8 +9,8 @@
     "ProdStackName=direct-care-api-int",
     "SamTemplate=template.yaml",
     "TestingArtifactBucket=@devArtifactsBucket",
-    "TestingCloudFormationExecutionRole=@devPipelineExecutionRole",
-    "TestingPipelineExecutionRole=@devCloudFormationExecutionRole",
+    "TestingCloudFormationExecutionRole=@devCloudFormationExecutionRole",
+    "TestingPipelineExecutionRole=@devPipelineExecutionRole",
     "TestingRegion=eu-west-2",
     "TestingStackName=direct-care-api-dev"
 ]
