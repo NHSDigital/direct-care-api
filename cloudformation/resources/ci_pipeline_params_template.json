@@ -1,0 +1,16 @@
+[
+    "FullRepositoryId=NHSDigital/direct-care-api",
+    "GitProviderType=GitHub",
+    "MainGitBranch=sam_deployment",
+    "ProdArtifactBucket=aws-sam-cli-managed-int-pipeline-artifactsbucket-5btgicdjbd5g",
+    "ProdCloudFormationExecutionExeRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-p-CloudFormationExecutionR-1FQ4IXL22V6FR",
+    "ProdPipelineExecutionRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-pipe-PipelineExecutionRole-1IYPX8GCW6EBK",
+    "ProdRegion=eu-west-2",
+    "ProdStackName=direct-care-api",
+    "SamTemplate=template.yaml",
+    "TestingArtifactBucket=@devArtifactsBucket",
+    "TestingCloudFormationExecutionRole=@devPipelineExecutionRole",
+    "TestingPipelineExecutionRole=@devCloudFormationExecutionRole",
+    "TestingRegion=eu-west-2",
+    "TestingStackName=direct-care-api"
+]

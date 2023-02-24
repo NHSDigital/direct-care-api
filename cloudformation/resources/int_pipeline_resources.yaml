@@ -30,6 +30,8 @@ Parameters:
   CreateNewOidcProvider:
     Type: String
     AllowedValues: [true, false]
+  PipelineAWSAccountID:
+    Type: String
 
 Conditions:
   MissingOidcProvider: !Equals [!Ref CreateNewOidcProvider, "true"]
@@ -150,7 +152,14 @@ Resources:
                   AWS:
                     - !If
                       - MissingPipelineUser
-                      - !Ref AWS::AccountId
+                      - !Join [
+                          "",
+                          [
+                            "arn:aws:iam::",
+                            !Ref "PipelineAWSAccountID",
+                            ":root",
+                          ],
+                        ]
                       - !Select [4, !Split [":", !Ref PipelineUserArn]]
                 Action:
                   - "sts:AssumeRole"
@@ -380,6 +389,8 @@ Outputs:
         - MissingPipelineUser
         - !GetAtt PipelineUser.Arn
         - !Ref PipelineUserArn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "PipelineUser"]]
 
   PipelineUserSecretKey:
     Description: AWS Access Key and Secret Key of pipeline user.
@@ -393,6 +404,8 @@ Outputs:
         - MissingCloudFormationExecutionRole
         - !GetAtt CloudFormationExecutionRole.Arn
         - !Ref CloudFormationExecutionRoleArn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "CloudFormationExecutionRole"]]
 
   PipelineExecutionRole:
     Description: ARN of the IAM Role(PipelineExecutionRole)
@@ -401,6 +414,8 @@ Outputs:
         - MissingPipelineExecutionRole
         - !GetAtt PipelineExecutionRole.Arn
         - !Ref PipelineExecutionRoleArn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "PipelineExecutionRole"]]
 
   ArtifactsBucket:
     Description: ARN of the Artifacts bucket
@@ -409,6 +424,8 @@ Outputs:
         - MissingArtifactsBucket
         - !GetAtt ArtifactsBucket.Arn
         - !Ref ArtifactsBucketArn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "ArtifactsBucket"]]
 
   ImageRepository:
     Description: ARN of the ECR image repository

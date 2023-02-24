@@ -1,0 +1,15 @@
+[
+    "CreateImageRepository=false",
+    "CreateNewOidcProvider=false",
+    "PipelineUserArn=arn:aws:iam::347250048819:user/anthony.brown8",
+    "UseOidcProvider=false",
+    "PipelineAWSAccountID=038755702666o",
+    "CloudFormationExecutionRoleArn=",
+    "OidcProviderUrl=",
+    "SubjectClaim=",
+    "OidcClientId=",
+    "PipelineExecutionRoleArn=",
+    "ImageRepositoryArn=",
+    "ArtifactsBucketArn=",
+    "IdentityProviderThumbprint="
+]
