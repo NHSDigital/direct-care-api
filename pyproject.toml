@@ -31,6 +31,7 @@ pythonpath = [
   "lambdas/multiply",
   "lambdas/power",
   "lambdas/shared",
+  "lambdas/sds"
 ]
 
 [tool.pylint.main]
