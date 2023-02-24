@@ -20,11 +20,13 @@ USER vscode
 # Install ASDF
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.9.0; \
     echo '. $HOME/.asdf/asdf.sh' >> ~/.bashrc; \
-    echo '. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc
+    echo '. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc; \
+    echo 'source /workspaces/direct-care-api/scripts/aws_mfa_update.sh' >> ~/.bashrc
 
 # Install ASDF plugins
 RUN /home/vscode/.asdf/bin/asdf plugin add python; \
-    /home/vscode/.asdf/bin/asdf plugin-add poetry https://github.com/asdf-community/asdf-poetry.git
+    /home/vscode/.asdf/bin/asdf plugin-add poetry https://github.com/asdf-community/asdf-poetry.git;
+
 
 
 WORKDIR /workspaces/direct-care-api

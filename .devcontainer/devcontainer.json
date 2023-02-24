@@ -26,7 +26,8 @@
 				"redhat.vscode-yaml",
 				"ms-python.python",
 				"ms-vscode.makefile-tools",
-				"ms-python.pylint"
+				"ms-python.pylint",
+				"eamodio.gitlens"
 			],
 			"settings": {
 				"python.defaultInterpreterPath": "/workspaces/vscode/.venv/bin/python",
@@ -40,10 +41,7 @@
 			}
 		}
 	},
-	"postAttachCommand": [
-		"rm ~/.docker/config.json",
-		"echo 'source /workspaces/direct-care-api/scripts/aws_mfa_update.sh' >> ~/.bashrc"
-	]
+	"postAttachCommand": "rm ~/.docker/config.json"
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
