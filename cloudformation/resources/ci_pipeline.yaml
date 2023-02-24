@@ -156,7 +156,15 @@ Resources:
                 ParameterOverrides: !Sub |
                   {
                     "FeatureGitBranch": "${FeatureGitBranch}",
-                    "CodeStarConnectionArn": "${CodeStarConnectionArn}"
+                    "CodeStarConnectionArn": "${CodeStarConnectionArn}",
+                    "ProdArtifactBucket": "${ProdArtifactBucket}",
+                    "ProdCloudFormationExecutionExeRole": "${ProdCloudFormationExecutionExeRole}",
+                    "ProdPipelineExecutionRole": "${ProdPipelineExecutionRole}",
+                    "ProdStackName": "${ProdStackName}",
+                    "TestingArtifactBucket": "${TestingArtifactBucket}",
+                    "TestingCloudFormationExecutionRole": "${TestingCloudFormationExecutionRole}",
+                    "TestingPipelineExecutionRole": "${TestingPipelineExecutionRole}",
+                    "TestingStackName": "{TestingStackName}"
                   }
               InputArtifacts:
                 - Name: SourceCodeAsZip
