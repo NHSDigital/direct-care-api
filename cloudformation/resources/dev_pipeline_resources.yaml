@@ -150,17 +150,10 @@ Resources:
                   # Allow roles with tag Role=aws-sam-pipeline-codebuild-service-role to assume this role.
                   # This is required when CodePipeline is the CI/CD system of choice.
                   AWS:
-                    - !If
-                      - MissingPipelineUser
-                      - !Join [
-                          "",
-                          [
-                            "arn:aws:iam::",
-                            !Ref "PipelineAWSAccountID",
-                            ":root",
-                          ],
-                        ]
-                      - !Select [4, !Split [":", !Ref PipelineUserArn]]
+                    !Join [
+                      "",
+                      ["arn:aws:iam::", !Ref PipelineAWSAccountID, ":root"],
+                    ]
                 Action:
                   - "sts:AssumeRole"
                 Condition:
