@@ -16,3 +16,8 @@ phases:
       - echo 'Running unit tests'
       - make install
       - make test
+reports:
+  unit-test-reports:
+    files:
+      - "reports/*.xml"
+    file-format: "JUNITXML"
