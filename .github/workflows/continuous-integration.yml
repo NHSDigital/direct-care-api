@@ -59,4 +59,6 @@ jobs:
           CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
           CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
         run: |
+          export CODEBUILD_TOKEN=$CODEBUILD_TOKEN
+          export CODEBUILD_USER=$CODEBUILD_USER
           ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment
