@@ -54,4 +54,7 @@ jobs:
           role-session-name: github-actions
 
       - name: deploy_pipeline
+        env:
+          CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
+          CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
         run: ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment

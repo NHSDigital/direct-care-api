@@ -14,5 +14,7 @@
     "TestingRegion=eu-west-2",
     "TestingStackName=@TestingStackName",
     "CodeStarConnectionArn=arn:aws:codestar-connections:eu-west-2:038755702666:connection/ddce3c23-848a-49b3-9d1c-9cd0dd5d0c81",
-    "FeatureGitBranch=@FeatureGitBranch"
+    "FeatureGitBranch=@FeatureGitBranch",
+    "IntegrationUser=@CODEBUILD_USER",
+    "IntegrationPass=@CODEBUILD_TOKEN"
 ]

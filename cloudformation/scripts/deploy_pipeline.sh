@@ -62,6 +62,9 @@ sed -i "s#@intCloudFormationExecutionRole#$intCloudFormationExecutionRole#g" /tm
 sed -i "s#@FeatureGitBranch#$FeatureGitBranch#g" /tmp/ci_pipeline_params.json
 sed -i "s#@TestingStackName#$TestingStackName#g" /tmp/ci_pipeline_params.json
 sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json
+sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json
+sed -i "s#@CODEBUILD_TOKEN#$CODEBUILD_TOKEN#g" /tmp/ci_pipeline_params.json
+sed -i "s#@CODEBUILD_USER#$CODEBUILD_USER#g" /tmp/ci_pipeline_params.json
 
 #aws cloudformation deploy \
 #		--profile nhs-direct-care-pipelines \
