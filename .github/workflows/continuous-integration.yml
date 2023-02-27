@@ -53,8 +53,10 @@ jobs:
           role-to-assume: arn:aws:iam::038755702666:role/github-managed-pipeline-r-CloudFormationDeployRole-1K2TWJ9088EOI
           role-session-name: github-actions
 
-      - name: deploy_pipeline
+      - shell: bash
+        name: deploy_pipeline
         env:
           CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
           CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
-        run: ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment
+        run: |
+          ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment
