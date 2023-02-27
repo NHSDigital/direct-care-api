@@ -270,6 +270,14 @@ Resources:
                 Version: "1"
               Configuration:
                 ProjectName: !Ref CodeBuildProjectIntegrationTest
+                EnvironmentVariables: !Sub |
+                  [
+                    {"name": "ENV_STACK_NAME", "value": "${ProdStackName}"},
+                    {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${ProdPipelineExecutionRole}"},
+                    {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${ProdCloudFormationExecutionExeRole}"},
+                    {"name": "ENV_BUCKET", "value": "${ProdArtifactBucket}"},
+                    {"name": "ENV_IMAGE_REPOSITORY", "value": "${ProdImageRepository}"}
+                  ]
               InputArtifacts:
                 - Name: SourceCodeAsZip
 
@@ -627,7 +635,6 @@ Resources:
         Type: CODEPIPELINE
         BuildSpec: pipeline/buildspec_build_package.yml
 
-  # Uncomment and modify the following step for running the integration tests
   CodeBuildProjectIntegrationTest:
     Type: AWS::CodeBuild::Project
     Properties:
