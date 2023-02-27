@@ -664,3 +664,8 @@ Outputs:
     Condition: CreateConnection
     Description: The Arn of AWS CodeStar Connection used to connect to external code repositories.
     Value: !Ref CodeStarConnection
+  CodePipelineName:
+    Description: The Name of code pipeline.
+    Value: !Ref Pipeline
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "Pipeline"]]
