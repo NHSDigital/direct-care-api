@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+set -e
 pull_request_id=$1
 FeatureGitBranch=$2
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
