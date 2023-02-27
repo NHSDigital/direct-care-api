@@ -272,7 +272,7 @@ Resources:
                 ProjectName: !Ref CodeBuildProjectIntegrationTest
                 EnvironmentVariables: !Sub |
                   [
-                    {"name": "ENV_STACK_NAME", "value": "${FEATURE_BRANCH_NAME}"},
+                    {"name": "ENV_STACK_NAME", "value": "${FeatureGitBranch}"},
                     {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${TestingCloudFormationExecutionRole}"},
                   ]
               InputArtifacts:
