@@ -835,7 +835,7 @@ Resources:
               url = "https://api.github.com/repos/" + repo_id + "/statuses/" + commit_id
               build_status={}
               build_status['state'] = state
-              build_status['context'] = "CodePipeline"
+              build_status['context'] = "AWS CodePipeline"
               build_status['description'] = data['detail']['pipeline']
               build_status['target_url'] = "https://" + region + ".console.aws.amazon.com/codesuite/codepipeline/pipelines/" + data['detail']['pipeline'] + "/executions/" + data['detail']['execution-id'] + "?region="+region
             else:
