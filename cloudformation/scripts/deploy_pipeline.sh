@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 set -e
-pull_request_id=$1
-FeatureGitBranch=$2
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 if test -z "$CODEBUILD_TOKEN" 
@@ -16,7 +14,21 @@ then
 	exit 1
 fi
 
+if test -z "$PULL_REQUEST_ID" 
+then
+	echo "\$PULL_REQUEST_ID is empty"
+	exit 1
+fi
+
+if test -z "$GIT_BRANCH" 
+then
+	echo "\$GIT_BRANCH is empty"
+	exit 1
+fi
+
 # get dev information
+# leaving this in here as should use it but need permissions and roles sorting.....
+
 #cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-dev`
 
 #devPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:PipelineExecutionRole").Value'`
@@ -41,15 +53,15 @@ intPipelineExecutionRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-
 intArtifactsBucket=aws-sam-cli-managed-int-pipeline-artifactsbucket-ja6wzylqqdr1
 intCloudFormationExecutionRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-p-CloudFormationExecutionR-YHTLPPVNKT3V
 
-if [ -z "$pull_request_id" ]
+if [ -z "$PULL_REQUEST_ID" ]
 then
       stackName=sam-app-pipeline
 	  TestingStackName=direct-care-api-dev
 	  ProdStackName=direct-care-api-int
 else
-      stackName=sam-app-pipeline-pr-${pull_request_id}
-	  TestingStackName=direct-care-api-dev-pr-${pull_request_id}
-	  ProdStackName=direct-care-api-int-pr-${pull_request_id}
+      stackName=sam-app-pipeline-pr-${PULL_REQUEST_ID}
+	  TestingStackName=direct-care-api-dev-pr-${PULL_REQUEST_ID}
+	  ProdStackName=direct-care-api-int-pr-${PULL_REQUEST_ID}
 fi
 
 echo "devPipelineExecutionRole       : $devPipelineExecutionRole"
@@ -59,7 +71,7 @@ echo "intPipelineExecutionRole       : $intPipelineExecutionRole"
 echo "intArtifactsBucket             : $intArtifactsBucket"
 echo "intCloudFormationExecutionRole : $intCloudFormationExecutionRole"
 echo "CI stackName                   : $stackName"
-echo "FeatureGitBranch               : $FeatureGitBranch"
+echo "GIT_BRANCH               		 : $GIT_BRANCH"
 echo "Testing StackName              : $TestingStackName"
 echo "Prod StackName                 : $ProdStackName"
 
@@ -71,7 +83,7 @@ sed -i "s#@devCloudFormationExecutionRole#$devCloudFormationExecutionRole#g" /tm
 sed -i "s#@intPipelineExecutionRole#$intPipelineExecutionRole#g" /tmp/ci_pipeline_params.json
 sed -i "s#@intArtifactsBucket#$intArtifactsBucket#g" /tmp/ci_pipeline_params.json
 sed -i "s#@intCloudFormationExecutionRole#$intCloudFormationExecutionRole#g" /tmp/ci_pipeline_params.json
-sed -i "s#@FeatureGitBranch#$FeatureGitBranch#g" /tmp/ci_pipeline_params.json
+sed -i "s#@FeatureGitBranch#$GIT_BRANCH#g" /tmp/ci_pipeline_params.json
 sed -i "s#@TestingStackName#$TestingStackName#g" /tmp/ci_pipeline_params.json
 sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json
 sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json

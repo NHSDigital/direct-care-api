@@ -59,4 +59,6 @@ jobs:
           CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
           CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
         run: |
+          PULL_REQUEST_ID=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          GIT_BRANCH=${GITHUB_REF_NAME}
           ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment
