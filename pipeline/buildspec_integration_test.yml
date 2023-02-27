@@ -1,9 +1,16 @@
 version: 0.2
 phases:
   install:
-    runtime-versions:
-      python: 3.8
+    commands:
+      - git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.9.0
+      - echo '. $HOME/.asdf/asdf.sh' >> ~/.bashrc
+      - source $HOME/.asdf/asdf.sh
+      - asdf plugin add python
+      - asdf plugin-add poetry https://github.com/asdf-community/asdf-poetry.git
+      - asdf install
   build:
     commands:
       # trigger the integration tests here
       - echo 'Running integration tests'
+      - make install
+      - make integration-test

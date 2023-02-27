@@ -73,6 +73,9 @@ test:
 	mkdir -p reports
 	poetry run pytest lambdas --junitxml=reports/junit.xml
 
+integration-test:
+	echo "running integration tests"
+
 clean:
 	rm -rf .aws-sam || true
 	find . -type d -name '.mypy_cache' | xargs rm -rf || true
