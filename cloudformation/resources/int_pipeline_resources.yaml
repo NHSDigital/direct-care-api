@@ -294,6 +294,7 @@ Resources:
               - "cloudformation:GetTemplate"
               - "cloudformation:GetTemplateSummary"
               - "cloudformation:DescribeStackResource"
+              - "cloudformation:DescribeStackResources"
             Resource: "*"
           - Effect: Allow
             Action:
