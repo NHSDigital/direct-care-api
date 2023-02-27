@@ -59,10 +59,4 @@ jobs:
           CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
           CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
         run: |
-          cat <<EOF > .env.build
-          CODEBUILD_TOKEN="$CODEBUILD_TOKEN"
-          CODEBUILD_USER="$CODEBUILD_USER"
-          EOF
-          source .env.build
           ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment
-          rm .env.build
