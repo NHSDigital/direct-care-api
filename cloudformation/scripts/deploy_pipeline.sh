@@ -17,7 +17,7 @@ then
 fi
 
 echo "hello"
-echo "${CODEBUILD_USER}"
+echo "$CODEBUILD_USER"
 echo "bye"
 # get dev information
 #cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-dev`

@@ -175,9 +175,9 @@ Resources:
                     "TestingArtifactBucket": "${TestingArtifactBucket}",
                     "TestingCloudFormationExecutionRole": "${TestingCloudFormationExecutionRole}",
                     "TestingPipelineExecutionRole": "${TestingPipelineExecutionRole}",
-                    "TestingStackName": "{TestingStackName}",
-                    "IntegrationUser": "{IntegrationUser}",
-                    "IntegrationPass": "{IntegrationPass}"
+                    "TestingStackName": "${TestingStackName}",
+                    "IntegrationUser": "${IntegrationUser}",
+                    "IntegrationPass": "${IntegrationPass}"
                   }
               InputArtifacts:
                 - Name: SourceCodeAsZip
