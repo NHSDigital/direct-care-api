@@ -70,14 +70,25 @@ if aws cloudformation describe-stacks --profile nhs-direct-care-pipelines \
 	--stack-name  ${stackName}  &>/dev/null 
 then
     echo 'stack exists'
+	cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-pipelines`
+	pipeline_name=`echo $cloudformation_exports | jq -r --arg stackName "$stackName:Pipeline"  '.Exports[] |select(.Name==$stackName).Value'`
+	trigger_pipeline=1
+
 else
 	echo 'stack does not exist'
+	trigger_pipeline=0
 fi
 
-#aws cloudformation deploy \
-#		--profile nhs-direct-care-pipelines \
-#		--template-file ${SCRIPT_DIR}/../resources/ci_pipeline.yaml \
-#		--stack-name ${stackName} \
-#		--parameter-overrides file:///tmp/ci_pipeline_params.json \
-#		--capabilities CAPABILITY_IAM \
-#		--no-fail-on-empty-changeset
+aws cloudformation deploy \
+		--profile nhs-direct-care-pipelines \
+		--template-file ${SCRIPT_DIR}/../resources/ci_pipeline.yaml \
+		--stack-name ${stackName} \
+		--parameter-overrides file:///tmp/ci_pipeline_params.json \
+		--capabilities CAPABILITY_IAM \
+		--no-fail-on-empty-changeset
+
+if [ $trigger_pipeline -eq 1 ]; then
+    echo "triggereing pipeline ${pipeline_name}"
+	aws codepipeline start-pipeline-execution --profile nhs-direct-care-pipelines \
+	--name ${pipeline_name}
+fi
