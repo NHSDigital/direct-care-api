@@ -75,19 +75,6 @@ sed -i "s#@CODEBUILD_USER#$CODEBUILD_USER#g" /tmp/ci_pipeline_params.json
 #		--no-execute-changeset \
 #		--no-fail-on-empty-changeset
 
-# check if stack exists
-if aws cloudformation describe-stacks  \
-	--stack-name  ${stackName}  &>/dev/null 
-then
-    echo 'stack exists'
-	cloudformation_exports=`aws cloudformation list-exports`
-	pipeline_name=`echo $cloudformation_exports | jq -r --arg stackName "$stackName:Pipeline"  '.Exports[] |select(.Name==$stackName).Value'`
-	trigger_pipeline=1
-
-else
-	echo 'stack does not exist'
-	trigger_pipeline=0
-fi
 
 aws cloudformation deploy \
 		--template-file ${SCRIPT_DIR}/../resources/ci_pipeline.yaml \
@@ -96,8 +83,9 @@ aws cloudformation deploy \
 		--capabilities CAPABILITY_IAM \
 		--no-fail-on-empty-changeset
 
-if [ $trigger_pipeline -eq 1 ]; then
-    echo "triggereing pipeline ${pipeline_name}"
-	aws codepipeline start-pipeline-execution \
+cloudformation_exports=`aws cloudformation list-exports`
+pipeline_name=`echo $cloudformation_exports | jq -r --arg stackName "$stackName:Pipeline"  '.Exports[] |select(.Name==$stackName).Value'`
+echo "triggereing pipeline ${pipeline_name}"
+
+aws codepipeline start-pipeline-execution \
 	--name ${pipeline_name}
-fi
