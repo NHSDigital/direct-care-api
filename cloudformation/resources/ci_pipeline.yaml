@@ -135,6 +135,7 @@ Resources:
                     !Ref FeatureGitBranch,
                     !Ref MainGitBranch,
                   ]
+                DetectChanges: "No"
               OutputArtifacts:
                 - Name: SourceCodeAsZip
               RunOrder: 1
