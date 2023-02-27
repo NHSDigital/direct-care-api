@@ -73,11 +73,11 @@ sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json
 #		--no-fail-on-empty-changeset
 
 # check if stack exists
-if aws cloudformation describe-stacks --profile nhs-direct-care-pipelines \
+if aws cloudformation describe-stacks  \
 	--stack-name  ${stackName}  &>/dev/null 
 then
     echo 'stack exists'
-	cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-pipelines`
+	cloudformation_exports=`aws cloudformation list-exports`
 	pipeline_name=`echo $cloudformation_exports | jq -r --arg stackName "$stackName:Pipeline"  '.Exports[] |select(.Name==$stackName).Value'`
 	trigger_pipeline=1
 
@@ -87,7 +87,6 @@ else
 fi
 
 aws cloudformation deploy \
-		--profile nhs-direct-care-pipelines \
 		--template-file ${SCRIPT_DIR}/../resources/ci_pipeline.yaml \
 		--stack-name ${stackName} \
 		--parameter-overrides file:///tmp/ci_pipeline_params.json \
@@ -96,6 +95,6 @@ aws cloudformation deploy \
 
 if [ $trigger_pipeline -eq 1 ]; then
     echo "triggereing pipeline ${pipeline_name}"
-	aws codepipeline start-pipeline-execution --profile nhs-direct-care-pipelines \
+	aws codepipeline start-pipeline-execution \
 	--name ${pipeline_name}
 fi
