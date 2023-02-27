@@ -540,6 +540,17 @@ Resources:
                   - "s3:PutObject"
                 Resource:
                   - !Sub "arn:${AWS::Partition}:s3:::${PipelineArtifactsBucket}/*"
+        - PolicyName: CodeBuildReportGroup
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "codebuild:CreateReportGroup"
+                  - "codebuild:CreateReport"
+                  - "codebuild:BatchPutTestCases"
+                  - "codebuild:UpdateReport"
+                Resource: "*"
         - PolicyName: AssumeStagePipExecutionRoles
           PolicyDocument:
             Version: "2012-10-17"
