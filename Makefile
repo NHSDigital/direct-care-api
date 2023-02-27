@@ -136,3 +136,13 @@ review-cloudformation-int-resources:
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
 		--no-fail-on-empty-changeset 
+
+review-cloudformation-pipeline-resources:
+	aws cloudformation deploy \
+		--profile nhs-direct-care-pipelines \
+		--template-file cloudformation/resources/pipeline_resources.yaml \
+		--stack-name github-managed-pipeline-resources \
+		--parameter-overrides file://cloudformation/resources/pipeline_resources_params.json \
+		--capabilities CAPABILITY_IAM \
+		--no-execute-changeset \
+		--no-fail-on-empty-changeset 

@@ -5,22 +5,29 @@ FeatureGitBranch=$2
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # get dev information
-cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-dev`
+#cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-dev`
 
-devPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:PipelineExecutionRole").Value'`
-devCloudFormationExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:CloudFormationExecutionRole").Value'`
-devArtifactsBucketARN=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:ArtifactsBucket").Value'`
-arr_devArtifactsBucketARN=(${devArtifactsBucketARN//:/ })
-devArtifactsBucket=${arr_devArtifactsBucketARN[3]}
+#devPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:PipelineExecutionRole").Value'`
+#devCloudFormationExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:CloudFormationExecutionRole").Value'`
+#devArtifactsBucketARN=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:ArtifactsBucket").Value'`
+#arr_devArtifactsBucketARN=(${devArtifactsBucketARN//:/ })
+#devArtifactsBucket=${arr_devArtifactsBucketARN[3]}
 
 # get int information
-cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-int`
+#cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-int`
 
-intPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:PipelineExecutionRole").Value'`
-intCloudFormationExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:CloudFormationExecutionRole").Value'`
-intArtifactsBucketARN=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:ArtifactsBucket").Value'`
-arr_intArtifactsBucketARN=(${intArtifactsBucketARN//:/ })
-intArtifactsBucket=${arr_intArtifactsBucketARN[3]}
+#intPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:PipelineExecutionRole").Value'`
+#intCloudFormationExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:CloudFormationExecutionRole").Value'`
+#intArtifactsBucketARN=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-int-pipeline-resources:ArtifactsBucket").Value'`
+#arr_intArtifactsBucketARN=(${intArtifactsBucketARN//:/ })
+#intArtifactsBucket=${arr_intArtifactsBucketARN[3]}
+
+devPipelineExecutionRole=arn:aws:iam::436014718090:role/aws-sam-cli-managed-dev-pipe-PipelineExecutionRole-KWHOXSO2ZF0J
+devArtifactsBucket=aws-sam-cli-managed-dev-pipeline-artifactsbucket-9cbzh2etlask
+devCloudFormationExecutionRole=arn:aws:iam::436014718090:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionR-HL4Z8GB0UI5U
+intPipelineExecutionRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-pipe-PipelineExecutionRole-XBPVSUSWDGIC
+intArtifactsBucket=aws-sam-cli-managed-int-pipeline-artifactsbucket-ja6wzylqqdr1
+intCloudFormationExecutionRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-p-CloudFormationExecutionR-YHTLPPVNKT3V
 
 if [ -z "$pull_request_id" ]
 then
