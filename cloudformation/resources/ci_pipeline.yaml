@@ -739,7 +739,7 @@ Resources:
   PipelineNotificationRule:
     Type: "AWS::CodeStarNotifications::NotificationRule"
     Properties:
-      Name: !Sub "Notification for ${!Ref Pipeline}"
+      Name: !Sub "Notification for ${Pipeline}"
       DetailType: FULL
       Resource: !Sub "arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${Pipeline}"
       EventTypeIds:
