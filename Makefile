@@ -73,7 +73,7 @@ test:
 	mkdir -p reports
 	poetry run pytest lambdas --junitxml=reports/junit.xml
 
-integration-test:
+integration-test: guard-BASE_URL
 	echo "running integration tests"
 
 clean:
