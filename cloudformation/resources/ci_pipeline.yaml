@@ -741,7 +741,7 @@ Resources:
     Properties:
       Name: !Sub "Notification for ${!Ref Pipeline}"
       DetailType: FULL
-      Resource: !GetAtt Pipeline.ARN
+      Resource: !Sub "arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${Pipeline}"
       EventTypeIds:
         - codepipeline-pipeline-pipeline-execution-failed
         - codepipeline-pipeline-pipeline-execution-canceled
