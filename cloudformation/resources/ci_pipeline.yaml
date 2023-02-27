@@ -274,7 +274,7 @@ Resources:
                 EnvironmentVariables: !Sub |
                   [
                     {"name": "ENV_STACK_NAME", "value": "${FeatureGitBranch}"},
-                    {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${TestingCloudFormationExecutionRole}"}
+                    {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"}
                   ]
               InputArtifacts:
                 - Name: SourceCodeAsZip
