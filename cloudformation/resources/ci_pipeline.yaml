@@ -272,11 +272,8 @@ Resources:
                 ProjectName: !Ref CodeBuildProjectIntegrationTest
                 EnvironmentVariables: !Sub |
                   [
-                    {"name": "ENV_STACK_NAME", "value": "${ProdStackName}"},
-                    {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${ProdPipelineExecutionRole}"},
-                    {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${ProdCloudFormationExecutionExeRole}"},
-                    {"name": "ENV_BUCKET", "value": "${ProdArtifactBucket}"},
-                    {"name": "ENV_IMAGE_REPOSITORY", "value": "${ProdImageRepository}"}
+                    {"name": "ENV_STACK_NAME", "value": "${FEATURE_BRANCH_NAME}"},
+                    {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${TestingCloudFormationExecutionRole}"},
                   ]
               InputArtifacts:
                 - Name: SourceCodeAsZip
