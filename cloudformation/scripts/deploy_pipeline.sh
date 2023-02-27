@@ -4,6 +4,18 @@ pull_request_id=$1
 FeatureGitBranch=$2
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+if test -z "$CODEBUILD_TOKEN" 
+then
+	echo "\$CODEBUILD_TOKEN is empty"
+	exit 1
+fi
+
+if test -z "$CODEBUILD_USER" 
+then
+	echo "\$CODEBUILD_USER is empty"
+	exit 1
+fi
+
 # get dev information
 #cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-dev`
 
