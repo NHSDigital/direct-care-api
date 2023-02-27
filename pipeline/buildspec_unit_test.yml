@@ -8,6 +8,8 @@ phases:
       - asdf plugin add python
       - asdf plugin-add poetry https://github.com/asdf-community/asdf-poetry.git
       - asdf install
+      - rm -rf lambdas/shared
+      - cp -r shared/shared lambdas/
   build:
     commands:
       # trigger the unit tests here
