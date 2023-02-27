@@ -13,5 +13,5 @@ phases:
       # trigger the unit tests here
       - echo 'Running unit tests'
       - make install
-      - ls -l lambdas
+      - ls -l lambdas/shared
       - make test
