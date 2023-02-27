@@ -66,9 +66,10 @@ sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json
 #		--no-fail-on-empty-changeset
 
 
-#aws cloudformation deploy \
-#		--profile nhs-direct-care-pipelines \
-#		--template-file cloudformation/sam-app-pipeline.yaml \
-#		--stack-name sam-app-pipeline \
-#		--parameter-overrides file://cloudformation/sam-app-pipeline-params.json \
-#		--capabilities CAPABILITY_IAM 
+aws cloudformation deploy \
+		--profile nhs-direct-care-pipelines \
+		--template-file ${SCRIPT_DIR}/../resources/ci_pipeline.yaml \
+		--stack-name ${stackName} \
+		--parameter-overrides file:///tmp/ci_pipeline_params.json \
+		--capabilities CAPABILITY_IAM \
+		--no-fail-on-empty-changeset
