@@ -13,7 +13,7 @@ phases:
     commands:
       - sam build --use-container --template ${SAM_TEMPLATE}
       - . ./scripts/assume_role.sh ${TESTING_PIPELINE_EXECUTION_ROLE} feature-deploy
-      - sam deploy --stack-name $(echo ${FEATURE_BRANCH_NAME} | tr -cd '[a-zA-Z0-9-]')
+      - sam deploy --stack-name $(echo ${STACK_NAME} | tr -cd '[a-zA-Z0-9-]')
         --capabilities CAPABILITY_IAM
         --region ${TESTING_REGION}
         --s3-bucket ${TESTING_ARTIFACT_BUCKET}

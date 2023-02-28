@@ -286,7 +286,7 @@ Resources:
                 ProjectName: !Ref CodeBuildProjectIntegrationTest
                 EnvironmentVariables: !Sub |
                   [
-                    {"name": "ENV_STACK_NAME", "value": "${FeatureGitBranch}"},
+                    {"name": "ENV_STACK_NAME", "value": "${TestingStackName}"},
                     {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"}
                   ]
               InputArtifacts:
@@ -616,6 +616,8 @@ Resources:
             Value: !Ref TestingImageRepository
           - Name: FEATURE_BRANCH_NAME
             Value: !Ref FeatureGitBranch
+          - Name: STACK_NAME
+            Value: !Ref TestingStackName
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
