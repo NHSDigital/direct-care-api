@@ -1,7 +1,7 @@
 [
     "FullRepositoryId=NHSDigital/direct-care-api",
     "GitProviderType=GitHub",
-    "MainGitBranch=sam_deployment",
+    "MainGitBranch=main",
     "IntArtifactBucket=@intArtifactsBucket",
     "IntCloudFormationExecutionExeRole=@intCloudFormationExecutionRole",
     "IntPipelineExecutionRole=@intPipelineExecutionRole",
