@@ -98,31 +98,12 @@ get-sam-endpoint: guard-stack_name
 curl-sam: guard-sam_endpoint
 	curl -s "$$sam_endpoint/calculate?a=5&b=7"
 
-review-cloudformation-pipeline:
-	aws cloudformation deploy \
-		--profile nhs-direct-care-pipelines \
-		--template-file cloudformation/sam-app-pipeline.yaml \
-		--stack-name sam-app-pipeline \
-		--parameter-overrides file://cloudformation/sam-app-pipeline-params.json \
-		--capabilities CAPABILITY_IAM \
-		--no-execute-changeset \
-		--no-fail-on-empty-changeset
-
-
-deploy-cloudformation-pipeline:
-	aws cloudformation deploy \
-		--profile nhs-direct-care-pipelines \
-		--template-file cloudformation/sam-app-pipeline.yaml \
-		--stack-name sam-app-pipeline \
-		--parameter-overrides file://cloudformation/sam-app-pipeline-params.json \
-		--capabilities CAPABILITY_IAM 
-
 review-cloudformation-dev-resources:
 	aws cloudformation deploy \
 		--profile nhs-direct-care-dev \
-		--template-file cloudformation/resources/dev_pipeline_resources.yaml \
+		--template-file aws/cloudformation/dev_pipeline_resources.yaml \
 		--stack-name aws-sam-cli-managed-dev-pipeline-resources \
-		--parameter-overrides file://cloudformation/resources/dev_pipeline_resources_params.json \
+		--parameter-overrides file://aws/cloudformation/dev_pipeline_resources_params.json \
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
 		--no-fail-on-empty-changeset 
@@ -130,9 +111,9 @@ review-cloudformation-dev-resources:
 review-cloudformation-int-resources:
 	aws cloudformation deploy \
 		--profile nhs-direct-care-int \
-		--template-file cloudformation/resources/int_pipeline_resources.yaml \
+		--template-file aws/cloudformation/int_pipeline_resources.yaml \
 		--stack-name aws-sam-cli-managed-int-pipeline-resources \
-		--parameter-overrides file://cloudformation/resources/int_pipeline_resources_params.json \
+		--parameter-overrides file://aws/cloudformation/int_pipeline_resources_params.json \
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
 		--no-fail-on-empty-changeset 
@@ -140,9 +121,9 @@ review-cloudformation-int-resources:
 review-cloudformation-pipeline-resources:
 	aws cloudformation deploy \
 		--profile nhs-direct-care-pipelines \
-		--template-file cloudformation/resources/pipeline_resources.yaml \
+		--template-file aws/cloudformation/pipeline_resources.yaml \
 		--stack-name github-managed-pipeline-resources \
-		--parameter-overrides file://cloudformation/resources/pipeline_resources_params.json \
+		--parameter-overrides file://aws/cloudformation/pipeline_resources_params.json \
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
 		--no-fail-on-empty-changeset 

@@ -163,7 +163,7 @@ Resources:
         #                RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
         #                StackName: !Ref AWS::StackName
         #                ChangeSetName: !Sub ${AWS::StackName}-ChangeSet
-        #                TemplatePath: SourceCodeAsZip::cloudformation/resources/ci_pipeline.yaml
+        #                TemplatePath: SourceCodeAsZip::aws/cloudformation/ci_pipeline.yaml
         #                Capabilities: CAPABILITY_NAMED_IAM
         #                ParameterOverrides: !Sub |
         #                  {

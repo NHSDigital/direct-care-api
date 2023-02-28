@@ -71,19 +71,21 @@ echo "Testing StackName              : $TestingStackName"
 echo "Prod StackName                 : $ProdStackName"
 
 # fix template params file for stack deployment
-cp $SCRIPT_DIR/../resources/ci_pipeline_params_template.json /tmp/ci_pipeline_params.json
-sed -i "s#@devPipelineExecutionRole#$devPipelineExecutionRole#g" /tmp/ci_pipeline_params.json
-sed -i "s#@devArtifactsBucket#$devArtifactsBucket#g" /tmp/ci_pipeline_params.json
-sed -i "s#@devCloudFormationExecutionRole#$devCloudFormationExecutionRole#g" /tmp/ci_pipeline_params.json
-sed -i "s#@intPipelineExecutionRole#$intPipelineExecutionRole#g" /tmp/ci_pipeline_params.json
-sed -i "s#@intArtifactsBucket#$intArtifactsBucket#g" /tmp/ci_pipeline_params.json
-sed -i "s#@intCloudFormationExecutionRole#$intCloudFormationExecutionRole#g" /tmp/ci_pipeline_params.json
-sed -i "s#@FeatureGitBranch#$GIT_BRANCH#g" /tmp/ci_pipeline_params.json
-sed -i "s#@TestingStackName#$TestingStackName#g" /tmp/ci_pipeline_params.json
-sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json
-sed -i "s#@ProdStackName#$ProdStackName#g" /tmp/ci_pipeline_params.json
-sed -i "s#@CODEBUILD_TOKEN#$CODEBUILD_TOKEN#g" /tmp/ci_pipeline_params.json
-sed -i "s#@CODEBUILD_USER#$CODEBUILD_USER#g" /tmp/ci_pipeline_params.json
+RENDERED_TEMPLATE=$SCRIPT_DIR/../rendered/ci_pipeline_params.json
+mkdir $SCRIPT_DIR/../rendered/ 
+cp $SCRIPT_DIR/../aws/cloudformation/ci_pipeline_params_template.json ${RENDERED_TEMPLATE}
+sed -i "s#@devPipelineExecutionRole#$devPipelineExecutionRole#g" ${RENDERED_TEMPLATE}
+sed -i "s#@devArtifactsBucket#$devArtifactsBucket#g" ${RENDERED_TEMPLATE}
+sed -i "s#@devCloudFormationExecutionRole#$devCloudFormationExecutionRole#g" ${RENDERED_TEMPLATE}
+sed -i "s#@intPipelineExecutionRole#$intPipelineExecutionRole#g" ${RENDERED_TEMPLATE}
+sed -i "s#@intArtifactsBucket#$intArtifactsBucket#g" ${RENDERED_TEMPLATE}
+sed -i "s#@intCloudFormationExecutionRole#$intCloudFormationExecutionRole#g" ${RENDERED_TEMPLATE}
+sed -i "s#@FeatureGitBranch#$GIT_BRANCH#g" ${RENDERED_TEMPLATE}
+sed -i "s#@TestingStackName#$TestingStackName#g" ${RENDERED_TEMPLATE}
+sed -i "s#@ProdStackName#$ProdStackName#g" ${RENDERED_TEMPLATE}
+sed -i "s#@ProdStackName#$ProdStackName#g" ${RENDERED_TEMPLATE}
+sed -i "s#@CODEBUILD_TOKEN#$CODEBUILD_TOKEN#g" ${RENDERED_TEMPLATE}
+sed -i "s#@CODEBUILD_USER#$CODEBUILD_USER#g" ${RENDERED_TEMPLATE}
 
 #aws cloudformation deploy \
 #		--profile nhs-direct-care-pipelines \
@@ -96,9 +98,9 @@ sed -i "s#@CODEBUILD_USER#$CODEBUILD_USER#g" /tmp/ci_pipeline_params.json
 
 
 aws cloudformation deploy \
-		--template-file ${SCRIPT_DIR}/../resources/ci_pipeline.yaml \
+		--template-file ${SCRIPT_DIR}/../aws/cloudformation/ci_pipeline.yaml \
 		--stack-name ${stackName} \
-		--parameter-overrides file:///tmp/ci_pipeline_params.json \
+		--parameter-overrides file://${RENDERED_TEMPLATE} \
 		--capabilities CAPABILITY_IAM \
 		--no-fail-on-empty-changeset
 
