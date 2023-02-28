@@ -66,7 +66,7 @@ echo "intPipelineExecutionRole       : $intPipelineExecutionRole"
 echo "intArtifactsBucket             : $intArtifactsBucket"
 echo "intCloudFormationExecutionRole : $intCloudFormationExecutionRole"
 echo "CI stackName                   : $stackName"
-echo "GIT_BRANCH               		 : $GIT_BRANCH"
+echo "GIT_BRANCH                     : $GIT_BRANCH"
 echo "Testing StackName              : $TestingStackName"
 echo "Prod StackName                 : $ProdStackName"
 
