@@ -588,7 +588,7 @@ Resources:
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
-        BuildSpec: pipeline/buildspec_unit_test.yml
+        BuildSpec: aws/codepipeline/buildspec_unit_test.yml
 
   CodeBuildProjectBuildAndDeployFeature:
     Condition: IsFeatureBranchPipeline
@@ -619,7 +619,7 @@ Resources:
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
-        BuildSpec: pipeline/buildspec_feature.yml
+        BuildSpec: aws/codepipeline/buildspec_feature.yml
 
   CodeBuildProjectBuildAndPackage:
     Condition: IsMainBranchPipeline
@@ -654,7 +654,7 @@ Resources:
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
-        BuildSpec: pipeline/buildspec_build_package.yml
+        BuildSpec: aws/codepipeline/buildspec_build_package.yml
 
   CodeBuildProjectIntegrationTest:
     Type: AWS::CodeBuild::Project
@@ -668,7 +668,7 @@ Resources:
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
-        BuildSpec: pipeline/buildspec_integration_test.yml
+        BuildSpec: aws/codepipeline/buildspec_integration_test.yml
 
   CodeBuildProjectDeploy:
     Condition: IsMainBranchPipeline
@@ -683,7 +683,7 @@ Resources:
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
-        BuildSpec: pipeline/buildspec_deploy.yml
+        BuildSpec: aws/codepipeline/buildspec_deploy.yml
 
   # lambda to notify github
 
