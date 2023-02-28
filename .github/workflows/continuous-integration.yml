@@ -78,6 +78,6 @@ jobs:
           CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
           CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
           PULL_REQUEST_ID: ${{steps.get_issue_number.outputs.result}}
+          GIT_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
-          export GIT_BRANCH=${GITHUB_REF##*/}
           ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment
