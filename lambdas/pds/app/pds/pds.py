@@ -2,7 +2,7 @@ from typing import Dict
 import uuid
 import json
 import requests
-from nhs_number import is_valid
+from nhs_number import is_valid  # type: ignore
 
 SANDBOX_URL = "https://sandbox.api.service.nhs.uk/personal-demographics/FHIR/R4"
 
