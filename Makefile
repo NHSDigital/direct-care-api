@@ -127,3 +127,6 @@ review-cloudformation-pipeline-resources:
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
 		--no-fail-on-empty-changeset 
+
+deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
+	./scripts/deploy_pipeline.sh
