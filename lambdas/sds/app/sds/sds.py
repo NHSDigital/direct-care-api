@@ -1,7 +1,7 @@
 import uuid
 from typing import Dict
 import requests as r
-from shared.logger import app_logger
+#from shared.logger import app_logger
 
 # pylint: disable= line-too-long, invalid-name, broad-exception-caught
 
@@ -30,12 +30,20 @@ def get_sds_device_data(ods_code):
 
 def extract_nhsMhsPartyKey(body):
     """Extracts the nhsPartyKey value from the /Device of SDS FHIR API response"""
+    entry_key = body["entry"][0]
+    if len(entry_key)==0:
+        raise IndexError
+
     party_key = body["entry"][0]["resource"]["identifier"][1]["value"]
     return party_key
 
 
 def extract_asid(body):
     """Extracts the ASID value from the /Device of SDS FHIR API response"""
+    entry_key = body["entry"][0]
+    if len(entry_key)==0:
+        raise IndexError
+
     asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
     return asid_number
 
@@ -54,8 +62,12 @@ def get_sds_endpoint_data(nhsMhsPartyKey):
     return endpoint_req.json()
 
 
-def extract_adress(body):
+def extract_address(body):
     """Extracts the address value from the /Endpoint of SDS FHIR API response"""
+    entry_key = body["entry"][0]
+    if len(entry_key)==0:
+        raise IndexError
+
     address = body["entry"][0]["resource"]["address"]
     return address
 
@@ -71,7 +83,7 @@ def handler(event, _context) -> Dict:
         sds_device_data = get_sds_device_data(ods_code)
         party_key = extract_nhsMhsPartyKey(sds_device_data)
         sds_endpoint_data = get_sds_endpoint_data(nhsMhsPartyKey=party_key)
-        result = extract_adress(sds_endpoint_data)
+        result = extract_address(sds_endpoint_data)
     except Exception:
         status_code = 500
         app_logger.exception()
