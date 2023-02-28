@@ -52,11 +52,11 @@ if [ -z "$PULL_REQUEST_ID" ]
 then
       stackName=sam-app-pipeline
 	  TestingStackName=direct-care-api-dev
-	  ProdStackName=direct-care-api-int
+	  IntStackName=direct-care-api-int
 else
       stackName=sam-app-pipeline-pr-${PULL_REQUEST_ID}
 	  TestingStackName=direct-care-api-dev-pr-${PULL_REQUEST_ID}
-	  ProdStackName=direct-care-api-int-pr-${PULL_REQUEST_ID}
+	  IntStackName=direct-care-api-int-pr-${PULL_REQUEST_ID}
 fi
 
 echo "devPipelineExecutionRole       : $devPipelineExecutionRole"
@@ -68,8 +68,8 @@ echo "intCloudFormationExecutionRole : $intCloudFormationExecutionRole"
 echo "CI stackName                   : $stackName"
 echo "GIT_BRANCH                     : $GIT_BRANCH"
 echo "Testing StackName              : $TestingStackName"
-echo "Prod StackName                 : $ProdStackName"
-
+echo "Int StackName                  : $IntStackName"
+ 
 # fix template params file for stack deployment
 RENDERED_TEMPLATE=$SCRIPT_DIR/../rendered/ci_pipeline_params.json
 mkdir $SCRIPT_DIR/../rendered/ 
@@ -82,8 +82,8 @@ sed -i "s#@intArtifactsBucket#$intArtifactsBucket#g" ${RENDERED_TEMPLATE}
 sed -i "s#@intCloudFormationExecutionRole#$intCloudFormationExecutionRole#g" ${RENDERED_TEMPLATE}
 sed -i "s#@FeatureGitBranch#$GIT_BRANCH#g" ${RENDERED_TEMPLATE}
 sed -i "s#@TestingStackName#$TestingStackName#g" ${RENDERED_TEMPLATE}
-sed -i "s#@ProdStackName#$ProdStackName#g" ${RENDERED_TEMPLATE}
-sed -i "s#@ProdStackName#$ProdStackName#g" ${RENDERED_TEMPLATE}
+sed -i "s#@IntStackName#$IntStackName#g" ${RENDERED_TEMPLATE}
+sed -i "s#@IntStackName#$IntStackName#g" ${RENDERED_TEMPLATE}
 sed -i "s#@CODEBUILD_TOKEN#$CODEBUILD_TOKEN#g" ${RENDERED_TEMPLATE}
 sed -i "s#@CODEBUILD_USER#$CODEBUILD_USER#g" ${RENDERED_TEMPLATE}
 

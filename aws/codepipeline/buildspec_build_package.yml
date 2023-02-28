@@ -16,13 +16,13 @@ phases:
       - sam package --s3-bucket ${TESTING_ARTIFACT_BUCKET}
         --region ${TESTING_REGION}
         --output-template-file packaged-test.yaml
-      - . ./scripts/assume_role.sh ${PROD_PIPELINE_EXECUTION_ROLE} prod-package
-      - sam package --s3-bucket ${PROD_ARTIFACT_BUCKET}
-        --region ${PROD_REGION}
-        --output-template-file packaged-prod.yaml
+      - . ./scripts/assume_role.sh ${INT_PIPELINE_EXECUTION_ROLE} int-package
+      - sam package --s3-bucket ${INT_ARTIFACT_BUCKET}
+        --region ${INT_REGION}
+        --output-template-file packaged-int.yaml
 artifacts:
   files:
     - packaged-test.yaml
-    - packaged-prod.yaml
+    - packaged-int.yaml
     - scripts/assume_role.sh
     - pipeline/*

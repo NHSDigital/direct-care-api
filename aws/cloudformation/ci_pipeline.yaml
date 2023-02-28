@@ -8,7 +8,7 @@ Description: >
   - BuildAndDeployFeatureStack (FeatureGitBranch only)
   - BuildAndPackage (MainGitBranch only)
   - DeployTest (MainGitBranch only)
-  - DeployProd (MainGitBranch only)
+  - DeployInt (MainGitBranch only)
 
   **WARNING** You will be billed for the AWS resources used if you create a stack from this template.
 
@@ -54,19 +54,19 @@ Parameters:
     # Update the line below with image repository URL and add "--image-repository ${TESTING_IMAGE_REPOSITORY}" to
     # prod "sam package" and "sam deploy" commands in buildspec files (in pipeline/).
     Default: ""
-  ProdRegion:
+  IntRegion:
     Type: String
     Default: "eu-west-2"
-  ProdStackName:
+  IntStackName:
     Type: String
     Default: "direct-care-api"
-  ProdPipelineExecutionRole:
+  IntPipelineExecutionRole:
     Type: String
-  ProdCloudFormationExecutionExeRole:
+  IntCloudFormationExecutionExeRole:
     Type: String
-  ProdArtifactBucket:
+  IntArtifactBucket:
     Type: String
-  ProdImageRepository:
+  IntImageRepository:
     Type: String
     # If there are functions with "Image" PackageType in your template,
     # Update the line below with image repository URL and add "--image-repository ${PROD_IMAGE_REPOSITORY}" to
@@ -169,10 +169,10 @@ Resources:
         #                  {
         #                    "FeatureGitBranch": "${FeatureGitBranch}",
         #                    "CodeStarConnectionArn": "${CodeStarConnectionArn}",
-        #                    "ProdArtifactBucket": "${ProdArtifactBucket}",
-        #                    "ProdCloudFormationExecutionExeRole": "${ProdCloudFormationExecutionExeRole}",
-        #                    "ProdPipelineExecutionRole": "${ProdPipelineExecutionRole}",
-        #                    "ProdStackName": "${ProdStackName}",
+        #                    "IntArtifactBucket": "${IntArtifactBucket}",
+        #                    "IntCloudFormationExecutionExeRole": "${IntCloudFormationExecutionExeRole}",
+        #                    "IntPipelineExecutionRole": "${IntPipelineExecutionRole}",
+        #                    "IntStackName": "${IntStackName}",
         #                    "TestingArtifactBucket": "${TestingArtifactBucket}",
         #                    "TestingCloudFormationExecutionRole": "${TestingCloudFormationExecutionRole}",
         #                    "TestingPipelineExecutionRole": "${TestingPipelineExecutionRole}",
@@ -294,9 +294,9 @@ Resources:
 
         - !If
           - IsMainBranchPipeline
-          - Name: DeployProd
+          - Name: DeployInt
             Actions:
-              # uncomment this to have a manual approval step before deployment to production
+              # uncomment this to have a manual approval step before deployment to int
               # - Name: ManualApproval
               #   ActionTypeId:
               #    Category: Approval
@@ -304,7 +304,7 @@ Resources:
               #    Provider: Manual
               #    Version: "1"
               #   RunOrder: 1
-              - Name: DeployProd
+              - Name: DeployInt
                 ActionTypeId:
                   Category: Build
                   Owner: AWS
@@ -315,13 +315,13 @@ Resources:
                   ProjectName: !Ref CodeBuildProjectDeploy
                   EnvironmentVariables: !Sub |
                     [
-                      {"name": "ENV_TEMPLATE", "value": "packaged-prod.yaml"},
-                      {"name": "ENV_REGION", "value": "${ProdRegion}"},
-                      {"name": "ENV_STACK_NAME", "value": "${ProdStackName}"},
-                      {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${ProdPipelineExecutionRole}"},
-                      {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${ProdCloudFormationExecutionExeRole}"},
-                      {"name": "ENV_BUCKET", "value": "${ProdArtifactBucket}"},
-                      {"name": "ENV_IMAGE_REPOSITORY", "value": "${ProdImageRepository}"}
+                      {"name": "ENV_TEMPLATE", "value": "packaged-int.yaml"},
+                      {"name": "ENV_REGION", "value": "${IntRegion}"},
+                      {"name": "ENV_STACK_NAME", "value": "${IntStackName}"},
+                      {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${IntPipelineExecutionRole}"},
+                      {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${IntCloudFormationExecutionExeRole}"},
+                      {"name": "ENV_BUCKET", "value": "${IntArtifactBucket}"},
+                      {"name": "ENV_IMAGE_REPOSITORY", "value": "${IntImageRepository}"}
                     ]
                 InputArtifacts:
                   - Name: BuildArtifactAsZip
@@ -637,20 +637,20 @@ Resources:
             Value: !Ref SamTemplate
           - Name: TESTING_REGION
             Value: !Ref TestingRegion
-          - Name: PROD_REGION
-            Value: !Ref ProdRegion
+          - Name: INT_REGION
+            Value: !Ref IntRegion
           - Name: TESTING_PIPELINE_EXECUTION_ROLE
             Value: !Ref TestingPipelineExecutionRole
-          - Name: PROD_PIPELINE_EXECUTION_ROLE
-            Value: !Ref ProdPipelineExecutionRole
+          - Name: INT_PIPELINE_EXECUTION_ROLE
+            Value: !Ref IntPipelineExecutionRole
           - Name: TESTING_ARTIFACT_BUCKET
             Value: !Ref TestingArtifactBucket
-          - Name: PROD_ARTIFACT_BUCKET
-            Value: !Ref ProdArtifactBucket
+          - Name: INT_ARTIFACT_BUCKET
+            Value: !Ref IntArtifactBucket
           - Name: TESTING_IMAGE_REPOSITORY
             Value: !Ref TestingImageRepository
-          - Name: PROD_IMAGE_REPOSITORY
-            Value: !Ref ProdImageRepository
+          - Name: INT_IMAGE_REPOSITORY
+            Value: !Ref IntImageRepository
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
