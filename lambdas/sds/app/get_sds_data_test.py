@@ -49,10 +49,11 @@ class TestExtractionMethods(unittest.TestCase):
         actual = "YES-0000807"
         expected = extract_nhsMhsPartyKey(body)
         self.assertNotEqual(actual, expected)
-    
+
     def test_donot_extract_empty_nhsMhsPartyKey(self):
         body = {"entry": []}
-        self.assertRaises(IndexError, lambda: extract_nhsMhsPartyKey(body))
+        with self.assertRaises(IndexError):
+            extract_nhsMhsPartyKey(body)
 
     def test_extract_asid(self):
         body = {"entry": [
@@ -100,7 +101,8 @@ class TestExtractionMethods(unittest.TestCase):
 
     def test_donot_extract_empty_asid(self):
         body = {"entry": []}
-        self.assertRaises(IndexError, lambda: extract_asid(body))
+        with self.assertRaises(IndexError):
+            extract_asid(body)
 
     def test_extract_adress(self):
         body= {
@@ -130,7 +132,7 @@ class TestExtractionMethods(unittest.TestCase):
         actual = "https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliablerequest"
         expected = extract_address(body)
         self.assertEqual(actual, expected)
-        
+
     def test_donot_extract_wrong_adress(self):
         body= {
             "entry" : [ {
@@ -159,7 +161,8 @@ class TestExtractionMethods(unittest.TestCase):
         actual = "https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliabler"
         expected = extract_address(body)
         self.assertNotEqual(actual, expected)
-    
+
     def test_donot_extract_empty_address(self):
         body = {"entry": []}
-        self.assertRaises(IndexError, lambda: extract_address(body))
+        with self.assertRaises(IndexError):
+            extract_address(body)
