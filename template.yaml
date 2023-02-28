@@ -56,6 +56,18 @@ Resources:
             Id: PowerFunction
           Permissions:
             - Write
+      InvokePds:
+        Properties:
+          Destination:
+            Id: PdsFunction
+          Permissions:
+            - Write
+      InvokeSds:
+        Properties:
+          Destination:
+            Id: SdsFunction
+          Permissions:
+            - Write
 
     Properties:
       CodeUri: lambdas/main/
@@ -105,6 +117,28 @@ Resources:
     Properties:
       CodeUri: lambdas/power/
       Handler: app.power_lambda.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref SharedLayer
+
+  PdsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/pds/
+      Handler: pds_lambda.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref SharedLayer
+
+  SdsFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdas/sds/
+      Handler: sds_lambda.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64

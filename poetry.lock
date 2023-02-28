@@ -1211,6 +1211,18 @@ extra = ["lxml (>=4.6)", "pydot (>=1.4.2)", "pygraphviz (>=1.9)", "sympy (>=1.10
 test = ["codecov (>=2.1)", "pytest (>=7.2)", "pytest-cov (>=4.0)"]
 
 [[package]]
+name = "nhs-number"
+version = "1.2.1"
+description = "Python library for checking the validity of NHS Numbers"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "nhs_number-1.2.1-py2.py3-none-any.whl", hash = "sha256:cb07ac19ab019badc8f547eff0c29b2ebe51b63172955efbf242ef0d37501f7c"},
+    {file = "nhs_number-1.2.1.tar.gz", hash = "sha256:9c2bd54f7d8d5da09c0f277473b25e41615a45759a3b56c7d2c5bf393074aa1b"},
+]
+
+[[package]]
 name = "packaging"
 version = "23.0"
 description = "Core utilities for Python packages"
