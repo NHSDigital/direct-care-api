@@ -15,7 +15,7 @@ phases:
       - STACK_NAME=`echo ${ENV_STACK_NAME} | tr -cd '[a-zA-Z0-9-]'`
       - echo STACK_NAME ${STACK_NAME}
       - echo ENV_PIPELINE_EXECUTION_ROLE ${ENV_PIPELINE_EXECUTION_ROLE}
-      - . ./assume-role.sh ${ENV_PIPELINE_EXECUTION_ROLE} integration-test
+      - . ./scripts/assume_role.sh ${ENV_PIPELINE_EXECUTION_ROLE} integration-test
       - stack_resources=`aws cloudformation describe-stack-resources --stack-name ${STACK_NAME}`
       - serverlessRestApi=`echo $stack_resources | jq -r '.StackResources[] |select(.ResourceType=="AWS::ApiGateway::RestApi").PhysicalResourceId'`
       - BASE_URL=https://${serverlessRestApi}.execute-api.eu-west-2.amazonaws.com/Prod/
