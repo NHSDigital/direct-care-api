@@ -18,6 +18,12 @@ Conditions:
     - ""
 
 Resources:
+  CodeStarConnection:
+    Type: AWS::CodeStarConnections::Connection
+    Properties:
+      ConnectionName: GitRepositoryConnection
+      ProviderType: "GitHub"
+
   CloudFormationDeployRole:
     Type: AWS::IAM::Role
     Properties:

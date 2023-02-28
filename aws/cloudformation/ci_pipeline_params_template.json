@@ -13,7 +13,7 @@
     "TestingPipelineExecutionRole=@devPipelineExecutionRole",
     "TestingRegion=eu-west-2",
     "TestingStackName=@TestingStackName",
-    "CodeStarConnectionArn=arn:aws:codestar-connections:eu-west-2:038755702666:connection/ddce3c23-848a-49b3-9d1c-9cd0dd5d0c81",
+    "CodeStarConnectionArn=arn:aws:codestar-connections:eu-west-2:038755702666:connection/36e6d606-1972-44e0-b493-f86593c8537c",
     "FeatureGitBranch=@FeatureGitBranch",
     "IntegrationUser=@CODEBUILD_USER",
     "IntegrationPass=@CODEBUILD_TOKEN"
