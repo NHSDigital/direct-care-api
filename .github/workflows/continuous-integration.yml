@@ -53,12 +53,31 @@ jobs:
           role-to-assume: arn:aws:iam::038755702666:role/github-managed-pipeline-r-CloudFormationDeployRole-1K2TWJ9088EOI
           role-session-name: github-actions
 
+      - uses: actions/github-script@v6
+        id: get_issue_number
+        with:
+          script: |
+            if (context.issue.number) {
+              // Return issue number if present
+              return context.issue.number;
+            } else {
+              // Otherwise return issue number from commit
+              return (
+                await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  commit_sha: context.sha,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                })
+              ).data[0].number;
+            }
+          result-encoding: string
+
       - shell: bash
         name: deploy_pipeline
         env:
           CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
           CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
+          PULL_REQUEST_ID: ${{steps.get_issue_number.outputs.result}}
         run: |
-          PULL_REQUEST_ID=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           GIT_BRANCH=${GITHUB_REF_NAME}
           ./cloudformation/scripts/deploy_pipeline.sh 4 sam_deployment

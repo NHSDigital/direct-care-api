@@ -14,21 +14,16 @@ then
 	exit 1
 fi
 
-if test -z "$PULL_REQUEST_ID" 
-then
-	echo "\$PULL_REQUEST_ID is empty"
-	exit 1
-fi
-
 if test -z "$GIT_BRANCH" 
 then
 	echo "\$GIT_BRANCH is empty"
 	exit 1
 fi
 
-# get dev information
-# leaving this in here as should use it but need permissions and roles sorting.....
 
+
+# leaving this in here as should use it but need permissions and roles sorting.....
+# get dev information
 #cloudformation_exports=`aws cloudformation list-exports --profile nhs-direct-care-dev`
 
 #devPipelineExecutionRole=`echo $cloudformation_exports | jq -r '.Exports[] |select(.Name=="aws-sam-cli-managed-dev-pipeline-resources:PipelineExecutionRole").Value'`

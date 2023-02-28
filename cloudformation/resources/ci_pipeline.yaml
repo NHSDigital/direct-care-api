@@ -33,7 +33,7 @@ Parameters:
     Default: "NHSDigital/direct-care-api"
   MainGitBranch:
     Type: String
-    Default: "sam_deployment"
+    Default: "main"
   SamTemplate:
     Type: String
     Default: "template.yaml"
@@ -91,7 +91,7 @@ Parameters:
     Description: Enter Bitbucket or GitHub API password
 
 Conditions:
-  IsMainBranchPipeline: !Equals [!Ref FeatureGitBranch, ""]
+  IsMainBranchPipeline: !Equals [!Ref FeatureGitBranch, "main"]
   IsFeatureBranchPipeline: !Not [Condition: IsMainBranchPipeline]
   CreateConnection: !Equals [!Ref CodeStarConnectionArn, ""]
 
