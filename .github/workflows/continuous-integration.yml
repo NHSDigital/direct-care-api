@@ -80,4 +80,4 @@ jobs:
           PULL_REQUEST_ID: ${{steps.get_issue_number.outputs.result}}
           GIT_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
-          ./cloudformation/scripts/deploy_pipeline.sh
+          ./scripts/deploy_pipeline.sh
