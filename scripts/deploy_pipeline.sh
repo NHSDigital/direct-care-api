@@ -48,7 +48,7 @@ intPipelineExecutionRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-
 intArtifactsBucket=aws-sam-cli-managed-int-pipeline-artifactsbucket-ja6wzylqqdr1
 intCloudFormationExecutionRole=arn:aws:iam::503308544674:role/aws-sam-cli-managed-int-p-CloudFormationExecutionR-YHTLPPVNKT3V
 
-if [ -z "$PULL_REQUEST_ID" ]
+if [ "$GIT_BRANCH" = "main" ]
 then
       stackName=sam-app-pipeline
 	  TestingStackName=direct-care-api-dev
@@ -72,7 +72,7 @@ echo "Int StackName                  : $IntStackName"
  
 # fix template params file for stack deployment
 RENDERED_TEMPLATE=$SCRIPT_DIR/../rendered/ci_pipeline_params.json
-mkdir $SCRIPT_DIR/../rendered/ 
+mkdir -p $SCRIPT_DIR/../rendered/ 
 cp $SCRIPT_DIR/../aws/cloudformation/ci_pipeline_params_template.json ${RENDERED_TEMPLATE}
 sed -i "s#@devPipelineExecutionRole#$devPipelineExecutionRole#g" ${RENDERED_TEMPLATE}
 sed -i "s#@devArtifactsBucket#$devArtifactsBucket#g" ${RENDERED_TEMPLATE}

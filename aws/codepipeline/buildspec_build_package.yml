@@ -25,4 +25,4 @@ artifacts:
     - packaged-test.yaml
     - packaged-int.yaml
     - scripts/assume_role.sh
-    - pipeline/*
+    - aws/codepipeline/*
