@@ -24,6 +24,7 @@ pydantic = "^1.10.5"
 aws-sam-translator = "1.59.0"
 jsonschema = "4.17.3"
 nhs-number = "^1.2.1"
+pyjwt = "^2.6.0"
 
 [tool.pytest.ini_options]
 pythonpath = [

@@ -249,3 +249,6 @@ $RECYCLE.BIN/
 logs/
 reports/
 rendered/
+
+int-1.pem
+api_key.txt
