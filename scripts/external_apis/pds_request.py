@@ -53,8 +53,6 @@ def create_client_assertion():
         "exp": int(time()) + 300,
     }
 
-    print(payload)
-
     return jwt.encode(
         payload, key=SECRETS_DICT["private_key"], algorithm="RS512", headers=headers
     )
@@ -74,7 +72,7 @@ def get_access_token():
         data=data,
         headers={"content-type": "application/x-www-form-urlencoded"},
     ).json()
-    print(token_response)
+
     return token_response.get("access_token")
 
 
