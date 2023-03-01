@@ -116,9 +116,8 @@ async def process(event: Dict) -> Dict:
     param_a = int(event["queryStringParameters"]["a"])
     param_b = int(event["queryStringParameters"]["b"])
     nhs_number = int(event["queryStringParameters"]["nhs_number"])
-    ods = str(
-        event["queryStringParameters"]["ods"]
-    )  # the ods will change once we have a value from pds
+    # the ods will change once we have a value from pds
+    ods = str(event["queryStringParameters"]["ods"])
     ssp_input = str(event["queryStringParameters"]["ssp_input"])
 
     results = await asyncio.gather(
