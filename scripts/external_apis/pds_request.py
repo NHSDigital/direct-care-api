@@ -7,7 +7,7 @@ Pre-requisites:
 
 Usage:
     <from root dir>
-    python scripts/pds_request <nhs_number>
+    python scripts/pds_request.py <nhs_number>
 
 To get nhs numbers available in the PDS integration environment,
 refer to the integration test pack at:
@@ -15,11 +15,12 @@ https://digital.nhs.uk/developer/api-catalogue/personal-demographics-service-fhi
 
 """
 
+import sys
+from time import time
+from uuid import uuid4
+
 import jwt
 import requests
-from uuid import uuid4
-from time import time
-import sys
 
 
 def private_key():
