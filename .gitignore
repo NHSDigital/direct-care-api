@@ -250,6 +250,5 @@ logs/
 reports/
 rendered/
 
-.vscode/settings.json
 int-1.pem
 api_key.txt
