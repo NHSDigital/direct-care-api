@@ -1,6 +1,6 @@
 from typing import Dict
 
-from sds.sds import handler
+from .sds.sds import handler
 
 
 def lambda_handler(event, context) -> Dict:

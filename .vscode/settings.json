@@ -13,5 +13,5 @@
         "convention": "Warning",
         "refactor": "Warning"
     },
-    "python.linting.pylintCategorySeverity.convention": "Warning"
+    "python.linting.pylintCategorySeverity.convention": "Warning",
 }

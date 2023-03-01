@@ -12,12 +12,20 @@ app_logger.setup("main_lambda")
 app_logger.logger().addFilter(context_logger)
 
 
+is_sam_local = os.getenv("AWS_SAM_LOCAL") == "true"
+add_function_arn = "AddFunction" if is_sam_local else os.getenv("AddFunction_ARN")
+multiply_function_arn = (
+    "AddFunction" if is_sam_local else os.getenv("MultiplyFunction_ARN")
+)
+power_function_arn = "AddFunction" if is_sam_local else os.getenv("PowerFunction_ARN")
+
+
 @log_action()
 async def add(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Add lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
     response = lambda_client.invoke(
-        FunctionName="AddFunction",
+        FunctionName=add_function_arn,
         InvocationType="RequestResponse",
         Payload=json.dumps(lambda_payload).encode("utf-8"),
     )
@@ -30,7 +38,7 @@ async def multiply(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]
     """Async function to invoke the Multiply lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
     response = lambda_client.invoke(
-        FunctionName="MultiplyFunction",
+        FunctionName=multiply_function_arn,
         InvocationType="RequestResponse",
         Payload=json.dumps(lambda_payload).encode("utf-8"),
     )
@@ -43,7 +51,7 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
     """Async function to invoke the Power lambda"""
     lambda_payload = {"a": param_a, "b": param_b}
     response = lambda_client.invoke(
-        FunctionName="PowerFunction",
+        FunctionName=power_function_arn,
         InvocationType="RequestResponse",
         Payload=json.dumps(lambda_payload).encode("utf-8"),
     )
@@ -54,6 +62,9 @@ async def power(lambda_client, param_a: int, param_b: int) -> Tuple[str, int]:
 @log_action()
 async def sds(lambda_client, ods: str) -> Tuple[str, int]:
     """Async function to invoke the SDS lambda"""
+    lambda_payload = {
+        "ods": ods,
+    }
     lambda_payload = {
         "ods": ods,
     }
@@ -96,7 +107,6 @@ async def ssp(lambda_client, ssp_input: str) -> Tuple[str, int]:
 async def process(event: Dict) -> Dict:
     """Orchestration function"""
 
-    is_sam_local = os.getenv("AWS_SAM_LOCAL") == "true"
     lambda_client = (
         boto3.client("lambda", endpoint_url=os.getenv("EndpointUrl"))
         if is_sam_local
@@ -119,7 +129,6 @@ async def process(event: Dict) -> Dict:
         sds(lambda_client, ods),
         ssp(lambda_client, ssp_input),
     )
-    print({result[0]: result[1] for result in results})
     return {result[0]: result[1] for result in results}
 
 

@@ -1,0 +1,20 @@
+[
+    "FullRepositoryId=NHSDigital/direct-care-api",
+    "GitProviderType=GitHub",
+    "MainGitBranch=main",
+    "IntArtifactBucket=@intArtifactsBucket",
+    "IntCloudFormationExecutionExeRole=@intCloudFormationExecutionRole",
+    "IntPipelineExecutionRole=@intPipelineExecutionRole",
+    "IntRegion=eu-west-2",
+    "IntStackName=@IntStackName",
+    "SamTemplate=template.yaml",
+    "TestingArtifactBucket=@devArtifactsBucket",
+    "TestingCloudFormationExecutionRole=@devCloudFormationExecutionRole",
+    "TestingPipelineExecutionRole=@devPipelineExecutionRole",
+    "TestingRegion=eu-west-2",
+    "TestingStackName=@TestingStackName",
+    "CodeStarConnectionArn=arn:aws:codestar-connections:eu-west-2:038755702666:connection/36e6d606-1972-44e0-b493-f86593c8537c",
+    "FeatureGitBranch=@FeatureGitBranch",
+    "IntegrationUser=@CODEBUILD_USER",
+    "IntegrationPass=@CODEBUILD_TOKEN"
+]

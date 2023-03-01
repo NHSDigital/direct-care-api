@@ -11,11 +11,14 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # This causes all history to be fetched, which is required for calculate-version to function
+          fetch-depth: 0 # This causes all history to be fetched, which is required for calculate-version to function
 
       - name: Install Python 3.9
         uses: actions/setup-python@v4
@@ -43,3 +46,38 @@ jobs:
       - name: Set SPEC_VERSION env var
         run: echo "USE THIS TO SET VERSION NUMBER <TODO>"
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::038755702666:role/github-managed-pipeline-r-CloudFormationDeployRole-1K2TWJ9088EOI
+          role-session-name: github-actions
+
+      - uses: actions/github-script@v6
+        id: get_issue_number
+        with:
+          script: |
+            if (context.issue.number) {
+              // Return issue number if present
+              return context.issue.number;
+            } else {
+              // Otherwise return issue number from commit
+              return (
+                await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  commit_sha: context.sha,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                })
+              ).data[0].number;
+            }
+          result-encoding: string
+
+      - shell: bash
+        name: deploy_pipeline
+        env:
+          CODEBUILD_TOKEN: ${{ secrets.CODEBUILD_TOKEN }}
+          CODEBUILD_USER: ${{ secrets.CODEBUILD_USER }}
+          PULL_REQUEST_ID: ${{steps.get_issue_number.outputs.result}}
+          GIT_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          make deploy_pipeline
