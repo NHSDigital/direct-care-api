@@ -1,6 +1,12 @@
 SHELL:=/bin/bash -O globstar
 .SHELLFLAGS = -ecu
 
+guard-%:
+	@ if [ "${${*}}" = "" ]; then \
+		echo "Environment variable $* not set"; \
+		exit 1; \
+	fi
+
 remove-docker-config:
 	rm -f /home/vscode/.docker/config.json
 
@@ -67,8 +73,60 @@ test:
 	mkdir -p reports
 	poetry run pytest lambdas --junitxml=reports/junit.xml
 
+integration-test: guard-BASE_URL
+	echo "running integration tests"
+
 clean:
 	rm -rf .aws-sam || true
 	find . -type d -name '.mypy_cache' | xargs rm -rf || true
 	find . -type d -name '.pytest_cache' | xargs rm -rf || true
 	find . -type d -name '__pycache__' | xargs rm -rf || true
+
+sync: guard-stack_name
+	sam sync --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev
+
+sync-watch: guard-stack_name
+	sam sync --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev --watch
+
+delete-sam-stack: guard-stack_name
+	sam delete --stack-name $$stack_name --region eu-west-2  --profile nhs-direct-care-dev
+
+get-sam-endpoint: guard-stack_name
+	@sam list endpoints --region eu-west-2  --profile nhs-direct-care-dev --stack-name=anthonydev --output json \
+		| jq -r '.[] | select(.LogicalResourceId=="ServerlessRestApi") | .CloudEndpoint[] | select(. |endswith("Prod"))'
+
+curl-sam: guard-sam_endpoint
+	curl -s "$$sam_endpoint/calculate?a=5&b=7"
+
+review-cloudformation-dev-resources:
+	aws cloudformation deploy \
+		--profile nhs-direct-care-dev \
+		--template-file aws/cloudformation/dev_pipeline_resources.yaml \
+		--stack-name aws-sam-cli-managed-dev-pipeline-resources \
+		--parameter-overrides file://aws/cloudformation/dev_pipeline_resources_params.json \
+		--capabilities CAPABILITY_IAM \
+		--no-execute-changeset \
+		--no-fail-on-empty-changeset 
+
+review-cloudformation-int-resources:
+	aws cloudformation deploy \
+		--profile nhs-direct-care-int \
+		--template-file aws/cloudformation/int_pipeline_resources.yaml \
+		--stack-name aws-sam-cli-managed-int-pipeline-resources \
+		--parameter-overrides file://aws/cloudformation/int_pipeline_resources_params.json \
+		--capabilities CAPABILITY_IAM \
+		--no-execute-changeset \
+		--no-fail-on-empty-changeset 
+
+review-cloudformation-pipeline-resources:
+	aws cloudformation deploy \
+		--profile nhs-direct-care-pipelines \
+		--template-file aws/cloudformation/pipeline_resources.yaml \
+		--stack-name github-managed-pipeline-resources \
+		--parameter-overrides file://aws/cloudformation/pipeline_resources_params.json \
+		--capabilities CAPABILITY_IAM \
+		--no-execute-changeset \
+		--no-fail-on-empty-changeset 
+
+deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
+	./scripts/deploy_pipeline.sh

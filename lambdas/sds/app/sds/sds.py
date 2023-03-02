@@ -1,7 +1,7 @@
 import uuid
 from typing import Dict
 import requests as r
-#from shared.logger import app_logger
+from shared.logger import app_logger
 
 # pylint: disable= line-too-long, invalid-name, broad-exception-caught
 
