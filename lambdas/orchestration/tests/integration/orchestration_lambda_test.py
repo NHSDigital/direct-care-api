@@ -1,4 +1,4 @@
-from ...orchestration_handler import orchestration_handler
+from ...handler.orchestration_handler import orchestration_handler
 from ..utils.log_helper import LogHelper
 from ..utils.test_utils import mock_orchestration_event, parse_response
 

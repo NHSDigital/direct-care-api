@@ -3,7 +3,7 @@
 import json
 from http import HTTPStatus
 
-from .lib.write_log import write_log
+from ..lib.write_log import write_log
 
 
 def orchestration_handler(event, _):
