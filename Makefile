@@ -129,5 +129,5 @@ deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
 	./scripts/deploy_pipeline.sh
 
 pytest-ci:
-	pytest lambdas/orchestration --tb=short --capture=no -p no:warnings \
+	python -m pytest lambdas/orchestration --tb=short --capture=no -p no:warnings \
 	--cov-report html --cov-report term --cov=lambdas/orchestration
