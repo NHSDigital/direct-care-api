@@ -252,3 +252,4 @@ rendered/
 
 int-1.pem
 api_key.txt
+coverage_html_report/
