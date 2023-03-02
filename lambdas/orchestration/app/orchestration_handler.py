@@ -30,10 +30,10 @@ def orchestration_handler(event, _):
 
     return {
         "statusCode": HTTPStatus.OK,
-        "pds_status_code": pds_status_code,
-        "pds_record": pds_body,
         "body": json.dumps({
-            "nhs_number": nhs_number
+            "nhs_number": nhs_number,
+            "pds_status_code": pds_status_code,
+            "pds_record": pds_body,
         }),
         "headers": {"test_header": "test_value"},
         "isBase64Encoded": False
