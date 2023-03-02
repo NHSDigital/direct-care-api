@@ -41,7 +41,7 @@
   "isort.args": ["--profile", "black"],
   "editor.guides.indentation": true,
   "python.testing.pytestArgs": [
-    "lambdas"
+    "lambdas", "--capture=no"
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true
