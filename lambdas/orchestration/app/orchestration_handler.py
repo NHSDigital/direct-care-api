@@ -22,6 +22,8 @@ def orchestration_handler(event, _):
         return {
             "statusCode": HTTPStatus.BAD_REQUEST,
             "body": json.dumps({"error": error}),
+            "headers": {"test_header": "test_value"},
+            "isBase64Encoded": False
         }
 
     pds_status_code, pds_body = lookup_nhs_number(nhs_number)
@@ -29,8 +31,10 @@ def orchestration_handler(event, _):
     return {
         "statusCode": HTTPStatus.OK,
         "pds_status_code": pds_status_code,
-        "pds_body": pds_body,
+        "pds_record": pds_body,
         "body": json.dumps({
             "nhs_number": nhs_number
         }),
+        "headers": {"test_header": "test_value"},
+        "isBase64Encoded": False
     }
