@@ -3,6 +3,7 @@
 import json
 from http import HTTPStatus
 
+from ..lib.pds_fhir import lookup_nhs_number
 from ..lib.write_log import write_log
 
 
@@ -23,8 +24,12 @@ def orchestration_handler(event, _):
             "body": json.dumps({"error": error}),
         }
 
+    pds_status_code, pds_body = lookup_nhs_number(nhs_number)
+
     return {
         "statusCode": HTTPStatus.OK,
+        "pds_status_code": pds_status_code,
+        "pds_body": pds_body,
         "body": json.dumps({
             "nhs_number": nhs_number
         }),
