@@ -74,7 +74,7 @@ test:
 	poetry run pytest lambdas --junitxml=reports/junit.xml
 
 integration-test: guard-BASE_URL
-	echo "running integration tests"
+	echo "Running Integration Tests"
 
 clean:
 	rm -rf .aws-sam || true
