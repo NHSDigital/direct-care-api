@@ -33,4 +33,8 @@ def test_orchestration_lambda_no_nhs_number_provided(logger: LogHelper):
     assert logger.was_logged("LAMBDA0001")
 
     assert logger.was_logged("LAMBDA0002")
-    assert logger.was_value_logged("LAMBDA0002", "reason", "nhs_number is required query string parameter")
+    assert logger.was_value_logged(
+        "LAMBDA0002",
+        "reason",
+        "nhs_number is required query string parameter"
+    )

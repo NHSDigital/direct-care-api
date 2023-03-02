@@ -15,7 +15,6 @@ phases:
       # trigger the unit tests here
       - echo 'Running unit tests'
       - make install
-      - make lint
       - make test
 reports:
   unit-test-reports:

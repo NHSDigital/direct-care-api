@@ -1,6 +1,5 @@
 """Test log helper to determine if correct logs and details were logged"""
 import io
-import re
 import sys
 
 
