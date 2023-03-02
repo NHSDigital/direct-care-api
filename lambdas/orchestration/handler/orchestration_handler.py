@@ -3,8 +3,8 @@
 import json
 from http import HTTPStatus
 
-from ..lib.pds_fhir import lookup_nhs_number
-from ..lib.write_log import write_log
+from .lib.pds_fhir import lookup_nhs_number
+from .lib.write_log import write_log
 
 
 def orchestration_handler(event, _):

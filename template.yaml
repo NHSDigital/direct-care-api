@@ -37,7 +37,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambdas/orchestration/
-      Handler: orchestration_handler.orchestration_handler
+      Handler: handler.orchestration_handler.orchestration_handler
       Runtime: python3.9
       Architectures:
         - x86_64

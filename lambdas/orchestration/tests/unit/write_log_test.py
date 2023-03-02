@@ -1,6 +1,6 @@
 import pytest
 
-from ...lib.write_log import write_log
+from ...handler.lib.write_log import write_log
 from ..utils.log_helper import LogHelper
 
 
