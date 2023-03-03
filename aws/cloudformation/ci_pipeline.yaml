@@ -198,8 +198,6 @@ Resources:
         #                - Name: !Sub ${AWS::StackName}ChangeSet
         #              RunOrder: 2
 
-        # Uncomment and modify the following step for running the unit-tests
-
         - !If
           - IsFeatureBranchPipeline
           - Name: BuildAndDeployFeatureStack

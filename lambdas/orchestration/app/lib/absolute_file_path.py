@@ -1,6 +1,6 @@
 """
-When the lambda function is created (see package-lambdas command in Makefile)
-the directory structure changes slightly so whenever you need to access a file in
+When the lambda function is createdmthe directory structure
+changes slightly so whenever you need to access a file in
 the python code, you need to get the absolute path of the *python* file that wants to use
 that file, then navigate to the file relatively
 """

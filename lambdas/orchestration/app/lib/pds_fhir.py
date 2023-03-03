@@ -4,6 +4,7 @@ import requests
 
 from .get_access_token import get_access_token
 
+# This will need to be changed if we ever integrate with prod
 PDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
 
 
