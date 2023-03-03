@@ -33,6 +33,52 @@ Parameters:
 # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
 
 Resources:
+
+  # Declare the lambda role manually
+  LambdaIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaIAMRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      # This AWS managed policy allows the lambda function to write logs to cloudwatch
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+      # Add permission to retrieve SSM parameters from the store
+      Policies:
+        - PolicyName: SsmGet
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Sid: GetParameterFromStore
+                Action:
+                  - ssm:PutParameter
+                Resource: !Sub
+                  - "arn:aws:ssm:eu-west-2:${AccountId}:parameter/"
+                  - AccountId: !Ref AWS::AccountId
+
+        # Add permission to decrypt those SSM Parameters with the auto-generated KMS key
+        - PolicyName: KmsDecrypt
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Sid: DecryptWithKMS
+                Action:
+                  - kms:Decrypt
+                Resource: !Sub
+                  - "arn:aws:kms:eu-west-2:${AccountId}:key/*"
+                  - AccountId: !Ref AWS::AccountId
+
   MainFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -50,6 +96,7 @@ Resources:
           Properties:
             Path: /calculate
             Method: get
+      Role: !Ref LambdaIAMRole
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -63,4 +110,4 @@ Outputs:
     Value: !GetAtt MainFunction.Arn
   DirectCareFunctionIamRole:
     Description: "Implicit IAM Role created for the Main function"
-    Value: !GetAtt MainFunctionRole.Arn
+    Value: !GetAtt LambdaIAMRole.Arn
