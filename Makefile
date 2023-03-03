@@ -129,5 +129,5 @@ deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
 	./scripts/deploy_pipeline.sh
 
 pytest-ci:
-	poetry run pytest lambdas/orchestration --tb=short --capture=no -p no:warnings \
+	poetry run pytest lambdas/orchestration --tb=short --capture=no \
 	--cov-report html --cov-report term --cov=lambdas/orchestration
