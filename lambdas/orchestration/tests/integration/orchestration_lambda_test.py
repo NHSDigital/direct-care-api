@@ -12,7 +12,11 @@ def test_orchestration_lambda_success(logger: LogHelper):
     lambda_response = parse_response(orchestration_handler(event, ""))
 
     assert lambda_response.status_code == 200
-    assert lambda_response.body == {'nhs_number': nhs_number}
+    assert "nhs_number" in lambda_response.body
+    assert "pds_record" in lambda_response.body
+
+    # Check that the record has loaded correctly by verifying the expected birthdate
+    assert lambda_response.body["pds_record"]["birthDate"] == "2015-01-01"
 
     assert logger.was_logged("LAMBDA0001")
 

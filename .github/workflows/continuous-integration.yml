@@ -43,13 +43,13 @@ jobs:
       - name: Install python packages
         run: poetry install
 
-      # - name: Lint
-      #   if: always()
-      #   run: make lint
+      - name: Lint
+        if: always()
+        run: make lint
 
-      # - name: Mocked testing
-      #   if: always()
-      #   run: make pytest-ci
+      - name: Mocked testing
+        if: always()
+        run: make pytest-ci
 
       - name: Set SPEC_VERSION env var
         run: echo "USE THIS TO SET VERSION NUMBER <TODO>"

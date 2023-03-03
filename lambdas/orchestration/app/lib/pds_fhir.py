@@ -1,8 +1,7 @@
 from uuid import uuid4
 
-import requests
-
 from .get_access_token import get_access_token
+from .make_get_request import make_get_request
 
 # This will need to be changed if we ever integrate with prod
 PDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
@@ -20,5 +19,5 @@ def lookup_nhs_number(nhs_number):
     }
     endpoint = PDS_FHIR_ENDPOINT
     url = f"{endpoint}/{nhs_number}"
-    response = requests.get(url, headers=headers)
+    response = make_get_request(url, headers)
     return response.status_code, response.json()

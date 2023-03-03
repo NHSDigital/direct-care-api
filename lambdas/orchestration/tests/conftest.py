@@ -1,10 +1,13 @@
 # pylint: disable=unused-argument
 
 import logging
+from unittest.mock import patch
 
 import pytest
 
 from .utils.log_helper import LogHelper
+from .utils.mock_get_request import MockGetRequest
+from .utils.mock_ssm_client import MockSSMClient
 
 
 @pytest.fixture(name="logger")
@@ -14,3 +17,15 @@ def log_helper_fixture(request):
     log_helper = LogHelper(request.node.originalname)
     log_helper.set_stdout_capture()
     return log_helper
+
+
+@pytest.fixture(autouse=True)
+def patch_ssm():
+    with patch("lambdas.orchestration.app.lib.get_ssm_param.get_ssm_client", MockSSMClient()):
+        yield
+
+
+@pytest.fixture(autouse=True)
+def patch_request():
+    with patch("lambdas.orchestration.app.lib.make_get_request.requests.get", MockGetRequest()):
+        yield

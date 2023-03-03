@@ -44,6 +44,7 @@ def get_access_token():
         OAUTH_ENDPOINT,
         data=data,
         headers={"content-type": "application/x-www-form-urlencoded"},
+        timeout=600
     ).json()
 
     return token_response.get("access_token")
