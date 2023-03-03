@@ -96,7 +96,7 @@ Resources:
           Properties:
             Path: /calculate
             Method: get
-      Role: !Ref LambdaIAMRole
+      Role: !Ref LambdaIAMRole.Arn
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
