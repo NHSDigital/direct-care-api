@@ -1,4 +1,3 @@
-from botocore.exceptions import ClientError
 
 from .mock_private_key import MOCK_RSA_KEY
 
@@ -12,7 +11,7 @@ class MockSSMClient:
     def get_parameter(self, Name, **kwargs):
         """Mocking the get_parameter function"""
         if Name not in self.params:
-            raise ClientError({"Error": {"Message": f"Parameter {Name} not found."}}, "testing")
+            raise ValueError({"Error": {"Message": f"Parameter {Name} not found."}}, "testing")
         return {"Parameter": {"Value": self.params[Name]}}
 
     def __call__(self, *args):
