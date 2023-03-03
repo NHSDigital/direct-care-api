@@ -63,7 +63,7 @@ Resources:
                 Action:
                   - ssm:PutParameter
                 Resource: !Sub
-                  - "arn:aws:ssm:eu-west-2:${AccountId}:parameter/"
+                  - "arn:aws:ssm:eu-west-2:${AccountId}:parameter/*"
                   - AccountId: !Ref AWS::AccountId
 
         # Add permission to decrypt those SSM Parameters with the auto-generated KMS key
