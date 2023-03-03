@@ -61,7 +61,7 @@ Resources:
               - Effect: Allow
                 Sid: GetParameterFromStore
                 Action:
-                  - ssm:PutParameter
+                  - ssm:GetParameter
                 Resource: !Sub
                   - "arn:aws:ssm:eu-west-2:${AccountId}:parameter/*"
                   - AccountId: !Ref AWS::AccountId
