@@ -63,7 +63,7 @@ class LogHelper:
         Trims unimportant noise from logs for debugging
         Before: [Date] [Timestamp] [Loglevel] [Process] [Logreference] [Message] [session_id]
         After: [OrderLogged] [Logreference] [Message]
-        e.g -- 1. CAP0001 - Recaptcha endpoint called with token=12345678 secretPresent=True
+        e.g -- 1. CAP001 - Recaptcha endpoint called with token=12345678 secretPresent=True
         """
         trimmed_log = log
         try:

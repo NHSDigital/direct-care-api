@@ -15,10 +15,12 @@ def test_orchestration_lambda_success(logger: LogHelper):
     assert "nhs_number" in lambda_response.body
     assert "pds_record" in lambda_response.body
 
+    assert logger.was_value_logged("PDS001", "nhs_number", nhs_number)
+
     # Check that the record has loaded correctly by verifying the expected birthdate
     assert lambda_response.body["pds_record"]["birthDate"] == "2015-01-01"
 
-    assert logger.was_logged("LAMBDA0001")
+    assert logger.was_logged("LAMBDA001")
 
 
 def test_orchestration_lambda_no_nhs_number_provided(logger: LogHelper):
@@ -34,11 +36,41 @@ def test_orchestration_lambda_no_nhs_number_provided(logger: LogHelper):
     assert lambda_response.status_code == 400
     assert lambda_response.body == {"error": expected_error}
 
-    assert logger.was_logged("LAMBDA0001")
+    assert logger.was_logged("LAMBDA001")
 
-    assert logger.was_logged("LAMBDA0002")
+    assert logger.was_logged("LAMBDA002")
     assert logger.was_value_logged(
-        "LAMBDA0002",
+        "LAMBDA002",
         "reason",
         "nhs_number is required query string parameter"
     )
+
+
+def test_orchestration_lambda_nhs_number_not_found(logger: LogHelper):
+    """Test case for when PDS fails to find the provided nhs number"""
+
+    nhs_number = "1234567890"
+
+    event = mock_orchestration_event(nhs_number)
+
+    lambda_response = parse_response(orchestration_handler(event, ""))
+
+    assert lambda_response.body["pds_status_code"] == 400
+
+    assert logger.was_value_logged("PDS002", "nhs_number", nhs_number)
+
+
+def test_orchestration_lambda_error_in_pds(logger: LogHelper):
+    """Test case for when PDS returns a status code that isn't 200 (found) or 400 (not found)"""
+
+    # We use this nhs number as a flag for the mock to return a 500 status code
+    nhs_number = "0000000000"
+
+    event = mock_orchestration_event(nhs_number)
+
+    lambda_response = parse_response(orchestration_handler(event, ""))
+
+    assert lambda_response.body["pds_status_code"] == 500
+
+    assert logger.was_value_logged("PDS003", "nhs_number", nhs_number)
+    assert logger.was_value_logged("PDS003", "status_code", 500)
