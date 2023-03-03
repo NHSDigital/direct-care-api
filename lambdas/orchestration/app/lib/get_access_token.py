@@ -2,9 +2,9 @@ from time import time
 from uuid import uuid4
 
 import jwt
-import requests
 
 from .get_ssm_param import get_encrypted_ssm_secret
+from .make_request import make_post_request
 
 # These will need to be changed if we ever integrate with prod
 KID = "int-1"
@@ -40,11 +40,10 @@ def get_access_token():
         "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
     }
 
-    token_response = requests.post(
+    token_response = make_post_request(
         OAUTH_ENDPOINT,
         data=data,
         headers={"content-type": "application/x-www-form-urlencoded"},
-        timeout=600
     ).json()
 
     return token_response.get("access_token")

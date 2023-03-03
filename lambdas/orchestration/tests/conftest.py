@@ -26,6 +26,12 @@ def patch_ssm():
 
 
 @pytest.fixture(autouse=True)
-def patch_request():
-    with patch("lambdas.orchestration.app.lib.make_get_request.requests.get", MockGetRequest()):
+def patch_get_request():
+    with patch("lambdas.orchestration.app.lib.make_request.requests.get", MockGetRequest()):
+        yield
+
+
+@pytest.fixture(autouse=True)
+def patch_post_request():
+    with patch("lambdas.orchestration.app.lib.make_request.requests.post", MockGetRequest()):
         yield

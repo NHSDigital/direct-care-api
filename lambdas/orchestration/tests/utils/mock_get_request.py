@@ -46,7 +46,7 @@ class MockGetRequest:
         self.headers = headers
 
         self.status_code = 200
-        self.response = {f"mocked response not found for url={self.url}"}
+        self.response = {"error": f"mocked response not found for url={self.url}"}
 
         if "personal-demographics" in self.url:
             nhs_number = self.url.split("/")[-1]
