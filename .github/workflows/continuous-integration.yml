@@ -47,10 +47,6 @@ jobs:
       #   if: always()
       #   run: make lint
 
-      - name: Install pytest
-        if: always()
-        run: python -m pip install pytest
-
       - name: Mocked testing
         if: always()
         run: make pytest-ci
