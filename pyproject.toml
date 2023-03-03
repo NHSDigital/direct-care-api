@@ -27,6 +27,7 @@ nhs-number = "^1.2.1"
 pyjwt = "^2.6.0"
 pytest-cov = "^4.0.0"
 flake8 = "^6.0.0"
+cryptography = "*"
 
 [tool.pytest.ini_options]
 pythonpath = [

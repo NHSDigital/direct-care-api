@@ -65,10 +65,10 @@ format:
 	poetry run black .
 
 lint:
-	poetry run flake8 lambdas/orchestration
-	poetry run pylint lambdas/orchestration --rcfile=tox.ini
-	poetry run mypy lambdas/orchestration
-	poetry run cfn-lint template.yaml
+	python -m flake8 lambdas/orchestration
+	python -m pylint lambdas/orchestration --rcfile=tox.ini
+	python -m mypy lambdas/orchestration
+	cfn-lint template.yaml
 
 integration-test: guard-BASE_URL
 	echo "running integration tests"
@@ -127,6 +127,11 @@ review-cloudformation-pipeline-resources:
 
 deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
 	./scripts/deploy_pipeline.sh
+
+install-ci-requirements:
+	python -m pip install poetry
+	python -m poetry export -f requirements.txt --output requirements.txt
+	python -m pip install -r requirements.txt
 
 pytest-ci:
 	python -m pytest lambdas/orchestration --tb=short --capture=no -p no:warnings \
