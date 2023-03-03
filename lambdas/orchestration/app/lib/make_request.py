@@ -8,4 +8,4 @@ def make_get_request(url, headers):
 
 def make_post_request(url, data, headers):
     """Extracted function to make mocking requests easier"""
-    return requests.get(url, data=data, headers=headers, timeout=600)
+    return requests.post(url, data=data, headers=headers, timeout=600)
