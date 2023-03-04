@@ -21,23 +21,17 @@ def log_helper_fixture(request):
 
 @pytest.fixture(autouse=True)
 def patch_ssm():
-    with patch(
-        "lambdas.orchestration.app.lib.get_ssm_param.get_ssm_client", MockSSMClient()
-    ):
+    with patch("lambdas.orchestration.app.lib.get_ssm_param.get_ssm_client", MockSSMClient()):
         yield
 
 
 @pytest.fixture(autouse=True)
 def patch_get_request():
-    with patch(
-        "lambdas.orchestration.app.lib.make_request.requests.get", MockGetRequest()
-    ):
+    with patch("lambdas.orchestration.app.lib.make_request.requests.get", MockGetRequest()):
         yield
 
 
 @pytest.fixture(autouse=True)
 def patch_post_request():
-    with patch(
-        "lambdas.orchestration.app.lib.make_request.requests.post", MockGetRequest()
-    ):
+    with patch("lambdas.orchestration.app.lib.make_request.requests.post", MockGetRequest()):
         yield

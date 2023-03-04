@@ -55,10 +55,7 @@ class LogHelper:
         """
         Returns trimmed logs for use in debugging tests
         """
-        return [
-            self.trim_log(idx, log)
-            for idx, log in enumerate(self._get_log_lines(), start=1)
-        ]
+        return [self.trim_log(idx, log) for idx, log in enumerate(self._get_log_lines(), start=1)]
 
     @staticmethod
     def trim_log(idx, log):

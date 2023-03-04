@@ -19,12 +19,17 @@
       "when": "$(basename).py"
     },
     "**/.DS_Store": true,
-    "**/__pycache__": true
+    "**/__pycache__": true,
+    ".mypy_cache": true,
+    ".pytest_cache": true,
+    ".venv": true,
+    ".coverage": true,
+    "requirements.txt": true
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "python.formatting.blackArgs": ["--line-length", "120"],
+  "python.formatting.blackArgs": ["--line-length", "100"],
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
   "python.linting.lintOnSave": true,
