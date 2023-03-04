@@ -1,23 +1,10 @@
 {
-    "editor.formatOnSave": true,
-    "python.formatting.provider": "black",
-    "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
-    "python.linting.mypyEnabled": true,
-    "python.linting.mypyPath": "${workspaceFolder}/.venv/bin/mypy",
-    "python.linting.pylintPath": "${workspaceFolder}/.venv/bin/pylint",
-    "python.linting.pylintCategorySeverity.convention": "Warning",
-    "python.envFile": "${workspaceFolder}/.env",
-  "python.analysis.typeCheckingMode": "basic",
-  "[python]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    },
-    "editor.defaultFormatter": "ms-python.python"
-  },
+  // General editor
+  "editor.formatOnSave": true,
+  "editor.guides.indentation": true,
+
+  // General files
   "files.exclude": {
-    "**/*.pyc": {
-      "when": "$(basename).py"
-    },
     "**/.DS_Store": true,
     "**/__pycache__": true,
     ".mypy_cache": true,
@@ -29,16 +16,31 @@
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
+
+  // Python specific
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyPath": "${workspaceFolder}/.venv/bin/mypy",
+  "python.linting.pylintPath": "${workspaceFolder}/.venv/bin/pylint",
+  "python.linting.pylintCategorySeverity.convention": "Warning",
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.analysis.typeCheckingMode": "basic",
   "python.formatting.blackArgs": ["--line-length", "100"],
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
   "python.linting.lintOnSave": true,
   "python.linting.pylintEnabled": true,
-  "isort.args": ["--profile", "black"],
-  "editor.guides.indentation": true,
   "python.testing.pytestArgs": [
     "lambdas", "--capture=no"
   ],
   "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true
+  "python.testing.pytestEnabled": true,
+  "isort.args": ["--profile", "black"],
 }
