@@ -1,20 +1,11 @@
 {
     "editor.formatOnSave": true,
     "python.formatting.provider": "black",
-    "python.formatting.blackPath": "/workspaces/direct-care-api/.venv/bin/black",
+    "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
     "python.linting.mypyEnabled": true,
-    "python.linting.mypyPath": "/workspaces/direct-care-api/.venv/bin/mypy",
-    "pylint.importStrategy": "fromEnvironment",
-    "pylint.path": [
-        "/workspaces/direct-care-api/.venv/bin/pylint"
-    ],
-    "python.linting.pylintPath": "/workspaces/direct-care-api/.venv/bin/pylint",
-    "pylint.severity": {
-        "convention": "Warning",
-        "refactor": "Warning"
-    },
+    "python.linting.mypyPath": "${workspaceFolder}/.venv/bin/mypy",
+    "python.linting.pylintPath": "${workspaceFolder}/.venv/bin/pylint",
     "python.linting.pylintCategorySeverity.convention": "Warning",
-
     "python.envFile": "${workspaceFolder}/.env",
   "python.analysis.typeCheckingMode": "basic",
   "[python]": {

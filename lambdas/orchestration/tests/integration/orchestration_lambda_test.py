@@ -63,7 +63,10 @@ def test_orchestration_lambda_nhs_number_not_found(logger: LogHelper):
 
     lambda_response = parse_response(orchestration_handler(event, ""))
 
-    assert lambda_response.body["message"] == "PDS FHIR did not find matching record for nhs_number=9449306621"
+    assert (
+        lambda_response.body["message"]
+        == "PDS FHIR did not find matching record for nhs_number=9449306621"
+    )
 
     assert logger.was_value_logged("PDS002", "nhs_number", nhs_number)
 
@@ -78,7 +81,10 @@ def test_orchestration_lambda_error_in_pds(logger: LogHelper):
 
     lambda_response = parse_response(orchestration_handler(event, ""))
 
-    assert lambda_response.body["message"] == "PDS FHIR returned a non-200 status code with status_code=500"
+    assert (
+        lambda_response.body["message"]
+        == "PDS FHIR returned a non-200 status code with status_code=500"
+    )
 
     assert logger.was_value_logged("PDS003", "nhs_number", nhs_number)
     assert logger.was_value_logged("PDS003", "status_code", 500)
@@ -95,6 +101,9 @@ def test_orchestration_lambda_no_ods_on_record(logger: LogHelper):
 
     lambda_response = parse_response(orchestration_handler(event, ""))
 
-    assert lambda_response.body["message"] == "Pds found record for nhs_number=9449306613 but ODS code not present"
+    assert (
+        lambda_response.body["message"]
+        == "Pds found record for nhs_number=9449306613 but ODS code not present"
+    )
 
     assert logger.was_value_logged("PDS004", "nhs_number", nhs_number)

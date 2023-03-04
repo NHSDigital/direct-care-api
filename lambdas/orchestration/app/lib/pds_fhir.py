@@ -38,10 +38,13 @@ def lookup_nhs_number(nhs_number):
     # PDS FHIR api returns 400 status code if it doesn't find a matching nhs number
     if response.status_code == HTTPStatus.BAD_REQUEST:
         write_log("PDS002", {"nhs_number": nhs_number})
-        return None, f"PDS FHIR did not find matching record for nhs_number={nhs_number}"
+        return (
+            None,
+            f"PDS FHIR did not find matching record for nhs_number={nhs_number}",
+        )
 
     # Any other non-200 status code means that something has gone wrong with the FHIR API
-    elif response.status_code != HTTPStatus.OK:
+    if response.status_code != HTTPStatus.OK:
         write_log(
             "PDS003",
             {
@@ -50,13 +53,20 @@ def lookup_nhs_number(nhs_number):
                 "error": response.json(),
             },
         )
-        return None, f"PDS FHIR returned a non-200 status code with status_code={response.status_code}"
+        return (
+            None,
+            f"PDS FHIR returned a non-200 status code with status_code={response.status_code}",
+        )
 
     ods_code = extract_ods_code(response.json())
 
-    # Account for the situation where a record has been retrieved but it does not contain and ods code
+    # Account for the situation where a record has been retrieved
+    # but it does not contain and ods code
     if not ods_code:
         write_log("PDS004", {"nhs_number": nhs_number, "record": response.json()})
-        return None, f"Pds found record for nhs_number={nhs_number} but ODS code not present"
+        return (
+            None,
+            f"Pds found record for nhs_number={nhs_number} but ODS code not present",
+        )
 
     return ods_code, "Success"
