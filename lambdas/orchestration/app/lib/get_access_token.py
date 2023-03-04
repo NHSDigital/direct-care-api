@@ -26,9 +26,7 @@ def create_client_assertion():
         "exp": int(time()) + 300,
     }
 
-    return jwt.encode(
-        payload, key=private_key, algorithm="RS512", headers=headers
-    )
+    return jwt.encode(payload, key=private_key, algorithm="RS512", headers=headers)
 
 
 def get_access_token():

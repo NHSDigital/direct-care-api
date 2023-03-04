@@ -5,7 +5,6 @@ from ..utils.log_helper import LogHelper
 
 
 def test_write_log_success(logger: LogHelper):
-
     write_log("LAMBDA001", {"event": "mocked_event"})
 
     assert logger.was_logged("LAMBDA001")
@@ -14,13 +13,11 @@ def test_write_log_success(logger: LogHelper):
 
 
 def test_write_log_log_ref_not_found():
-
     with pytest.raises(ValueError):
         write_log("INVALIDLOG", {"event": {"key": "value"}})
 
 
 def test_multiple_write_log(logger: LogHelper):
-
     for _ in range(3):
         write_log("LAMBDA001", {"event": {"key": "value"}})
 

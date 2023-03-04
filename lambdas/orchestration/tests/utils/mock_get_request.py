@@ -6,7 +6,6 @@ from ...app.lib.absolute_file_path import absolute_file_path
 
 
 def get_mocked_fhir_response(nhs_number):
-
     status_code = HTTPStatus.OK
     content = {}
 
@@ -33,7 +32,6 @@ def get_mocked_fhir_response(nhs_number):
 
 
 class MockGetRequest:
-
     def __init__(self):
         self.url = ""
         self.headers = {}

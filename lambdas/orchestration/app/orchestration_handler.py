@@ -3,8 +3,19 @@
 import json
 from http import HTTPStatus
 
+from nhs_number import is_valid
+
 from .lib.pds_fhir import lookup_nhs_number
 from .lib.write_log import write_log
+
+
+def wrap_lambda_return(status, body):
+    return {
+        "statusCode": status,
+        "body": json.dumps(body),
+        "headers": {"test_header": "test_value"},
+        "isBase64Encoded": False,
+    }
 
 
 def orchestration_handler(event, _):
@@ -19,22 +30,26 @@ def orchestration_handler(event, _):
     if not nhs_number:
         error = "nhs_number is required query string parameter"
         write_log("LAMBDA002", {"reason": error})
-        return {
-            "statusCode": HTTPStatus.BAD_REQUEST,
-            "body": json.dumps({"error": error}),
-            "headers": {"test_header": "test_value"},
-            "isBase64Encoded": False
-        }
+        return wrap_lambda_return(
+            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
+        )
 
-    pds_status_code, pds_body = lookup_nhs_number(nhs_number)
+    if not is_valid(nhs_number):
+        error = f"{nhs_number} is not a valid nhs number"
+        write_log("LAMBDA002", {"reason": error})
+        return wrap_lambda_return(
+            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
+        )
 
-    return {
-        "statusCode": HTTPStatus.OK,
-        "body": json.dumps({
-            "nhs_number": nhs_number,
-            "pds_status_code": pds_status_code,
-            "pds_record": pds_body,
-        }),
-        "headers": {"test_header": "test_value"},
-        "isBase64Encoded": False
-    }
+    ods_code, error = lookup_nhs_number(nhs_number)
+
+    if not ods_code:
+        # Logging is done for this in the pds function
+        return wrap_lambda_return(
+            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
+        )
+
+    return wrap_lambda_return(
+        HTTPStatus.OK,
+        {"record": ods_code, "message": "success"},
+    )

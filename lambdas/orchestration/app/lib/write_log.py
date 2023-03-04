@@ -15,7 +15,6 @@ class MissingVariables(LogbaseError):
 
 
 def write_log(log_ref, log_dict):
-
     # Find log
     log = LOG_CONFIG.get(log_ref)
     if not log:  # pragma: no cover
