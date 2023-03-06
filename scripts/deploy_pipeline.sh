@@ -2,19 +2,19 @@
 set -e
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-if test -z "$CODEBUILD_TOKEN" 
+if test -z "$CODEBUILD_TOKEN"
 then
 	echo "\$CODEBUILD_TOKEN is empty"
 	exit 1
 fi
 
-if test -z "$CODEBUILD_USER" 
+if test -z "$CODEBUILD_USER"
 then
 	echo "\$CODEBUILD_USER is empty"
 	exit 1
 fi
 
-if test -z "$GIT_BRANCH" 
+if test -z "$GIT_BRANCH"
 then
 	echo "\$GIT_BRANCH is empty"
 	exit 1
@@ -69,10 +69,10 @@ echo "CI stackName                   : $stackName"
 echo "GIT_BRANCH                     : $GIT_BRANCH"
 echo "Testing StackName              : $TestingStackName"
 echo "Int StackName                  : $IntStackName"
- 
+
 # fix template params file for stack deployment
 RENDERED_TEMPLATE=$SCRIPT_DIR/../rendered/ci_pipeline_params.json
-mkdir -p $SCRIPT_DIR/../rendered/ 
+mkdir -p $SCRIPT_DIR/../rendered/
 cp $SCRIPT_DIR/../aws/cloudformation/ci_pipeline_params_template.json ${RENDERED_TEMPLATE}
 sed -i "s#@devPipelineExecutionRole#$devPipelineExecutionRole#g" ${RENDERED_TEMPLATE}
 sed -i "s#@devArtifactsBucket#$devArtifactsBucket#g" ${RENDERED_TEMPLATE}
@@ -98,7 +98,7 @@ sed -i "s#@CODEBUILD_USER#$CODEBUILD_USER#g" ${RENDERED_TEMPLATE}
 
 # check if stack exists
 if aws cloudformation describe-stacks \
-	--stack-name  ${stackName}  &>/dev/null 
+	--stack-name  ${stackName}  &>/dev/null
 then
     echo 'stack exists'
 	trigger_pipeline=1
@@ -112,7 +112,7 @@ aws cloudformation deploy \
 		--template-file ${SCRIPT_DIR}/../aws/cloudformation/ci_pipeline.yaml \
 		--stack-name ${stackName} \
 		--parameter-overrides file://${RENDERED_TEMPLATE} \
-		--capabilities CAPABILITY_IAM \
+		--capabilities CAPABILITY_NAMED_IAM \
 		--no-fail-on-empty-changeset
 
 cloudformation_exports=`aws cloudformation list-exports`

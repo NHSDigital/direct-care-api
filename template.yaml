@@ -33,126 +33,70 @@ Parameters:
 # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
 
 Resources:
+
+  # Declare the lambda role manually
+  OrchestrationLambdaIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: OrchestrationLambdaIAMRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      # This AWS managed policy allows the lambda function to write logs to cloudwatch
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+      # Add permission to retrieve SSM parameters from the store
+      Policies:
+        - PolicyName: SsmGet
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Sid: GetParameterFromStore
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub
+                  - "arn:aws:ssm:eu-west-2:${AccountId}:parameter/*"
+                  - AccountId: !Ref AWS::AccountId
+
+        # Add permission to decrypt those SSM Parameters with the auto-generated KMS key
+        - PolicyName: KmsDecrypt
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Sid: DecryptWithKMS
+                Action:
+                  - kms:Decrypt
+                Resource: !Sub
+                  - "arn:aws:kms:eu-west-2:${AccountId}:key/*"
+                  - AccountId: !Ref AWS::AccountId
+
   MainFunction:
     Type: AWS::Serverless::Function
-
-    # Embedded connectors
-    Connectors:
-      InvokeAdd:
-        Properties:
-          Destination:
-            Id: AddFunction
-          Permissions:
-            - Write
-      InvokeMultiply:
-        Properties:
-          Destination:
-            Id: MultiplyFunction
-          Permissions:
-            - Write
-      InvokePower:
-        Properties:
-          Destination:
-            Id: PowerFunction
-          Permissions:
-            - Write
-      InvokePds:
-        Properties:
-          Destination:
-            Id: PdsFunction
-          Permissions:
-            - Write
-      InvokeSds:
-        Properties:
-          Destination:
-            Id: SdsFunction
-          Permissions:
-            - Write
-
     Properties:
-      CodeUri: lambdas/main/
-      Handler: app.main_lambda.lambda_handler
+      CodeUri: lambdas/orchestration/
+      Handler: app.orchestration_handler.orchestration_handler
       Runtime: python3.9
       Architectures:
         - x86_64
-      Layers:
-        - !Ref SharedLayer
       Environment:
         Variables:
           EndpointUrl: !Ref EndpointUrl
-          AddFunction_ARN: !Sub ${AddFunction.Arn}
-          MultiplyFunction_ARN: !Sub ${MultiplyFunction.Arn}
-          PowerFunction_ARN: !Sub ${PowerFunction.Arn}
       Events:
         Calculate:
           Type: Api
           Properties:
             Path: /calculate
             Method: get
-
-  AddFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/add
-      Handler: app.add_lambda.lambda_handler
-      Runtime: python3.9
-      Architectures:
-        - x86_64
-      Layers:
-        - !Ref SharedLayer
-
-  MultiplyFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/multiply/
-      Handler: app.multiply_lambda.lambda_handler
-      Runtime: python3.9
-      Architectures:
-        - x86_64
-      Layers:
-        - !Ref SharedLayer
-
-  PowerFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/power/
-      Handler: app.power_lambda.lambda_handler
-      Runtime: python3.9
-      Architectures:
-        - x86_64
-      Layers:
-        - !Ref SharedLayer
-
-  PdsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: lambdas/pds/
-      Handler: pds_lambda.lambda_handler
-      Runtime: python3.9
-      Architectures:
-        - x86_64
-      Layers:
-        - !Ref SharedLayer
-
-  SdsFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: lambdas/sds/
-      Handler: sds_lambda.lambda_handler
-      Runtime: python3.9
-      Architectures:
-        - x86_64
-      Layers:
-        - !Ref SharedLayer
-
-  SharedLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      ContentUri: shared/
-      CompatibleRuntimes:
-        - python3.9
-    Metadata:
-      BuildMethod: python3.9 # Required to have AWS SAM build this layer
+      Role: !GetAtt OrchestrationLambdaIAMRole.Arn
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -166,4 +110,4 @@ Outputs:
     Value: !GetAtt MainFunction.Arn
   DirectCareFunctionIamRole:
     Description: "Implicit IAM Role created for the Main function"
-    Value: !GetAtt MainFunctionRole.Arn
+    Value: !GetAtt OrchestrationLambdaIAMRole.Arn

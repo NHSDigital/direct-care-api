@@ -1,0 +1,19 @@
+{
+  "issue": [
+    {
+      "code": "value",
+      "details": {
+        "coding": [
+          {
+            "code": "INVALID_RESOURCE_ID",
+            "display": "Resource Id is invalid",
+            "system": "https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode",
+            "version": "1"
+          }
+        ]
+      },
+      "severity": "error"
+    }
+  ],
+  "resourceType": "OperationOutcome"
+}
