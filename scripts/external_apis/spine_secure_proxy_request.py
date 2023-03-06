@@ -1,3 +1,14 @@
+"""
+Script to ping the structured data endpoint on GP connect through Spine Secure Proxy
+
+Usage:
+    python scripts/spine_secure_proxy_request.py <org_ods_code: from PDS> <org_asid: from SDS> <nhs_number: from original request>
+
+For the default example use:
+    python scripts/external_apis/spine_secure_proxy_request.py B82617 918999198738 9690937278
+
+"""
+
 import json
 import sys
 import time
