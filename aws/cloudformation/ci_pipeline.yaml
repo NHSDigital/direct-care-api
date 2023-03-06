@@ -198,20 +198,6 @@ Resources:
         #                - Name: !Sub ${AWS::StackName}ChangeSet
         #              RunOrder: 2
 
-        # Uncomment and modify the following step for running the unit-tests
-        - Name: UnitTest
-          Actions:
-            - Name: UnitTest
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Provider: CodeBuild
-                Version: "1"
-              Configuration:
-                ProjectName: !Ref CodeBuildProjectUnitTest
-              InputArtifacts:
-                - Name: SourceCodeAsZip
-
         - !If
           - IsFeatureBranchPipeline
           - Name: BuildAndDeployFeatureStack
