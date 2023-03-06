@@ -24,7 +24,7 @@ def api_key():
 
 SDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/spine-directory/FHIR/R4"
 SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:psis:REPC_IN150016UK05"
-API_KEY = api_key()
+
 
 def device_fhir_lookup(ods_code):
     """Send lookup request to SDS FHIR Device Endpoint"""
