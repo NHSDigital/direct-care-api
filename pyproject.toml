@@ -36,7 +36,7 @@ pythonpath = [
   "lambdas/multiply",
   "lambdas/power",
   "lambdas/shared",
-  "lambdas/sds"
+  "lambdas/sds",
   "lambdas/pds",
 ]
 
