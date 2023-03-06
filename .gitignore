@@ -128,7 +128,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -252,3 +251,5 @@ rendered/
 
 int-1.pem
 api_key.txt
+coverage_html_report/
+requirements.txt

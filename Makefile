@@ -28,7 +28,7 @@ curl:
 invoke:
 	local_endpoint_ip=$$(make -s local_endpoint_ip) && \
 	echo "$$local_endpoint_ip" && \
-	echo '{"queryStringParameters": {"a":3, "b":4}}' | sam local invoke -d 9999 --parameter-overrides "ParameterKey=EndpointUrl,ParameterValue=http://$$local_endpoint_ip:3001" --event - MainFunction 
+	echo '{"queryStringParameters": {"a":3, "b":4}}' | sam local invoke -d 9999 --parameter-overrides "ParameterKey=EndpointUrl,ParameterValue=http://$$local_endpoint_ip:3001" --event - MainFunction
 
 invoke-workers:
 	local_endpoint_ip=$$(make -s local_endpoint_ip) && \
@@ -56,7 +56,7 @@ stop-containers:
 up: build start-api start-lambda
 
 down: stop-api stop-lambda stop-containers
-	
+
 local_endpoint_ip:
 	@/sbin/ifconfig eth0 | grep 'inet ' | awk '{$$1=$$1};1' | cut -d' ' -f2
 
@@ -65,13 +65,10 @@ format:
 	poetry run black .
 
 lint:
-	poetry run pylint lambdas
-	poetry run mypy lambdas
-	poetry run cfn-lint template.yaml
-
-test:
-	mkdir -p reports
-	poetry run pytest lambdas --junitxml=reports/junit.xml
+	python -m flake8 lambdas/orchestration
+	python -m pylint lambdas/orchestration --rcfile=tox.ini
+	python -m mypy lambdas/orchestration
+	cfn-lint template.yaml
 
 integration-test: guard-BASE_URL
 	echo "running integration tests"
@@ -106,7 +103,7 @@ review-cloudformation-dev-resources:
 		--parameter-overrides file://aws/cloudformation/dev_pipeline_resources_params.json \
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
-		--no-fail-on-empty-changeset 
+		--no-fail-on-empty-changeset
 
 review-cloudformation-int-resources:
 	aws cloudformation deploy \
@@ -116,7 +113,7 @@ review-cloudformation-int-resources:
 		--parameter-overrides file://aws/cloudformation/int_pipeline_resources_params.json \
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
-		--no-fail-on-empty-changeset 
+		--no-fail-on-empty-changeset
 
 review-cloudformation-pipeline-resources:
 	aws cloudformation deploy \
@@ -126,7 +123,16 @@ review-cloudformation-pipeline-resources:
 		--parameter-overrides file://aws/cloudformation/pipeline_resources_params.json \
 		--capabilities CAPABILITY_IAM \
 		--no-execute-changeset \
-		--no-fail-on-empty-changeset 
+		--no-fail-on-empty-changeset
 
 deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
 	./scripts/deploy_pipeline.sh
+
+install-ci-requirements:
+	python -m pip install poetry
+	python -m poetry export -f requirements.txt --output requirements.txt
+	python -m pip install -r requirements.txt
+
+pytest-ci:
+	python -m pytest lambdas/orchestration --tb=short --capture=no -p no:warnings \
+	--cov-report html --cov-report term --cov=lambdas/orchestration
