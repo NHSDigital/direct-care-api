@@ -87,6 +87,8 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
+      Layers:
+        - !Ref SharedLayer
       Environment:
         Variables:
           EndpointUrl: !Ref EndpointUrl
@@ -97,6 +99,15 @@ Resources:
             Path: /calculate
             Method: get
       Role: !GetAtt OrchestrationLambdaIAMRole.Arn
+
+  SharedLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: lambdas/shared/
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9 # Required to have AWS SAM build this layer
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
