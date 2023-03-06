@@ -1,0 +1,13 @@
+{
+    "resourceType": "Bundle",
+    "id": "F6AB840A-A475-472B-8D31-C0783F690825",
+    "type": "searchset",
+    "total": 0,
+    "link": [
+        {
+            "relation": "self",
+            "url": "http://int.apis.ptl.api.platform.nhs.uk/Endpoint?identifier=https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:psis:REPC_IN150016UK05&identifier=https://fhir.nhs.uk/Id/nhsMhsPartyKey|D82021-801653"
+        }
+    ],
+    "entry": []
+}
