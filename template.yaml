@@ -38,7 +38,6 @@ Resources:
   OrchestrationLambdaIAMRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: OrchestrationLambdaIAMRole
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -54,8 +53,7 @@ Resources:
 
       # Add permission to retrieve SSM parameters from the store
       Policies:
-        - PolicyName: SsmGet
-          PolicyDocument:
+        - PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
@@ -67,8 +65,7 @@ Resources:
                   - AccountId: !Ref AWS::AccountId
 
         # Add permission to decrypt those SSM Parameters with the auto-generated KMS key
-        - PolicyName: KmsDecrypt
-          PolicyDocument:
+        - PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
