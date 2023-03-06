@@ -35,10 +35,10 @@ Parameters:
 Resources:
 
   # Declare the lambda role manually
-  LambdaIAMRole:
+  OrchestrationLambdaIAMRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: LambdaIAMRole
+      RoleName: OrchestrationLambdaIAMRole
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -96,7 +96,7 @@ Resources:
           Properties:
             Path: /calculate
             Method: get
-      Role: !GetAtt LambdaIAMRole.Arn
+      Role: !GetAtt OrchestrationLambdaIAMRole.Arn
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -110,4 +110,4 @@ Outputs:
     Value: !GetAtt MainFunction.Arn
   DirectCareFunctionIamRole:
     Description: "Implicit IAM Role created for the Main function"
-    Value: !GetAtt LambdaIAMRole.Arn
+    Value: !GetAtt OrchestrationLambdaIAMRole.Arn
