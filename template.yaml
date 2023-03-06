@@ -53,7 +53,8 @@ Resources:
 
       # Add permission to retrieve SSM parameters from the store
       Policies:
-        - PolicyDocument:
+        - PolicyName: SsmGet
+          PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
@@ -65,7 +66,8 @@ Resources:
                   - AccountId: !Ref AWS::AccountId
 
         # Add permission to decrypt those SSM Parameters with the auto-generated KMS key
-        - PolicyDocument:
+        - PolicyName: KmsDecrypt
+          PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
