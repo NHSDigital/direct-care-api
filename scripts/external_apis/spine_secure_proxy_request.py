@@ -1,3 +1,4 @@
+# pylint: disable= line-too-long
 """
 Script to ping the structured data endpoint on GP connect through Spine Secure Proxy
 
@@ -18,7 +19,7 @@ import jwt
 import requests
 
 
-def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
+def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):  # noqa: E302
     jwt_headers = {"alg": "none", "typ": "JWT"}
     jwt_payload = {
         "iss": "https://orange.testlab.nhs.uk/",
