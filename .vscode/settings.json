@@ -1,48 +1,46 @@
 {
-    "editor.formatOnSave": true,
-    "python.formatting.provider": "black",
-    "python.formatting.blackPath": "/workspaces/direct-care-api/.venv/bin/black",
-    "python.linting.mypyEnabled": true,
-    "python.linting.mypyPath": "/workspaces/direct-care-api/.venv/bin/mypy",
-    "pylint.importStrategy": "fromEnvironment",
-    "pylint.path": [
-        "/workspaces/direct-care-api/.venv/bin/pylint"
-    ],
-    "python.linting.pylintPath": "/workspaces/direct-care-api/.venv/bin/pylint",
-    "pylint.severity": {
-        "convention": "Warning",
-        "refactor": "Warning"
-    },
-    "python.linting.pylintCategorySeverity.convention": "Warning",
+  // General editor
+  "editor.formatOnSave": true,
+  "editor.guides.indentation": true,
 
-    "python.envFile": "${workspaceFolder}/.env",
-  "python.analysis.typeCheckingMode": "basic",
+  // General files
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/__pycache__": true,
+    ".mypy_cache": true,
+    ".pytest_cache": true,
+    ".venv": true,
+    ".coverage": true,
+    "requirements.txt": true
+  },
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+
+  // Python specific
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     },
     "editor.defaultFormatter": "ms-python.python"
   },
-  "files.exclude": {
-    "**/*.pyc": {
-      "when": "$(basename).py"
-    },
-    "**/.DS_Store": true,
-    "**/__pycache__": true
-  },
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-  "files.trimTrailingWhitespace": true,
-  "python.formatting.blackArgs": ["--line-length", "120"],
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyPath": "${workspaceFolder}/.venv/bin/mypy",
+  "python.linting.pylintPath": "${workspaceFolder}/.venv/bin/pylint",
+  "python.linting.pylintCategorySeverity.convention": "Warning",
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.formatting.blackArgs": ["--line-length", "100"],
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
   "python.linting.lintOnSave": true,
   "python.linting.pylintEnabled": true,
-  "isort.args": ["--profile", "black"],
-  "editor.guides.indentation": true,
   "python.testing.pytestArgs": [
-    "proxygen_cli"
+    "lambdas", "--capture=no"
   ],
   "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true
+  "python.testing.pytestEnabled": true,
+  "isort.args": ["--profile", "black"],
 }
