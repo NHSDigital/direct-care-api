@@ -1,11 +1,6 @@
 """
 Script to ping the SDS patient endpoint
 
-Pre-requisites:
-    api key at <root>/api_key.txt
-    private_key at <root>/int-1.pem
-    ods_code
-
 Usage:
     <from root dir>
     python scripts/sds_request.py <ods_code>
@@ -22,24 +17,14 @@ import requests
 
 # pylint: disable= line-too-long
 
-def private_key():
-    with open("./int-1.pem", "r", encoding="utf-8") as f:
-        return f.read()
-
-
 def api_key():
     with open("./api_key.txt", "r", encoding="utf-8") as f:
         return f.read().strip()
 
 
-SECRETS_DICT = {
-    "sds_fhir_endpoint": "https://int.api.service.nhs.uk/spine-directory/FHIR/R4",
-    "service_interraction_id": "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:psis:REPC_IN150016UK05",
-    "api_key": api_key(),
-    "private_key": private_key(),
-    "kid": "int-1",
-}
-
+SDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/spine-directory/FHIR/R4"
+SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:psis:REPC_IN150016UK05"
+API_KEY = api_key()
 
 def device_fhir_lookup(ods_code):
     """Send lookup request to SDS FHIR Device Endpoint"""
@@ -47,14 +32,14 @@ def device_fhir_lookup(ods_code):
     gp_code = f"https://fhir.nhs.uk/Id/ods-organization-code|{ods_code}"
     device_params = {
         "organization": gp_code,
-        "identifier": SECRETS_DICT["service_interraction_id"]
+        "identifier": [SERVICE_INTERACTION_ID]
     }
 
     headers = {
         "x-request-id": x_request_id,
         "apikey": api_key(),
     }
-    endpoint = SECRETS_DICT["sds_fhir_endpoint"]
+    endpoint = SDS_FHIR_ENDPOINT
     device_url = f"{endpoint}/Device"
     response = requests.get(
         url=device_url,
@@ -89,12 +74,12 @@ def get_sds_endpoint_data(nhsMhsPartyKey):  # pylint: disable=redefined-outer-na
 
     service_interraction_party_key = f"https://fhir.nhs.uk/Id/nhsMhsPartyKey|{nhsMhsPartyKey}"
 
-    endpoint_params = {"identifier": [SECRETS_DICT["service_interraction_id"], service_interraction_party_key]}
+    endpoint_params = {"identifier": [SERVICE_INTERACTION_ID, service_interraction_party_key]}
     headers = {
         "x-request-id": x_request_id,
         "apikey": api_key(),
     }
-    endpoint = SECRETS_DICT["sds_fhir_endpoint"]
+    endpoint = SDS_FHIR_ENDPOINT
     endpoint_url = f"{endpoint}/Endpoint"
     response = requests.get(
         url=endpoint_url,
