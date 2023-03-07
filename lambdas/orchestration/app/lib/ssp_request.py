@@ -112,22 +112,18 @@ def get_request_body(nhs_number):
     )
 
 
-def ssp_request(org_ods_code, org_asid, patient_nhs_number):
-    # Eventually the base url will be taken from the extracted address value from SDS but for now that points at
-    # The spine integration environment (https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliablerequest)
-    # And will not work with the open test environment
-
+def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number):
     write_log(
         "SSP001",
         {
             "nhs_number": patient_nhs_number,
             "org_asid": org_asid,
-            "org_ods_code": org_ods_code,
+            "org_fhir_endpoint": org_fhir_endpoint,
         },
     )
 
-    base_url = "https://orange.testlab.nhs.uk/"
-    url = f"{base_url}{org_ods_code}/STU3/1/gpconnect/structured/fhir/Patient/$gpc.getstructuredrecord"
+    proxy_url = "https://proxy.opentest.hscic.gov.uk/"
+    url = f"{proxy_url}{org_fhir_endpoint}/Patient/$gpc.getstructuredrecord"
 
     headers = get_headers(org_asid)
     body = get_request_body(patient_nhs_number)

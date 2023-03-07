@@ -31,34 +31,30 @@ def orchestration_handler(event, _):
     if not nhs_number:
         error = "nhs_number is required query string parameter"
         write_log("LAMBDA002", {"reason": error})
-        return wrap_lambda_return(
-            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
-        )
+        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": error})
 
     if not is_valid(nhs_number):
         error = f"{nhs_number} is not a valid nhs number"
         write_log("LAMBDA002", {"reason": error})
-        return wrap_lambda_return(
-            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
-        )
+        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": error})
 
     ods_code, error = lookup_nhs_number(nhs_number)
 
     if not ods_code:
         # Logging is done for this in the pds function
-        return wrap_lambda_return(
-            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
-        )
+        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": error})
 
-    asid = "918999198738"
+    org_fhir_endpoint, asid = (
+        # pylint: disable=line-too-long
+        "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
+        "918999198738",
+    )
 
-    record, message = ssp_request(ods_code, asid, nhs_number)
+    record, message = ssp_request(org_fhir_endpoint, asid, nhs_number)
 
     if not record:
         # Logging is done for this in the pds function
-        return wrap_lambda_return(
-            HTTPStatus.BAD_REQUEST, {"record": None, "message": message}
-        )
+        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": message})
 
     return wrap_lambda_return(
         HTTPStatus.OK,
