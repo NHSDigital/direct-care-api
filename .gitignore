@@ -128,7 +128,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -258,3 +257,5 @@ api_key.txt
 /.idea/modules.xml
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/vcs.xml
+coverage_html_report/
+./requirements.txt

@@ -28,6 +28,9 @@ pyjwt = "^2.6.0"
 behave = "^1.2.6"
 behave2cucumber = "^1.0.3"
 assertpy = "^1.1"
+pytest-cov = "^4.0.0"
+flake8 = "^6.0.0"
+cryptography = "*"
 
 [tool.pytest.ini_options]
 pythonpath = [
