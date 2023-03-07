@@ -3,7 +3,7 @@ Script to ping the SDS patient endpoint
 
 Usage:
     <from root dir>
-    python scripts/sds_request.py <ods_code>
+    python scripts/sds_request.py B82617
 
 To get ods number used the one extracted from PDS integration environment call,
 refer to the integration test pack at:
@@ -15,7 +15,6 @@ import sys
 from uuid import uuid4
 import requests
 
-# pylint: disable= line-too-long
 
 def api_key():  # noqa: E302
     with open("./api_key.txt", "r", encoding="utf-8") as f:  # pylint: disable= invalid-name
@@ -23,7 +22,7 @@ def api_key():  # noqa: E302
 
 
 SDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/spine-directory/FHIR/R4"
-SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:psis:REPC_IN150016UK05"
+SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1"
 
 
 def device_fhir_lookup(ods_code):   # pylint: disable=redefined-outer-name
