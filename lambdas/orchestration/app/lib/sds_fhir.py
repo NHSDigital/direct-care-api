@@ -63,7 +63,41 @@ def get_device_data(ods_code):
 
     # FHIR api returns 400 status code if it doesn't find a matching ODS_CODE
     if response.status_code == HTTPStatus.BAD_REQUEST:
-        # write_log("PDS002", {"nhs_number": nhs_number})
+        write_log("SDS002", {"ods_code": ods_code})
         return (
-            None
+            None,
+            f"SDS FHIR did not find matching record for ods_code={ods_code}",
         )
+    if response.status_code != HTTPStatus.OK:
+        write_log(
+            "SDS003",
+            {
+                "ods_code": ods_code,
+                "status_code": response.status_code,
+                "error": response.json(),
+            },
+        )
+        return (
+            None,
+            f"SDS FHIR returned a non-200 status code with status_code={response.status_code}",
+        )
+
+    nhsMhsPartyKey = extract_nhsMhsPartyKey(response.json())  # pylint: disable=invalid-name
+    asid = extract_asid(response.json())
+
+    # Account for the situation where a record has been retrieved
+    # but it does not contain and ods code
+    if not nhsMhsPartyKey:
+        write_log("SDS004", {"ods_code": ods_code, "record": response.json()})
+        return (
+            None,
+            f"SDS FHIR found record for ods_code={ods_code} but party key not present in record.",
+        )
+    elif not asid:
+        write_log("SDS005", {"ods_code": ods_code, "record": response.json()})
+        return (
+            None,
+            f"SDS FHIR found record for ods_code={ods_code} but ASID number not present in record.",
+        )
+
+    return nhsMhsPartyKey, asid, "Success"
