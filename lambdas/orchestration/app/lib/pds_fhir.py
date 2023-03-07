@@ -2,22 +2,13 @@ from http import HTTPStatus
 from uuid import uuid4
 
 from .get_access_token import get_access_token
+from .get_dict_value import get_dict_value
 from .get_fhir_error import get_fhir_error
 from .make_request import make_get_request
 from .write_log import write_log
 
 # This will need to be changed if we ever integrate with prod
-PDS_FHIR_ENDPOINT = (
-    "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
-)
-
-
-def extract_ods_code(body):
-    """Extract ODS Code from PDS Patient Response"""
-    try:
-        return body["generalPractitioner"][0]["identifier"]["value"]
-    except IndexError:
-        return None
+PDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
 
 
 def lookup_nhs_number(nhs_number):
@@ -62,7 +53,7 @@ def lookup_nhs_number(nhs_number):
             ),
         )
 
-    ods_code = extract_ods_code(response.json())
+    ods_code = get_dict_value(response.json(), "generalPractitioner/0/identifier/value")
 
     # Account for the situation where a record has been retrieved
     # but it does not contain and ods code
