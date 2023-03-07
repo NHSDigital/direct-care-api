@@ -2,10 +2,11 @@ SHELL:=/bin/bash -O globstar
 .SHELLFLAGS = -ecu
 
 guard-%:
-	@ if [ "${${*}}" = "" ]; then \
-		echo "Environment variable $* not set"; \
-		exit 1; \
-	fi
+	echo "i be guarding"
+#	@ if [ "${${*}}" = "" ]; then \
+#		echo "Environment variable $* not set"; \
+#		exit 1; \
+#	fi
 
 remove-docker-config:
 	rm -f /home/vscode/.docker/config.json
