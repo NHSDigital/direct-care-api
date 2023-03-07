@@ -5,7 +5,8 @@ Usage:
     python scripts/spine_secure_proxy_request.py <org_ods_code: from PDS> <org_asid: from SDS> <nhs_number: from original request>
 
 For the default example use:
-    python scripts/external_apis/spine_secure_proxy_request.py B82617 918999198738 9690937278
+    python scripts/external_apis/spine_secure_proxy_request.py https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/ 200000001329 9690937278
+
 
 """
 
@@ -16,6 +17,10 @@ import uuid
 
 import jwt
 import requests
+
+CERT = "./endpoint.cert"
+KEY = "./endpoint.pem"
+VERIFY = "/etc/ssl/certs/ca-certificates.crt"
 
 
 def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
@@ -112,44 +117,39 @@ def get_request_body(nhs_number):
     )
 
 
-def make_request(org_ods_code, org_asid, patient_nhs_number):
-    # Eventually the base url will be taken from the extracted address value from SDS but for now that points at
-    # The spine integration environment (https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliablerequest)
-    # And will not work with the open test environment
-    base_url = "https://orange.testlab.nhs.uk/"
-    url = f"{base_url}{org_ods_code}/STU3/1/gpconnect/structured/fhir/Patient/$gpc.getstructuredrecord"
+def make_request(org_url, org_asid, patient_nhs_number):
+    opentest = "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/"
+
+    url = f"https://proxy.opentest.hscic.gov.uk/{org_url}/Patient/$gpc.getstructuredrecord"
 
     headers = get_headers(org_asid)
     body = get_request_body(patient_nhs_number)
-    print(url)
+
     response = requests.post(
-        url,
-        headers=headers,
-        data=body,
-        timeout=300,
+        url, headers=headers, data=body, timeout=300, cert=(CERT, KEY), verify=VERIFY
     )
     print(response.status_code)
-    print(response.content)
+    print(response.content.decode("utf-8"))
 
 
 if __name__ == "__main__":
-    # First argument is ODS code of the organisation extracted from PDS request
+    # First argument is URL returned from SDS request
     try:
-        ORG_ODS_CODE = sys.argv[1]
+        ORG_URL = sys.argv[1]
     except IndexError:
-        print("ODS code must be provided as first argument")
+        print("SDS extracted URL must be provided as first argument")
 
     # Second argument is the organisation ASID extracted from SDS request
     try:
         ORG_ASID = sys.argv[2]
     except IndexError:
-        print("ASID must be provided as first argument")
+        print("ASID must be provided as second argument")
 
     # Third argument is the NHS number of the patient to look up taken from the
     # original query string parameter pass to the direct care api endpoint
     try:
         PATIENT_NHS_NUMBER = sys.argv[3]
     except IndexError:
-        print("NHS number must be provided as first argument")
+        print("NHS number must be provided as third argument")
 
-    make_request(ORG_ODS_CODE, ORG_ASID, PATIENT_NHS_NUMBER)
+    make_request(ORG_URL, ORG_ASID, PATIENT_NHS_NUMBER)
