@@ -1,4 +1,4 @@
-import dpath
+import dpath  # type: ignore
 
 
 def get_dict_value(obj, path, default=None):

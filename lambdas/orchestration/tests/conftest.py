@@ -40,7 +40,7 @@ def test_failed_fixture(request, logger):
     if request.node.rep_call.failed:
         return logger.clean_up(test_failed=True)
 
-    logger.clean_up()
+    return logger.clean_up()
 
 
 @pytest.fixture(autouse=True)

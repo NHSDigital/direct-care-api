@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 import json
 import pathlib
 from http import HTTPStatus

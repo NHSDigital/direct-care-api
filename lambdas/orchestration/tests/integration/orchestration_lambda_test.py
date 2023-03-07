@@ -150,8 +150,8 @@ def test_orchestration_exception_in_on_ssp(logger: LogHelper):
     event = mock_orchestration_event(nhs_number)
 
     # Re-patch the make request function so that it throws an error
-    # The first side effect needs to remain as MockPostRequest as the first time post is
-    # called is on the oauth endpoint
+    # The first side effect needs to remain as MockPostRequest as the first time requests.post is
+    # called is on the oauth endpoint for the PDS request
     # Patch the second time it's called to throw the exception by passing a list to side_effect
     with patch(
         "lambdas.orchestration.app.lib.make_request.requests.post",
