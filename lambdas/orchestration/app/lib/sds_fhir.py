@@ -10,7 +10,7 @@ from .make_request import make_get_request
 
 # This will need to be changed if we ever integrate with prod
 SDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/spine-directory/FHIR/R4"
-SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:psis:REPC_IN150016UK05"
+SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1"
 ORG_CODE_BASE = "https://fhir.nhs.uk/Id/ods-organization-code|"
 
 def extract_nhsMhsPartyKey(body):  # pylint: disable=redefined-outer-name, invalid-name  # noqa: E302
@@ -45,7 +45,7 @@ def extract_address(body):  # pylint: disable=redefined-outer-name, invalid-name
 def get_device_data(ods_code):
     """Send lookup request to SDS FHIR Device Endpoint"""
 
-    write_log("SDS001", {"ods_code": ods_code})  # TO DO
+    write_log("SDS001", {"ods_code": ods_code})
     x_request_id = str(uuid4())
     gp_code = f"{ORG_CODE_BASE}{ods_code}"
     device_params = {
