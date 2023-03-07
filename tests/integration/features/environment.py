@@ -4,7 +4,6 @@ import secrets
 import sys
 from logging import DEBUG, INFO
 
-
 if not os.getenv("BASE_URL"):
     BASE_URL = "cookieclickertechtest.airelogic.com"
 else:

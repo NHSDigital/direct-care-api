@@ -259,3 +259,4 @@ api_key.txt
 /.idea/vcs.xml
 coverage_html_report/
 ./requirements.txt
+/results/
