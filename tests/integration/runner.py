@@ -1,5 +1,7 @@
 import argparse
 import subprocess
+import json
+import behave2cucumber
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -25,8 +27,11 @@ if __name__ == "__main__":
 
     # complete command
     command = (
-        f"behave{debug} -f json.pretty -o behave.json "
-        f"-f pretty --no-logcapture --logging-level={logging_level}{tags}"
+        f"behave {debug} -f pretty tests/integration/features"
+        f" --no-logcapture --logging-level={logging_level}{tags}"
     )
     print(f"Running subprocess with command: '{command}'")
     process = subprocess.run(command, shell=True, check=True)
+
+    with open('behave_json.json') as behave_json:
+        cucumber_json = behave2cucumber.convert(json.load(behave_json))

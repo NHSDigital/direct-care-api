@@ -75,6 +75,7 @@ test:
 
 integration-test: guard-BASE_URL
 	echo "Running Integration Tests"
+	python tests/integration/runner.py
 
 clean:
 	rm -rf .aws-sam || true

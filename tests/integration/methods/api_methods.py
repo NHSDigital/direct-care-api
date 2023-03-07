@@ -1,5 +1,5 @@
 import requests
-from .asserter import wrapped_assert_that as assert_that
+from assertpy import assert_that
 
 
 def start_new_game(context, name: str):
@@ -12,10 +12,10 @@ def start_new_game(context, name: str):
 
 
 def missing_player_name_error_is_displayed(context):
-    assert_that(requests.codes.bad, context.response.status_code, context=context)
-    assert_that(expected="Player name must be supplied", actual=context.response.json(), context=context)
+    assert_that(context.response.status_code).is_equal_to(requests.codes.bad)
+    assert_that(context.response.json()).is_equal_to("Player name must be supplied")
 
 
 def a_new_game_is_started(context):
     context.expected = requests.codes.ok
-    assert_that(actual=context.response.status_code, expected=requests.codes.ok, context=context)
+    assert_that(context.response.status_code).is_equal_to(requests.codes.ok)
