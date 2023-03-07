@@ -1,4 +1,5 @@
 import functools
+
 from assertpy import assert_that
 
 

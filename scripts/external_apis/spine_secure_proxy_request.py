@@ -43,7 +43,10 @@ def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
         "requesting_organization": {
             "resourceType": "Organization",
             "identifier": [
-                {"system": "https://fhir.nhs.uk/Id/ods-organization-code", "value": dcapi_ods_code}
+                {
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": dcapi_ods_code,
+                }
             ],
             # What name should we be using here
             "name": "Direct care API",
@@ -53,7 +56,10 @@ def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
             "id": "1",
             "identifier": [
                 # This is from the demo and will need to be changed once we get to integration environments
-                {"system": "https://fhir.nhs.uk/Id/sds-user-id", "value": "111111111111"},
+                {
+                    "system": "https://fhir.nhs.uk/Id/sds-user-id",
+                    "value": "111111111111",
+                },
                 {
                     "system": "https://fhir.nhs.uk/Id/sds-role-profile-id",
                     "value": "22222222222222",
@@ -95,7 +101,9 @@ def get_request_body(nhs_number):
                 },
                 {
                     "name": "includeAllergies",
-                    "part": [{"name": "includeResolvedAllergies", "valueBoolean": True}],
+                    "part": [
+                        {"name": "includeResolvedAllergies", "valueBoolean": True}
+                    ],
                 },
                 {"name": "includeMedication"},
                 {

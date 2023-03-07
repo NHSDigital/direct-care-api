@@ -30,18 +30,24 @@ def orchestration_handler(event, _):
     if not nhs_number:
         error = "nhs_number is required query string parameter"
         write_log("LAMBDA002", {"reason": error})
-        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": error})
+        return wrap_lambda_return(
+            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
+        )
 
     if not is_valid(nhs_number):
         error = f"{nhs_number} is not a valid nhs number"
         write_log("LAMBDA002", {"reason": error})
-        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": error})
+        return wrap_lambda_return(
+            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
+        )
 
     ods_code, error = lookup_nhs_number(nhs_number)
 
     if not ods_code:
         # Logging is done for this in the pds function
-        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": error})
+        return wrap_lambda_return(
+            HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
+        )
 
     return wrap_lambda_return(
         HTTPStatus.OK,

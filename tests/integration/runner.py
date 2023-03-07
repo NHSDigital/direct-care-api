@@ -39,9 +39,8 @@ if __name__ == "__main__":
     except subprocess.CalledProcessError as e:
         raise e
     finally:
-        with open('results/behave_json.json', mode="r") as behave_json:
+        with open("results/behave_json.json", mode="r") as behave_json:
             cucumber_json = behave2cucumber.convert(json.load(behave_json))
             os.makedirs(os.path.dirname("reports/"), exist_ok=True)
             with open("reports/cucumber_json.json", mode="w") as cucumber_json_report:
                 cucumber_json_report.write(json.dumps(cucumber_json[0]))
-
