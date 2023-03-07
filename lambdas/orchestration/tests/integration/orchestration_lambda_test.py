@@ -4,18 +4,22 @@ from ..utils.test_utils import mock_orchestration_event, parse_response
 
 
 def test_orchestration_lambda_success(logger: LogHelper):
-    nhs_number = "9999999999"
+    nhs_number = "9690937278"
 
     event = mock_orchestration_event(nhs_number)
 
     lambda_response = parse_response(orchestration_handler(event, ""))
 
     assert lambda_response.status_code == 200
-    assert lambda_response.body["record"] == "D82021"
+
+    # Check the record ID returned matches what we expected from the mock SSP return
+    assert lambda_response.body["record"]["id"] == "71f48f67-8055-4cbc-9a30-ecba6915a0d2"
 
     assert logger.was_value_logged("PDS001", "nhs_number", nhs_number)
 
     assert logger.was_logged("LAMBDA001")
+    assert logger.was_logged("SSP001")
+    assert logger.was_logged("SSP002")
 
 
 def test_orchestration_lambda_no_nhs_number_provided(logger: LogHelper):
@@ -81,9 +85,9 @@ def test_orchestration_lambda_error_in_pds(logger: LogHelper):
 
     lambda_response = parse_response(orchestration_handler(event, ""))
 
-    assert (
-        lambda_response.body["message"]
-        == "PDS FHIR returned a non-200 status code with status_code=500"
+    assert lambda_response.body["message"] == (
+        "PDS FHIR returned a non-200 status code with status_code=500"
+        " error=Unknown error - No diagnostics available"
     )
 
     assert logger.was_value_logged("PDS003", "nhs_number", nhs_number)

@@ -1,21 +1,15 @@
-"""
-Script to ping the structured data endpoint on GP connect through Spine Secure Proxy
-
-Usage:
-    python scripts/spine_secure_proxy_request.py <org_ods_code: from PDS> <org_asid: from SDS> <nhs_number: from original request>
-
-For the default example use:
-    python scripts/external_apis/spine_secure_proxy_request.py B82617 918999198738 9690937278
-
-"""
+# pylint: disable=line-too-long
 
 import json
-import sys
 import time
 import uuid
+from http import HTTPStatus
 
 import jwt
 import requests
+
+from .get_fhir_error import get_fhir_error
+from .write_log import write_log
 
 
 def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
@@ -112,44 +106,49 @@ def get_request_body(nhs_number):
     )
 
 
-def make_request(org_ods_code, org_asid, patient_nhs_number):
+def ssp_request(org_ods_code, org_asid, patient_nhs_number):
     # Eventually the base url will be taken from the extracted address value from SDS but for now that points at
     # The spine integration environment (https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliablerequest)
     # And will not work with the open test environment
+
+    write_log(
+        "SSP001",
+        {"nhs_number": patient_nhs_number, "org_asid": org_asid, "org_ods_code": org_ods_code},
+    )
+
     base_url = "https://orange.testlab.nhs.uk/"
     url = f"{base_url}{org_ods_code}/STU3/1/gpconnect/structured/fhir/Patient/$gpc.getstructuredrecord"
 
     headers = get_headers(org_asid)
     body = get_request_body(patient_nhs_number)
-    print(url)
-    response = requests.post(
-        url,
-        headers=headers,
-        data=body,
-        timeout=300,
-    )
-    print(response.status_code)
-    print(response.content)
 
+    write_log("SSP002", {"url": url, "headers": headers, "body": body})
 
-if __name__ == "__main__":
-    # First argument is ODS code of the organisation extracted from PDS request
     try:
-        ORG_ODS_CODE = sys.argv[1]
-    except IndexError:
-        print("ODS code must be provided as first argument")
+        response = requests.post(
+            url,
+            headers=headers,
+            data=body,
+            timeout=300,
+        )
+    except Exception as e:  # pylint: disable=broad-except
+        write_log("SSP003", {"error": str(e)})
+        return None, f"Exception in SSP request with error={str(e)}"
 
-    # Second argument is the organisation ASID extracted from SDS request
-    try:
-        ORG_ASID = sys.argv[2]
-    except IndexError:
-        print("ASID must be provided as first argument")
+    if response.status_code != HTTPStatus.OK:
+        write_log("SSP004", {"nhs_number": patient_nhs_number})
+        return None, f"SSP request returned non-200 status_code={response.status_code}"
 
-    # Third argument is the NHS number of the patient to look up taken from the
-    # original query string parameter pass to the direct care api endpoint
-    try:
-        PATIENT_NHS_NUMBER = sys.argv[3]
-    except IndexError:
-        print("NHS number must be provided as first argument")
+    # In future will need to investigate the various response status codes and potentially
+    # give a more useful error message to end user based on the particular code
+    if response.status_code != HTTPStatus.OK:
+        write_log(
+            "SSP005",
+            {
+                "status_code": response.status_code,
+                "response_content": get_fhir_error(response.json()),
+            },
+        )
+        return None, f"SSP request returned non-200 status_code={response.status_code}"
 
-    make_request(ORG_ODS_CODE, ORG_ASID, PATIENT_NHS_NUMBER)
+    return response.json(), "Success"

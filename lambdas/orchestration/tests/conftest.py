@@ -7,6 +7,7 @@ import pytest
 
 from .utils.log_helper import LogHelper
 from .utils.mock_get_request import MockGetRequest
+from .utils.mock_post_request import MockPostRequest
 from .utils.mock_ssm_client import MockSSMClient
 
 
@@ -33,5 +34,5 @@ def patch_get_request():
 
 @pytest.fixture(autouse=True)
 def patch_post_request():
-    with patch("lambdas.orchestration.app.lib.make_request.requests.post", MockGetRequest()):
+    with patch("lambdas.orchestration.app.lib.make_request.requests.post", MockPostRequest()):
         yield

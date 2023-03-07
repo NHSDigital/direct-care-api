@@ -1,9 +1,10 @@
 from http import HTTPStatus
 from uuid import uuid4
 
-from ..lib.write_log import write_log
 from .get_access_token import get_access_token
+from .get_fhir_error import get_fhir_error
 from .make_request import make_get_request
+from .write_log import write_log
 
 # This will need to be changed if we ever integrate with prod
 PDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
@@ -48,12 +49,15 @@ def lookup_nhs_number(nhs_number):
             {
                 "nhs_number": nhs_number,
                 "status_code": response.status_code,
-                "error": response.json(),
+                "error": get_fhir_error(response.json()),
             },
         )
         return (
             None,
-            f"PDS FHIR returned a non-200 status code with status_code={response.status_code}",
+            (
+                f"PDS FHIR returned a non-200 status code with status_code={response.status_code}"
+                f" error={get_fhir_error(response.json())}"
+            ),
         )
 
     ods_code = extract_ods_code(response.json())
