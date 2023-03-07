@@ -13,9 +13,11 @@ https://digital.nhs.uk/developer/api-catalogue/spine-directory-service-fhir
 
 import sys
 from uuid import uuid4
+
 import requests
 
-# pylint: disable= line-too-long
+# pylint: skip-file
+
 
 def api_key():
     with open("./api_key.txt", "r", encoding="utf-8") as f:
@@ -23,17 +25,14 @@ def api_key():
 
 
 SDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/spine-directory/FHIR/R4"
-SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:psis:REPC_IN150016UK05"
+SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1"
 
 
 def device_fhir_lookup(ods_code):
     """Send lookup request to SDS FHIR Device Endpoint"""
     x_request_id = str(uuid4())
     gp_code = f"https://fhir.nhs.uk/Id/ods-organization-code|{ods_code}"
-    device_params = {
-        "organization": gp_code,
-        "identifier": [SERVICE_INTERACTION_ID]
-    }
+    device_params = {"organization": gp_code, "identifier": [SERVICE_INTERACTION_ID]}
 
     headers = {
         "x-request-id": x_request_id,
@@ -41,13 +40,9 @@ def device_fhir_lookup(ods_code):
     }
     endpoint = SDS_FHIR_ENDPOINT
     device_url = f"{endpoint}/Device"
-    response = requests.get(
-        url=device_url,
-        params=device_params,
-        headers=headers,
-        timeout=500
-    )
+    response = requests.get(url=device_url, params=device_params, headers=headers, timeout=500)
     return response.status_code, response.json()
+
 
 def extract_nhsMhsPartyKey(body):  # pylint: disable=redefined-outer-name, invalid-name
     """Extracts the nhsPartyKey value
@@ -56,8 +51,11 @@ def extract_nhsMhsPartyKey(body):  # pylint: disable=redefined-outer-name, inval
     if len(entry_key) == 0:
         raise IndexError
 
-    party_key = body["entry"][0]["resource"]["identifier"][1]["value"]  # pylint: disable=redefined-outer-name
+    party_key = body["entry"][0]["resource"]["identifier"][1][
+        "value"
+    ]  # pylint: disable=redefined-outer-name
     return party_key
+
 
 def extract_asid(body):  # pylint: disable=redefined-outer-name, invalid-name
     """Extracts the ASID value from the /Device of SDS FHIR API response"""
@@ -67,6 +65,7 @@ def extract_asid(body):  # pylint: disable=redefined-outer-name, invalid-name
 
     asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
     return asid_number
+
 
 def get_sds_endpoint_data(nhsMhsPartyKey):  # pylint: disable=redefined-outer-name, invalid-name
     """Retrieves the whole response from the /Endpoint endpoint"""
@@ -81,14 +80,9 @@ def get_sds_endpoint_data(nhsMhsPartyKey):  # pylint: disable=redefined-outer-na
     }
     endpoint = SDS_FHIR_ENDPOINT
     endpoint_url = f"{endpoint}/Endpoint"
-    response = requests.get(
-        url=endpoint_url,
-        params=endpoint_params,
-        headers=headers,
-        timeout=500
-    )
-    print(response.json())
+    response = requests.get(url=endpoint_url, params=endpoint_params, headers=headers, timeout=500)
     return response.status_code, response.json()
+
 
 def extract_address(body):  # pylint: disable=redefined-outer-name, invalid-name
     """Extracts the address value from the /Endpoint of SDS FHIR API response"""
@@ -100,15 +94,21 @@ def extract_address(body):  # pylint: disable=redefined-outer-name, invalid-name
     return address
 
 
+def main(ods_code):
+    _, sds_device_data = device_fhir_lookup(ods_code)
+    party_key = extract_nhsMhsPartyKey(sds_device_data)
+    _, body = get_sds_endpoint_data(nhsMhsPartyKey=party_key)
+    return extract_asid(sds_device_data), extract_address(body)
+
+
 if __name__ == "__main__":
     try:
         ods_code = sys.argv[1]  # pylint: disable=invalid-name
-        status_code, sds_device_data = device_fhir_lookup(ods_code)
-        party_key = extract_nhsMhsPartyKey(sds_device_data)
     except IndexError:
         print("ODS code required as command line argument")
         sys.exit(1)
 
-    status, body = get_sds_endpoint_data(nhsMhsPartyKey=party_key)
-    print(f"ASID: {extract_asid(sds_device_data)}")
-    print(f"Address: {extract_address(body)}")
+    sds_device_data, address = main(ods_code)
+
+    print(f"ASID: {sds_device_data}")
+    print(f"Address: {address}")

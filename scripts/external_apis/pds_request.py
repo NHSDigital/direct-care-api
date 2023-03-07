@@ -15,10 +15,13 @@ https://digital.nhs.uk/developer/api-catalogue/personal-demographics-service-fhi
 
 """
 
+# pylint: skip-file
+
 import sys
 from time import time
 from uuid import uuid4
 
+import dpath
 import jwt
 import requests
 
@@ -53,9 +56,7 @@ def create_client_assertion():
         "exp": int(time()) + 300,
     }
 
-    return jwt.encode(
-        payload, key=SECRETS_DICT["private_key"], algorithm="RS512", headers=headers
-    )
+    return jwt.encode(payload, key=SECRETS_DICT["private_key"], algorithm="RS512", headers=headers)
 
 
 def get_access_token():
@@ -89,7 +90,7 @@ def pds_fhir_lookup(nhs_number):
     endpoint = SECRETS_DICT["pds_fhir_endpoint"]
     url = f"{endpoint}/{nhs_number}"
     response = requests.get(url, headers=headers)
-    return response.status_code, response.json()
+    return dpath.get(response.json(), "generalPractitioner/0/identifier/value")
 
 
 if __name__ == "__main__":
@@ -99,6 +100,4 @@ if __name__ == "__main__":
         print("NHS number required as command line argument")
         exit(1)
 
-    status, body = pds_fhir_lookup(nhs_number)
-    print(f"Status code: {status}")
-    print(body)
+    print(f"ODS code={pds_fhir_lookup(nhs_number)}")

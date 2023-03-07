@@ -5,7 +5,7 @@ Usage:
     python scripts/spine_secure_proxy_request.py <org_ods_code: from PDS> <org_asid: from SDS> <nhs_number: from original request>
 
 For the default example use:
-    python scripts/external_apis/spine_secure_proxy_request.py https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/ 200000001329 9690937278
+    python scripts/external_apis/spine_secure_proxy_request.py https://gpconnect-win1.itblab.nic.cfh.nhs.uk/B82617/STU3/1/gpconnect/structured/fhir 200000001329 9690937278
 
 
 """
@@ -128,8 +128,7 @@ def make_request(org_url, org_asid, patient_nhs_number):
     response = requests.post(
         url, headers=headers, data=body, timeout=300, cert=(CERT, KEY), verify=VERIFY
     )
-    print(response.status_code)
-    print(response.content.decode("utf-8"))
+    return response.content.decode("utf-8")
 
 
 if __name__ == "__main__":

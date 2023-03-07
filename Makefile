@@ -136,3 +136,6 @@ install-ci-requirements:
 pytest-ci:
 	python -m pytest lambdas/orchestration --tb=short --capture=no -p no:warnings \
 	--cov-report html --cov-report term --cov=lambdas/orchestration
+
+flow-script:
+	python scripts/external_apis/full_flow.py 9690937316
