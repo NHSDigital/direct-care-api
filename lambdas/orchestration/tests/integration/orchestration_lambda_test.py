@@ -1,5 +1,8 @@
+from unittest.mock import Mock, patch
+
 from ...app.orchestration_handler import orchestration_handler
 from ..utils.log_helper import LogHelper
+from ..utils.mock_post_request import MockPostRequest
 from ..utils.test_utils import mock_orchestration_event, parse_response
 
 
@@ -95,8 +98,6 @@ def test_orchestration_lambda_error_in_pds(logger: LogHelper):
 
 
 def test_orchestration_lambda_no_ods_on_record(logger: LogHelper):
-    """Test case for when PDS fails to find the provided nhs number"""
-
     # This nhs number has no items in the general practitioner array
     # See tests/data/pds_responses/nhs_number_9449306613.json
     nhs_number = "9449306613"
@@ -111,3 +112,53 @@ def test_orchestration_lambda_no_ods_on_record(logger: LogHelper):
     )
 
     assert logger.was_value_logged("PDS004", "nhs_number", nhs_number)
+
+
+def test_orchestration_lambda_no_match_on_ssp(logger: LogHelper):
+    """Test case for when PDS finds a match but SSP fails to find the provided nhs number"""
+
+    nhs_number = "9999999999"
+
+    event = mock_orchestration_event(nhs_number)
+
+    lambda_response = parse_response(orchestration_handler(event, ""))
+
+    assert (
+        lambda_response.body["message"] == "SSP failed to find patient with nhs_number=9999999999"
+    )
+
+    assert logger.was_value_logged("SSP004", "nhs_number", nhs_number)
+
+
+def test_orchestration_lambda_error_on_ssp(logger: LogHelper):
+    """Test case for when PDS finds a match but SSP returns other non-200 status"""
+
+    nhs_number = "1111111111"
+
+    event = mock_orchestration_event(nhs_number)
+
+    lambda_response = parse_response(orchestration_handler(event, ""))
+
+    assert lambda_response.body["message"] == "SSP request returned non-200 status_code=500"
+
+    assert logger.was_value_logged("SSP005", "status_code", 500)
+
+
+def test_orchestration_exception_in_on_ssp(logger: LogHelper):
+    nhs_number = "1111111111"
+
+    event = mock_orchestration_event(nhs_number)
+
+    # Re-patch the make request function so that it throws an error
+    # The first side effect needs to remain as MockPostRequest as the first time post is
+    # called is on the oauth endpoint
+    # Patch the second time it's called to throw the exception by passing a list to side_effect
+    with patch(
+        "lambdas.orchestration.app.lib.make_request.requests.post",
+        Mock(side_effect=[MockPostRequest(), Exception("Boom!")]),
+    ):
+        lambda_response = parse_response(orchestration_handler(event, ""))
+
+    assert lambda_response.body["message"] == "Exception in SSP request with error=Boom!"
+
+    assert logger.was_value_logged("SSP003", "error", "Boom!")

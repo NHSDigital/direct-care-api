@@ -37,7 +37,10 @@ def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
         "requesting_organization": {
             "resourceType": "Organization",
             "identifier": [
-                {"system": "https://fhir.nhs.uk/Id/ods-organization-code", "value": dcapi_ods_code}
+                {
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": dcapi_ods_code,
+                }
             ],
             # What name should we be using here
             "name": "Direct care API",
@@ -47,7 +50,10 @@ def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
             "id": "1",
             "identifier": [
                 # This is from the demo and will need to be changed once we get to integration environments
-                {"system": "https://fhir.nhs.uk/Id/sds-user-id", "value": "111111111111"},
+                {
+                    "system": "https://fhir.nhs.uk/Id/sds-user-id",
+                    "value": "111111111111",
+                },
                 {
                     "system": "https://fhir.nhs.uk/Id/sds-role-profile-id",
                     "value": "22222222222222",
@@ -113,7 +119,11 @@ def ssp_request(org_ods_code, org_asid, patient_nhs_number):
 
     write_log(
         "SSP001",
-        {"nhs_number": patient_nhs_number, "org_asid": org_asid, "org_ods_code": org_ods_code},
+        {
+            "nhs_number": patient_nhs_number,
+            "org_asid": org_asid,
+            "org_ods_code": org_ods_code,
+        },
     )
 
     base_url = "https://orange.testlab.nhs.uk/"
@@ -135,9 +145,9 @@ def ssp_request(org_ods_code, org_asid, patient_nhs_number):
         write_log("SSP003", {"error": str(e)})
         return None, f"Exception in SSP request with error={str(e)}"
 
-    if response.status_code != HTTPStatus.OK:
+    if response.status_code == HTTPStatus.NOT_FOUND:
         write_log("SSP004", {"nhs_number": patient_nhs_number})
-        return None, f"SSP request returned non-200 status_code={response.status_code}"
+        return None, f"SSP failed to find patient with nhs_number={patient_nhs_number}"
 
     # In future will need to investigate the various response status codes and potentially
     # give a more useful error message to end user based on the particular code

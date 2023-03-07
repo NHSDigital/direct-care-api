@@ -13,13 +13,13 @@ def get_mocked_ssp_response(nhs_number):
     data_dir = absolute_file_path(__file__, "../data/ssp_responses/")
     mocked_response_file = pathlib.Path(data_dir) / f"ssp_response_{nhs_number}.json"
 
-    if nhs_number == "0000000000":
+    if nhs_number == "1111111111":
         status_code = HTTPStatus.INTERNAL_SERVER_ERROR
         # Not sure exactly what the body of a SSP error looks like so leave blank for now
         content = {}
 
     elif not pathlib.Path.exists(mocked_response_file):
-        status_code = HTTPStatus.BAD_REQUEST
+        status_code = HTTPStatus.NOT_FOUND
         error_file = pathlib.Path(data_dir) / "ssp_not_found_response.json"
         with open(error_file, "r", encoding="utf-8") as _file:
             content = _file.read()
@@ -39,7 +39,7 @@ class MockPostRequest:
         self.url = ""
         self.headers = {}
         self.status_code = None
-        self.response = None
+        self.response = {}
         self.body = json.dumps({})
 
     def json(self):
@@ -48,7 +48,7 @@ class MockPostRequest:
     def __call__(self, url, headers, *args, **kwargs):
         self.url = url
         self.headers = headers
-        self.body = kwargs.get("data")
+        self.body = kwargs.get("data") or self.body
         self.status_code = 200
         self.response = {"error": f"mocked response not found for url={self.url}"}
 

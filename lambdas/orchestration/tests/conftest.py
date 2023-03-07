@@ -20,6 +20,29 @@ def log_helper_fixture(request):
     return log_helper
 
 
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    # execute all other hooks to obtain the report object
+    outcome = yield
+    rep = outcome.get_result()
+
+    # set a report attribute for each phase of a call, which can
+    # be "setup", "call", "teardown"
+
+    setattr(item, "rep_" + rep.when, rep)
+
+
+@pytest.fixture(autouse=True)
+def test_failed_fixture(request, logger):
+    yield
+
+    # If test fails, print out the logs to terminal
+    if request.node.rep_call.failed:
+        return logger.clean_up(test_failed=True)
+
+    logger.clean_up()
+
+
 @pytest.fixture(autouse=True)
 def patch_ssm():
     with patch("lambdas.orchestration.app.lib.get_ssm_param.get_ssm_client", MockSSMClient()):

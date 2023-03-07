@@ -7,7 +7,9 @@ from .make_request import make_get_request
 from .write_log import write_log
 
 # This will need to be changed if we ever integrate with prod
-PDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
+PDS_FHIR_ENDPOINT = (
+    "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
+)
 
 
 def extract_ods_code(body):
