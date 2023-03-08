@@ -95,7 +95,7 @@ Resources:
         Record:
           Type: Api
           Properties:
-            Path: /record
+            Path: /record/*
             Method: get
       Role: !GetAtt OrchestrationLambdaIAMRole.Arn
 
