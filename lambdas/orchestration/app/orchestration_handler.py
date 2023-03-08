@@ -35,8 +35,8 @@ class LambdaHandler:
     def set_audit_info(self, event):
         # Set a new transaction ID for each request that comes into that lambda
         self.transaction_id = uuid4()
-        self.user_id = dpath.get(event, "headers/x-user-id")
 
+        self.user_id = dpath.get(event, "headers/x-user-id")
         if not self.user_id:
             raise MissingAuditInfoException("User Id must be included in headers as x-user-id")
 
