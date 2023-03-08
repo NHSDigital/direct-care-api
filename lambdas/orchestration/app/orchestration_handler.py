@@ -6,6 +6,7 @@ from http import HTTPStatus
 from nhs_number import is_valid  # type: ignore
 
 from .lib.pds_fhir import lookup_nhs_number
+from .lib.ssp_request import ssp_request
 from .lib.write_log import write_log
 
 
@@ -43,7 +44,19 @@ def orchestration_handler(event, _):
         # Logging is done for this in the pds function
         return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": error})
 
+    org_fhir_endpoint, asid = (
+        # pylint: disable=line-too-long
+        "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
+        "918999198738",
+    )
+
+    record, message = ssp_request(org_fhir_endpoint, asid, nhs_number)
+
+    if not record:
+        # Logging is done for this in the pds function
+        return wrap_lambda_return(HTTPStatus.BAD_REQUEST, {"record": None, "message": message})
+
     return wrap_lambda_return(
         HTTPStatus.OK,
-        {"record": ods_code, "message": "success"},
+        {"record": record, "message": "success"},
     )
