@@ -83,7 +83,7 @@ def test_orchestration_lambda_error_in_pds(logger: LogHelper):
 
     assert (
         lambda_response.body["message"]
-        == "PDS FHIR returned a non-200 status code with status_code=500"
+        == "PDS FHIR returned a non-200 status code with status_code=500 error=Unknown error - No diagnostics available"
     )
 
     assert logger.was_value_logged("PDS003", "nhs_number", nhs_number)
