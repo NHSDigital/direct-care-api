@@ -5,15 +5,16 @@ Usage:
     python scripts/spine_secure_proxy_request.py <org_ods_code: from PDS> <org_asid: from SDS> <nhs_number: from original request>
 
 For the default example use:
-    python scripts/external_apis/spine_secure_proxy_request.py B82617 918999198738 9690937278
+    python scripts/external_apis/spine_secure_proxy_request.py https://gpconnect-win1.itblab.nic.cfh.nhs.uk/B82617/STU3/1/gpconnect/structured/fhir 918999198738 9690937278
 
 """
-
 import json
 import sys
 import time
 import uuid
+from urllib.parse import urlparse
 
+import dpath
 import jwt
 import requests
 
@@ -112,16 +113,29 @@ def get_request_body(nhs_number):
     )
 
 
-def make_request(org_ods_code, org_asid, patient_nhs_number):
-    # Eventually the base url will be taken from the extracted address value from SDS but for now that points at
-    # The spine integration environment (https://msg.int.spine2.ncrs.nhs.uk/reliablemessaging/reliablerequest)
-    # And will not work with the open test environment
-    base_url = "https://orange.testlab.nhs.uk/"
-    url = f"{base_url}{org_ods_code}/STU3/1/gpconnect/structured/fhir/Patient/$gpc.getstructuredrecord"
+def make_request(org_fhir_url, org_asid, patient_nhs_number, integration_env=False):
+    parsed_url = urlparse(org_fhir_url)
+    structured_record_endpoint = "Patient/$gpc.getstructuredrecord"
+
+    proxy_fqdn = "https://proxy.opentest.hscic.gov.uk/"
+
+    # We're not yet onboarded into the integration environment for SSP / gpconnect  which means:
+    # 1. The ASID returned from SDS for B82617 does not match the ASID on the test data on gpconnect
+    # 2. The netloc of the 'address' field from SDS cannot be used with the gpconnect endpoint
+    # 3. The sandbox SSP cannot be used as it requires VPN access to opentest
+    if not integration_env:
+        # Swap out the org ASID for the one that's in the gpconnect test data
+        org_asid = "918999198738"
+        # Remove the routing through the spine proxy
+        proxy_fqdn = ""
+        # Swap out the netloc for the one that's in the gpconnect test data
+        parsed_url = parsed_url._replace(netloc="orange.testlab.nhs.uk")
+
+    url = f"{proxy_fqdn}{parsed_url.geturl()}/{structured_record_endpoint}"
 
     headers = get_headers(org_asid)
     body = get_request_body(patient_nhs_number)
-    print(url)
+
     response = requests.post(
         url,
         headers=headers,
@@ -129,27 +143,27 @@ def make_request(org_ods_code, org_asid, patient_nhs_number):
         timeout=300,
     )
 
-    print(response.content)
+    print(dpath.get(response.json(), "entry/10/resource/name/0"))
 
 
 if __name__ == "__main__":
     # First argument is ODS code of the organisation extracted from PDS request
     try:
-        ORG_ODS_CODE = sys.argv[1]
+        ORG_FHIR_URL = sys.argv[1]
     except IndexError:
-        print("ODS code must be provided as first argument")
+        print("ORG fhir url from SDS must be provided as first argument")
 
     # Second argument is the organisation ASID extracted from SDS request
     try:
         ORG_ASID = sys.argv[2]
     except IndexError:
-        print("ASID must be provided as first argument")
+        print("ASID must be provided as second argument")
 
     # Third argument is the NHS number of the patient to look up taken from the
     # original query string parameter pass to the direct care api endpoint
     try:
         PATIENT_NHS_NUMBER = sys.argv[3]
     except IndexError:
-        print("NHS number must be provided as first argument")
+        print("NHS number must be provided as third argument")
 
-    make_request(ORG_ODS_CODE, ORG_ASID, PATIENT_NHS_NUMBER)
+    make_request(ORG_FHIR_URL, ORG_ASID, PATIENT_NHS_NUMBER)
