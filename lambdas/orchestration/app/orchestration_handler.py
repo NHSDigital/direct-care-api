@@ -4,9 +4,9 @@ import json
 from http import HTTPStatus
 from uuid import uuid4
 
-import dpath  # type: ignore
 from nhs_number import is_valid  # type: ignore
 
+from .lib.get_dict_value import get_dict_value
 from .lib.pds_fhir import lookup_nhs_number
 from .lib.ssp_request import ssp_request
 from .lib.write_log import write_log
@@ -36,11 +36,11 @@ class LambdaHandler:
         # Set a new transaction ID for each request that comes into that lambda
         self.transaction_id = uuid4()
 
-        self.user_id = dpath.get(event, "headers/x-user-id")
+        self.user_id = get_dict_value(event, "headers/x-user-id")
         if not self.user_id:
             raise MissingAuditInfoException("User Id must be included in headers as x-user-id")
 
-        self.user_org_code = dpath.get(event, "headers/x-user-org-code")
+        self.user_org_code = get_dict_value(event, "headers/x-user-org-code")
         if not self.user_org_code:
             raise MissingAuditInfoException(
                 "User org code must be included in headers as x-user-org-code"
