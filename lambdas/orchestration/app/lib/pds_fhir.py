@@ -5,13 +5,12 @@ from .get_access_token import get_access_token
 from .get_dict_value import get_dict_value
 from .get_fhir_error import get_fhir_error
 from .make_request import make_get_request
-from .write_log import write_log
 
 # This will need to be changed if we ever integrate with prod
 PDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient"
 
 
-def lookup_nhs_number(nhs_number):
+def lookup_nhs_number(nhs_number, write_log):
     """Send lookup request to PDS FHIR"""
 
     write_log("PDS001", {"nhs_number": nhs_number})

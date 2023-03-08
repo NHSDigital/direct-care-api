@@ -10,7 +10,6 @@ import jwt
 import requests
 
 from .get_fhir_error import get_fhir_error
-from .write_log import write_log
 
 
 def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
@@ -113,7 +112,7 @@ def get_request_body(nhs_number):
     )
 
 
-def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, integration_env=False):
+def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, write_log, integration_env=False):
     write_log(
         "SSP001",
         {

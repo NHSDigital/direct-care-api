@@ -1,4 +1,5 @@
 import json
+from uuid import uuid4
 
 
 def parse_response(lambda_response):
@@ -19,12 +20,14 @@ def parse_response(lambda_response):
     return LambdaResponse()
 
 
-def mock_orchestration_event(nhs_number):
+def mock_orchestration_event(nhs_number, user_org_code=None, user_id=None):
     return {
         "body": None,
         "queryStringParameters": {"nhs_number": nhs_number},
         "headers": {
             "content-type": "application/json",
             "Host": "https://aws.com/gaetway_id/r9srwxlz3d",
+            "x-user-org-code": "A10456" if user_org_code is None else user_org_code,
+            "x-user-id": uuid4() if user_id is None else user_id,
         },
     }
