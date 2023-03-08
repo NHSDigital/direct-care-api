@@ -4,6 +4,7 @@ import json
 import time
 import uuid
 from http import HTTPStatus
+from urllib.parse import urlparse
 
 import jwt
 import requests
@@ -112,7 +113,7 @@ def get_request_body(nhs_number):
     )
 
 
-def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number):
+def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, integration_env=False):
     write_log(
         "SSP001",
         {
@@ -122,8 +123,24 @@ def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number):
         },
     )
 
-    proxy_url = "https://proxy.opentest.hscic.gov.uk/"
-    url = f"{proxy_url}{org_fhir_endpoint}/Patient/$gpc.getstructuredrecord"
+    parsed_url = urlparse(org_fhir_endpoint)
+    structured_record_endpoint = "Patient/$gpc.getstructuredrecord"
+
+    proxy_fqdn = "https://proxy.opentest.hscic.gov.uk/"
+
+    # We're not yet onboarded into the integration environment for SSP / gpconnect  which means:
+    # 1. The ASID returned from SDS for B82617 does not match the ASID on the test data on gpconnect
+    # 2. The netloc of the 'address' field from SDS cannot be used with the gpconnect endpoint
+    # 3. The sandbox SSP cannot be used as it requires VPN access to opentest
+    if not integration_env:  # pragma: no cover
+        # Swap out the org ASID for the one that's in the gpconnect test data
+        org_asid = "918999198738"
+        # Remove the routing through the spine proxy
+        proxy_fqdn = ""
+        # Swap out the netloc for the one that's in the gpconnect test data
+        parsed_url = parsed_url._replace(netloc="orange.testlab.nhs.uk")
+
+    url = f"{proxy_fqdn}{parsed_url.geturl()}/{structured_record_endpoint}"
 
     headers = get_headers(org_asid)
     body = get_request_body(patient_nhs_number)
