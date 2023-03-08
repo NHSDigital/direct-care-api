@@ -139,7 +139,7 @@ def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, write_log, inte
         # Swap out the netloc for the one that's in the gpconnect test data
         parsed_url = parsed_url._replace(netloc="orange.testlab.nhs.uk")
 
-    url = f"{proxy_fqdn}{parsed_url.geturl()}/{structured_record_endpoint}"
+    url = f"{proxy_fqdn}{parsed_url.geturl()}{structured_record_endpoint}"
 
     headers = get_headers(org_asid)
     body = get_request_body(patient_nhs_number)
