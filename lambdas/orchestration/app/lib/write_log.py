@@ -14,7 +14,7 @@ class MissingVariables(LogbaseError):
     """Exception to raise if incomplete log dict passed to log"""
 
 
-def write_log(log_ref, log_dict):
+def write_log(log_ref, log_dict, audit_dict):
     # Find log
     log = LOG_CONFIG.get(log_ref)
     if not log:  # pragma: no cover
@@ -26,7 +26,7 @@ def write_log(log_ref, log_dict):
     # Text
     try:
         log_text = log["text"]
-        text = log_text.format(**log_dict)
+        text = log_text.format(**log_dict | audit_dict)
     except KeyError as exc:  # pragma: no cover
         raise MissingVariables(
             f"Missing variables passed to log with text={log_text} log_dict={log_dict}"

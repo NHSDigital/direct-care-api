@@ -1,22 +1,15 @@
-"""
-Script to ping the structured data endpoint on GP connect through Spine Secure Proxy
+# pylint: disable=line-too-long
 
-Usage:
-    python scripts/spine_secure_proxy_request.py <org_ods_code: from PDS> <org_asid: from SDS> <nhs_number: from original request>
-
-For the default example use:
-    python scripts/external_apis/spine_secure_proxy_request.py https://gpconnect-win1.itblab.nic.cfh.nhs.uk/B82617/STU3/1/gpconnect/structured/fhir 918999198738 9690937278
-
-"""
 import json
-import sys
 import time
 import uuid
+from http import HTTPStatus
 from urllib.parse import urlparse
 
-import dpath
 import jwt
 import requests
+
+from .get_fhir_error import get_fhir_error
 
 
 def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
@@ -44,7 +37,10 @@ def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
         "requesting_organization": {
             "resourceType": "Organization",
             "identifier": [
-                {"system": "https://fhir.nhs.uk/Id/ods-organization-code", "value": dcapi_ods_code}
+                {
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": dcapi_ods_code,
+                }
             ],
             # What name should we be using here
             "name": "Direct care API",
@@ -54,7 +50,10 @@ def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
             "id": "1",
             "identifier": [
                 # This is from the demo and will need to be changed once we get to integration environments
-                {"system": "https://fhir.nhs.uk/Id/sds-user-id", "value": "111111111111"},
+                {
+                    "system": "https://fhir.nhs.uk/Id/sds-user-id",
+                    "value": "111111111111",
+                },
                 {
                     "system": "https://fhir.nhs.uk/Id/sds-role-profile-id",
                     "value": "22222222222222",
@@ -113,8 +112,17 @@ def get_request_body(nhs_number):
     )
 
 
-def make_request(org_fhir_url, org_asid, patient_nhs_number, integration_env=False):
-    parsed_url = urlparse(org_fhir_url)
+def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, write_log, integration_env=False):
+    write_log(
+        "SSP001",
+        {
+            "nhs_number": patient_nhs_number,
+            "org_asid": org_asid,
+            "org_fhir_endpoint": org_fhir_endpoint,
+        },
+    )
+
+    parsed_url = urlparse(org_fhir_endpoint)
     structured_record_endpoint = "Patient/$gpc.getstructuredrecord"
 
     proxy_fqdn = "https://proxy.opentest.hscic.gov.uk/"
@@ -123,7 +131,7 @@ def make_request(org_fhir_url, org_asid, patient_nhs_number, integration_env=Fal
     # 1. The ASID returned from SDS for B82617 does not match the ASID on the test data on gpconnect
     # 2. The netloc of the 'address' field from SDS cannot be used with the gpconnect endpoint
     # 3. The sandbox SSP cannot be used as it requires VPN access to opentest
-    if not integration_env:
+    if not integration_env:  # pragma: no cover
         # Swap out the org ASID for the one that's in the gpconnect test data
         org_asid = "918999198738"
         # Remove the routing through the spine proxy
@@ -131,39 +139,38 @@ def make_request(org_fhir_url, org_asid, patient_nhs_number, integration_env=Fal
         # Swap out the netloc for the one that's in the gpconnect test data
         parsed_url = parsed_url._replace(netloc="orange.testlab.nhs.uk")
 
-    url = f"{proxy_fqdn}{parsed_url.geturl()}/{structured_record_endpoint}"
+    url = f"{proxy_fqdn}{parsed_url.geturl()}{structured_record_endpoint}"
 
     headers = get_headers(org_asid)
     body = get_request_body(patient_nhs_number)
 
-    response = requests.post(
-        url,
-        headers=headers,
-        data=body,
-        timeout=300,
-    )
+    write_log("SSP002", {"url": url, "headers": headers, "body": body})
 
-    print(dpath.get(response.json(), "entry/10/resource/name/0"))
-
-
-if __name__ == "__main__":
-    # First argument is ODS code of the organisation extracted from PDS request
     try:
-        ORG_FHIR_URL = sys.argv[1]
-    except IndexError:
-        print("ORG fhir url from SDS must be provided as first argument")
+        response = requests.post(
+            url,
+            headers=headers,
+            data=body,
+            timeout=300,
+        )
+    except Exception as e:  # pylint: disable=broad-except
+        write_log("SSP003", {"error": str(e)})
+        return None, f"Exception in SSP request with error={str(e)}"
 
-    # Second argument is the organisation ASID extracted from SDS request
-    try:
-        ORG_ASID = sys.argv[2]
-    except IndexError:
-        print("ASID must be provided as second argument")
+    if response.status_code == HTTPStatus.NOT_FOUND:
+        write_log("SSP004", {"nhs_number": patient_nhs_number})
+        return None, f"SSP failed to find patient with nhs_number={patient_nhs_number}"
 
-    # Third argument is the NHS number of the patient to look up taken from the
-    # original query string parameter pass to the direct care api endpoint
-    try:
-        PATIENT_NHS_NUMBER = sys.argv[3]
-    except IndexError:
-        print("NHS number must be provided as third argument")
+    # In future will need to investigate the various response status codes and potentially
+    # give a more useful error message to end user based on the particular code
+    if response.status_code != HTTPStatus.OK:
+        write_log(
+            "SSP005",
+            {
+                "status_code": response.status_code,
+                "response_content": get_fhir_error(response.json()),
+            },
+        )
+        return None, f"SSP request returned non-200 status_code={response.status_code}"
 
-    make_request(ORG_FHIR_URL, ORG_ASID, PATIENT_NHS_NUMBER)
+    return response.json(), "Success"
