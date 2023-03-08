@@ -92,10 +92,10 @@ Resources:
         Variables:
           EndpointUrl: !Ref EndpointUrl
       Events:
-        Calculate:
+        Record:
           Type: Api
           Properties:
-            Path: /calculate
+            Path: /record
             Method: get
       Role: !GetAtt OrchestrationLambdaIAMRole.Arn
 
@@ -113,8 +113,8 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   DirectCareApi:
-    Description: "API Gateway endpoint URL for Prod stage for the Main function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/calculate/"
+    Description: "API Gateway endpoint URL for for the Main function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/directcareapi/record/"
   DirectCareFunction:
     Description: "Main Lambda Function ARN"
     Value: !GetAtt MainFunction.Arn

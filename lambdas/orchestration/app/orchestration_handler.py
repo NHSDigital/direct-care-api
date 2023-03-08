@@ -1,7 +1,8 @@
-"""Lambda function linked to the /calculate api gateway route"""
+"""Lambda function linked to the /record api gateway route"""
 
 import json
 from http import HTTPStatus
+from typing import Dict
 from uuid import uuid4
 
 from nhs_number import is_valid  # type: ignore
@@ -22,7 +23,7 @@ class LambdaHandler:
     transaction_id = None
     user_id = None
     user_org_code = None
-    audit_dict = {}
+    audit_dict: Dict[str, str] = {}
 
     def set_audit_info(self, event):
         # Set a new transaction ID for each request that comes into that lambda
