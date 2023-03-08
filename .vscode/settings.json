@@ -37,6 +37,7 @@
   "python.linting.flake8Enabled": true,
   "python.linting.lintOnSave": true,
   "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": ["--rcfile=tox.ini"],
   "python.testing.pytestArgs": [
     "lambdas", "--capture=no"
   ],

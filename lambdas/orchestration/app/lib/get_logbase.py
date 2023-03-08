@@ -17,6 +17,7 @@ def parse_log_base(log_base_file):
         if not level:  # pragma: no cover
             raise LogbaseError(f"No level provided for Ref={log_ref}")
         text = log_base_config.get(log_ref, SECTION_TEXT)
+        text += " - transactionId={transaction_id} userId={user_id} userOrgCode={user_org_code}"
         if not level:  # pragma: no cover
             raise LogbaseError(f"No text provided for Ref={log_ref}")
 
