@@ -4,7 +4,7 @@ import json
 from http import HTTPStatus
 from uuid import uuid4
 
-import dpath
+import dpath  # type: ignore
 from nhs_number import is_valid  # type: ignore
 
 from .lib.pds_fhir import lookup_nhs_number
