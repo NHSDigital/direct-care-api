@@ -28,6 +28,6 @@ def mock_orchestration_event(nhs_number, user_org_code=None, user_id=None):
             "content-type": "application/json",
             "Host": "https://aws.com/gaetway_id/r9srwxlz3d",
             "x-user-org-code": "A10456" if user_org_code is None else user_org_code,
-            "x-user-id": uuid4() if user_id is None else user_id,
+            "x-user-id": str(uuid4()) if user_id is None else user_id,
         },
     }

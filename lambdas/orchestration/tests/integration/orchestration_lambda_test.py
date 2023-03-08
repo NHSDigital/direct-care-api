@@ -11,7 +11,7 @@ def test_orchestration_lambda_success(logger: LogHelper):
     nhs_number = "9690937278"
     user_id = "USER1234"
     user_org_code = "ODS1234"
-    transaction_id = uuid4()
+    transaction_id = str(uuid4())
 
     event = mock_orchestration_event(nhs_number, user_id=user_id, user_org_code=user_org_code)
 
