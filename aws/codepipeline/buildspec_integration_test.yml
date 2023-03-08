@@ -18,7 +18,7 @@ phases:
       - . ./scripts/assume_role.sh ${ENV_PIPELINE_EXECUTION_ROLE} integration-test
       - stack_resources=`aws cloudformation describe-stack-resources --stack-name ${STACK_NAME}`
       - serverlessRestApi=`echo $stack_resources | jq -r '.StackResources[] |select(.ResourceType=="AWS::ApiGateway::RestApi").PhysicalResourceId'`
-      - BASE_URL=https://${serverlessRestApi}.execute-api.eu-west-2.amazonaws.com/directcareapi/
+      - BASE_URL=https://${serverlessRestApi}.execute-api.eu-west-2.amazonaws.com/record/
       - echo BASE_URL ${BASE_URL}
       - make install
       - make integration-test

@@ -37,7 +37,7 @@ Resources:
   ApiDeployment:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: directcareapi
+      StageName: record
 
   # Declare the lambda role manually
   OrchestrationLambdaIAMRole:
@@ -100,7 +100,7 @@ Resources:
         Record:
           Type: Api
           Properties:
-            Path: /record/*
+            Path: "{proxy+}"
             Method: get
             RestApiId: !Ref ApiDeployment
       Role: !GetAtt OrchestrationLambdaIAMRole.Arn
@@ -120,7 +120,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   DirectCareApi:
     Description: "API Gateway endpoint URL for for the Main function"
-    Value: !Sub "https://${ApiDeployment}.execute-api.${AWS::Region}.amazonaws.com/directcareapi/record/"
+    Value: !Sub "https://${ApiDeployment}.execute-api.${AWS::Region}.amazonaws.com/record/"
   DirectCareFunction:
     Description: "Main Lambda Function ARN"
     Value: !GetAtt MainFunction.Arn
