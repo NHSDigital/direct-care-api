@@ -7,9 +7,9 @@ from http import HTTPStatus
 from urllib.parse import urlparse
 
 import jwt
-import requests
 
 from .get_fhir_error import get_fhir_error
+from .make_request import make_post_request
 
 
 def get_unsigned_jwt_token(dcapi_ods_code="Y90705"):
@@ -147,11 +147,10 @@ def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, write_log, inte
     write_log("SSP002", {"url": url, "headers": headers, "body": body})
 
     try:
-        response = requests.post(
+        response = make_post_request(
             url,
             headers=headers,
             data=body,
-            timeout=300,
         )
     except Exception as e:  # pylint: disable=broad-except
         write_log("SSP003", {"error": str(e)})
