@@ -1,4 +1,10 @@
 {
+  "resourceType": "OperationOutcome",
+  "meta": {
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-OperationOutcome-1"
+    ]
+  },
   "issue": [
     {
       "severity": "error",
@@ -12,8 +18,7 @@
           }
         ]
       },
-      "diagnostics": "No patient details found for patient ID: 1212121212"
+      "diagnostics": "No patient details found for patient ID: 9690937278"
     }
-  ],
-  "resourceType": "OperationOutcome"
+  ]
 }
