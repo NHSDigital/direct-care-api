@@ -1,9 +1,6 @@
 from unittest.mock import Mock, patch
 from uuid import uuid4
 
-import dpath
-
-from ...app.lib.get_dict_value import get_dict_value
 from ...app.orchestration_handler import main
 from ..utils.log_helper import LogHelper
 from ..utils.mock_post_request import MockPostRequest
