@@ -9,7 +9,8 @@ from nhs_number import is_valid  # type: ignore
 
 from .lib.get_dict_value import get_dict_value
 from .lib.pds_fhir import lookup_nhs_number
-from .lib.ssp_request import ssp_request
+from .lib.ssp_html_request import ssp_html_request
+from .lib.ssp_structured_request import ssp_structured_request
 from .lib.write_log import write_log
 
 
@@ -115,7 +116,8 @@ class LambdaHandler:
             "918999198738",
         )
 
-        record, message = ssp_request(org_fhir_endpoint, asid, nhs_number, path, self.write_log)
+        ssp_func = ssp_structured_request if path == "/structured" else ssp_html_request
+        record, message = ssp_func(org_fhir_endpoint, asid, nhs_number, self.write_log)
 
         if not record:
             # Logging is done for this in the pds function

@@ -1,6 +1,9 @@
 from unittest.mock import Mock, patch
 from uuid import uuid4
 
+import dpath
+
+from ...app.lib.get_dict_value import get_dict_value
 from ...app.orchestration_handler import main
 from ..utils.log_helper import LogHelper
 from ..utils.mock_post_request import MockPostRequest
@@ -227,3 +230,19 @@ def test_orchestration_exception_in_on_ssp(logger: LogHelper):
     assert lambda_response.body["message"] == "Exception in SSP request with error=Boom!"
 
     assert logger.was_value_logged("SSP003", "error", "Boom!")
+
+
+def test_orchestration_ssp_html_request(logger: LogHelper):
+    nhs_number = "9690937278"
+
+    event = mock_orchestration_event(nhs_number, path="html")
+
+    lambda_response = parse_response(main(event, ""))
+
+    assert lambda_response.status_code == 200
+
+    # Check the record ID returned matches what we expected from the mock SSP return
+    div = get_dict_value(lambda_response.body, "/entry/0/resource/section/0/text/div")
+    assert "<td>Hayfever, allergy to pollen</td>" in div  # type: ignore
+
+    assert logger.was_value_logged("LAMBDA001", "transactionId", "")
