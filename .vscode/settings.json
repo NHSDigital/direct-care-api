@@ -39,7 +39,7 @@
   "python.linting.pylintEnabled": true,
   "python.linting.pylintArgs": ["--rcfile=tox.ini"],
   "python.testing.pytestArgs": [
-    "lambdas", "--capture=no"
+    "lambdas/orchestration", "--capture=no"
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
