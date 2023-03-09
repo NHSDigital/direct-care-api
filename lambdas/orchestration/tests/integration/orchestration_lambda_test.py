@@ -37,6 +37,22 @@ def test_orchestration_lambda_success(logger: LogHelper):
     assert logger.was_value_logged("LAMBDA001", "transactionId", transaction_id)
 
 
+def test_orchestration_bad_path(logger: LogHelper):
+    nhs_number = "9690937278"
+
+    event = mock_orchestration_event(nhs_number, path="invalid")
+
+    lambda_response = parse_response(main(event, ""))
+
+    assert lambda_response.status_code == 400
+
+    assert (
+        lambda_response.body["message"] == "/invalid is not a valid path - use /html or /structured"
+    )
+
+    assert logger.was_value_logged("LAMBDA002", "reason", "")
+
+
 def test_orchestration_missing_user_id(logger: LogHelper):
     nhs_number = "9690937278"
     user_id = ""
@@ -50,7 +66,9 @@ def test_orchestration_missing_user_id(logger: LogHelper):
 
     assert lambda_response.body["message"] == "User Id must be included in headers as x-user-id"
 
-    assert logger.was_value_logged("LAMBDA002", "reason", "")
+    assert logger.was_value_logged(
+        "LAMBDA002", "reason", "User Id must be included in headers as x-user-id"
+    )
 
 
 def test_orchestration_missing_user_org_code(logger: LogHelper):

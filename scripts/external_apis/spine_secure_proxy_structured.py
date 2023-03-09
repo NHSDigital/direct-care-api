@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 """
 Script to ping the structured data endpoint on GP connect through Spine Secure Proxy
 
@@ -166,4 +168,4 @@ if __name__ == "__main__":
     except IndexError:
         print("NHS number must be provided as third argument")
 
-    make_request(ORG_FHIR_URL, ORG_ASID, PATIENT_NHS_NUMBER)
+    make_request(ORG_FHIR_URL, ORG_ASID, PATIENT_NHS_NUMBER)  # type: ignore

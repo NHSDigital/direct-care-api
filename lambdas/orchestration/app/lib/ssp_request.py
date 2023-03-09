@@ -112,7 +112,9 @@ def get_request_body(nhs_number):
     )
 
 
-def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, write_log, integration_env=False):
+def ssp_request(
+    org_fhir_endpoint, org_asid, patient_nhs_number, path, write_log, integration_env=False
+):
     write_log(
         "SSP001",
         {
