@@ -1,11 +1,10 @@
 import logging
 import os
-import secrets
 import sys
 from logging import DEBUG, INFO
 
 if not os.getenv("BASE_URL"):
-    BASE_URL = "cookieclickertechtest.airelogic.com"
+    BASE_URL = "http://localhost:3000"
 else:
     BASE_URL = os.getenv("BASE_URL")
 
@@ -15,7 +14,7 @@ def before_all(context):
         setup_logging(level=DEBUG)
     else:
         setup_logging(level=INFO)
-    context.base_url = generate_url()
+    context.base_url = BASE_URL
 
 
 def after_all(context):
@@ -46,7 +45,3 @@ def is_debug(context):
         return False
 
 
-def generate_url():
-    project_name = os.path.basename(os.getcwd())
-    url = f"https://{project_name}-{secrets.token_urlsafe(30*3//4)}.{BASE_URL}"
-    return url

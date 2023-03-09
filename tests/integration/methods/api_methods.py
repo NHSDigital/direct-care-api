@@ -2,13 +2,11 @@ import requests
 from assertpy import assert_that
 
 
-def start_new_game(context, name: str):
-    body = f"name={name}"
+def request_record(context, nhs_number: int):
     headers = {"content-type": "application/x-www-form-urlencoded"}
-    context.response = requests.post(
-        headers=headers, url=context.base_url + "/new_game", data=body
-    )
-    context.player_name = name
+    context.response = requests.get(
+        headers=headers, url=context.base_url + f"/record/structured?nhs_number={nhs_number}")
+    context.nhs_number = nhs_number
 
 
 def missing_player_name_error_is_displayed(context):

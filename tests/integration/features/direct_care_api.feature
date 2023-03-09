@@ -2,11 +2,11 @@
 Feature: Direct Care API
 
   @critical
-  Scenario Outline: I can start a new game of Cookie Clicker
-    When I request to start a new game with the name "<NAME>"
-    Then a new game is started
+  Scenario Outline: I can request my care record
+    When I request my care record with the NHS Number "<NHS_NUMBER>"
+    Then my record is returned
     Examples:
-      | NAME |
+      | NHS_NUMBER |
       | Bob  |
       | Sean |
 
