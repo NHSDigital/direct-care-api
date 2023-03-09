@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from scripts.external_apis.sds_request import api_key
 
-from ..lib.write_log import write_log
+from .get_dict_value import get_dict_value
 from .make_request import make_get_request
 
 # pylint: disable=line-too-long
@@ -12,25 +12,6 @@ from .make_request import make_get_request
 SDS_FHIR_ENDPOINT = "https://int.api.service.nhs.uk/spine-directory/FHIR/R4"
 SERVICE_INTERACTION_ID = "https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1"
 ORG_CODE_BASE = "https://fhir.nhs.uk/Id/ods-organization-code|"
-
-def extract_nhsMhsPartyKey(body):  # pylint: disable=redefined-outer-name, invalid-name  # noqa: E302
-    """Extracts the nhsPartyKey value
-    from the /Device of SDS FHIR API response"""
-    entry_key = body["entry"][0]
-    if len(entry_key) == 0:
-        raise IndexError
-
-    party_key = body["entry"][0]["resource"]["identifier"][1]["value"]  # pylint: disable=redefined-outer-name
-    return party_key
-
-def extract_asid(body):  # pylint: disable=redefined-outer-name, invalid-name # noqa: E302
-    """Extracts the ASID value from the /Device of SDS FHIR API response"""
-    entry_key = body["entry"][0]
-    if len(entry_key) == 0:
-        raise IndexError
-
-    asid_number = body["entry"][0]["resource"]["identifier"][0]["value"]
-    return asid_number
 
 def extract_address(body):  # pylint: disable=redefined-outer-name, invalid-name # noqa: E302
     """Extracts the address value from the /Endpoint of SDS FHIR API response"""
@@ -42,16 +23,13 @@ def extract_address(body):  # pylint: disable=redefined-outer-name, invalid-name
     return address
 
 
-def get_device_data(ods_code):
+def device_fhir_lookup(ods_code, write_log):
     """Send lookup request to SDS FHIR Device Endpoint"""
 
     write_log("SDS001", {"ods_code": ods_code})
     x_request_id = str(uuid4())
     gp_code = f"{ORG_CODE_BASE}{ods_code}"
-    device_params = {
-        "organization": gp_code,
-        "identifier": [SERVICE_INTERACTION_ID]
-    }
+    device_params = {"organization": gp_code, "identifier": [SERVICE_INTERACTION_ID]}
 
     headers = {
         "x-request-id": x_request_id,
@@ -82,8 +60,8 @@ def get_device_data(ods_code):
             f"SDS FHIR returned a non-200 status code with status_code={response.status_code}",
         )
 
-    nhsMhsPartyKey = extract_nhsMhsPartyKey(response.json())  # pylint: disable=invalid-name
-    asid = extract_asid(response.json())
+    nhsMhsPartyKey = get_dict_value(response.json(), "entry/0/resource/identifier/1/value")  # pylint: disable=invalid-name
+    asid = get_dict_value(response.json(), "entry/0/resource/identifier/0/value")
 
     # Account for the situation where a record has been retrieved
     # but it does not contain and ods code
