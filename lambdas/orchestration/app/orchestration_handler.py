@@ -2,7 +2,7 @@
 
 import json
 from http import HTTPStatus
-from typing import Dict
+from typing import Dict, Optional
 from uuid import uuid4
 
 from nhs_number import is_valid  # type: ignore
@@ -23,7 +23,7 @@ class LambdaHandler:
     transaction_id = None
     user_id = None
     user_org_code = None
-    audit_dict: Dict[str, str] = {}
+    audit_dict: Dict[str, Optional[str]] = {}
 
     def set_audit_info(self, event):
         # Set a new transaction ID for each request that comes into that lambda
@@ -100,6 +100,10 @@ class LambdaHandler:
             return self.wrap_lambda_return(
                 HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
             )
+
+        ######################################################
+        # SDS endpoint call replaces these hardcoded variables
+        ######################################################
 
         org_fhir_endpoint, asid = (
             # pylint: disable=line-too-long
