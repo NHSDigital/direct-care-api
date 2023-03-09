@@ -54,4 +54,8 @@ class MockGetRequest:
             nhs_number = self.url.split("/")[-1]
             self.status_code, self.response = get_mocked_fhir_response(nhs_number)
 
+        elif "spine-directory" in self.url:
+            ods_code = self.url.split("/")[-1]  # TO DO extract the ODS code  (?<=code\|)((\w){6})(?=&)
+            self.status_code, self.response = get_mocked_fhir_response(ods_code)
+
         return self
