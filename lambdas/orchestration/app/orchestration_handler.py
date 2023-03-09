@@ -5,7 +5,9 @@ from http import HTTPStatus
 from typing import Dict, Optional
 from uuid import uuid4
 
-from nhs_number import is_valid  # type: ignore
+from nhs_number import is_valid
+
+from .lib.sds_fhir import sds_request
 
 from .lib.get_dict_value import get_dict_value
 from .lib.pds_fhir import lookup_nhs_number
@@ -105,11 +107,10 @@ class LambdaHandler:
         # SDS endpoint call replaces these hardcoded variables
         ######################################################
 
-        org_fhir_endpoint, asid = (
+        org_fhir_endpoint, asid = sds_request(ods_code, self.write_log)  # TO DO why?
             # pylint: disable=line-too-long
-            "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
-            "918999198738",
-        )
+            # "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
+            # "918999198738",
 
         record, message = ssp_request(org_fhir_endpoint, asid, nhs_number, self.write_log)
 
