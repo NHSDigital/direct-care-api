@@ -1,6 +1,6 @@
 import unittest
 
-from orchestration.app.lib.sds_fhir import extract_address, extract_asid, extract_nhsMhsPartyKey
+from scripts.external_apis.sds_request import extract_address, extract_asid, extract_nhsMhsPartyKey
 
 
 # pylint: disable= line-too-long, invalid-name
