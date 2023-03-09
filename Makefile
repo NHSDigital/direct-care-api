@@ -91,7 +91,7 @@ delete-sam-stack: guard-stack_name
 
 get-sam-endpoint: guard-stack_name
 	@sam list endpoints --region eu-west-2  --profile nhs-direct-care-dev --stack-name=anthonydev --output json \
-		| jq -r '.[] | select(.LogicalResourceId=="ServerlessRestApi") | .CloudEndpoint[] | select(. |endswith("Prod"))'
+		| jq -r '.[] | select(.LogicalResourceId=="ServerlessRestApi") | .CloudEndpoint[] | select(. |endswith("directcareapi"))'
 
 curl-sam: guard-sam_endpoint
 	curl -s "$$sam_endpoint/calculate?a=5&b=7"
