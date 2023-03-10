@@ -115,10 +115,16 @@ class LambdaHandler:
         # SDS endpoint call replaces these hardcoded variables
         ######################################################
 
-        org_fhir_endpoint, asid = sds_request(ods_code, self.write_log)
+        org_fhir_endpoint, asid, message = sds_request(ods_code, self.write_log)  # org_fhir_endpoint is the address
             # pylint: disable=line-too-long
             # "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
             # "918999198738",
+
+        if not org_fhir_endpoint:
+            # Logging is done for this in the sds function
+            return self.wrap_lambda_return(
+                HTTPStatus.BAD_REQUEST, {"record": None, "message": message}
+            )
 
         record, message = ssp_request(org_fhir_endpoint, asid, nhs_number, self.write_log)
 
