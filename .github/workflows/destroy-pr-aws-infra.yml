@@ -18,7 +18,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: eu-west-2
-          role-to-assume: arn:aws:iam::436014718090:role/NHSDAdminRole
+          role-to-assume: arn:aws:iam::436014718090:role/github-role
           role-session-name: github-actions
 
       - name: Update repo
