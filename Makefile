@@ -1,6 +1,7 @@
 SHELL:=/bin/bash -O globstar
 .SHELLFLAGS = -ecu
 
+
 guard-%:
 	@ if [ "${${*}}" = "" ]; then \
 		echo "Environment variable $* not set"; \
@@ -128,7 +129,7 @@ review-cloudformation-pipeline-resources:
 deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
 	./scripts/deploy_pipeline.sh
 
-install-ci-requirements:
+install-requirements:
 	python -m pip install poetry
 	python -m poetry export -f requirements.txt --output requirements.txt
 	python -m pip install -r requirements.txt
@@ -136,3 +137,29 @@ install-ci-requirements:
 pytest-ci:
 	python -m pytest lambdas/orchestration --tb=short --capture=no -p no:warnings \
 	--cov-report html --cov-report term --cov=lambdas/orchestration
+
+prepare-terraform:
+	unzip ./terraform/terraform-1.2.3 -d terraform
+
+create-terraform-state-resources-%:
+	aws s3api create-bucket --bucket dcapi-$*-tf-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+	aws s3api create-bucket --bucket dcapi-$*-pipeline-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+	aws dynamodb create-table --table-name dcapi-$*-lock-table --attribute-definitions AttributeName=LockID,AttributeType=S \
+	--key-schema AttributeName=LockID,KeyType=HASH --billing-mode PAY_PER_REQUEST
+
+tf-init-%:
+	mkdir -p $$HOME/.terraform.d/plugin-cache
+	cd terraform && terraform init -backend-config=env-config/$*.conf -reconfigure
+	cd terraform && terraform workspace new $* || ./terraform workspace select $* && echo "$* workspace selected"
+
+tf-plan:
+	cd terraform && terraform plan
+
+tf-apply:
+	cd terraform && terraform apply --auto-approve
+
+switch-to-pr-%:
+	export PULL_REQUEST_NUMBER=$* && \
+	cat ./terraform/env-config/pull-request-template.conf | envsubst > ./terraform/env-config/active-pr.conf
+	cd terraform && terraform init -backend-config=env-config/active-pr.conf -reconfigure
+	cd terraform && terraform workspace new pr-$* || ./terraform workspace select pr-$* && echo Switching to pr-$*

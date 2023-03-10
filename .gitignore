@@ -255,3 +255,6 @@ coverage_html_report/
 ./requirements.txt
 endpoint.cert
 endpoint.pem
+terraform.tfstate.d/*
+terraform/env-config/active-pr.conf
+.terraform/

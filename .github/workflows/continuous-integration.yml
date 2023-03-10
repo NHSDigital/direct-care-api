@@ -38,7 +38,7 @@ jobs:
           key: ${{ runner.os }}-build-cache-poetry-packages-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install python packages
-        run: make install-ci-requirements
+        run: make install-requirements
 
       - name: Lint
         if: always()
