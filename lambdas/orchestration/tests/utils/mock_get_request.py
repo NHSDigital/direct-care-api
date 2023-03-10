@@ -2,6 +2,7 @@ import json
 import pathlib
 from http import HTTPStatus
 
+from ...app.lib.extract_url_code import extract_url_parts
 from ...app.lib.absolute_file_path import absolute_file_path
 
 
@@ -55,7 +56,7 @@ class MockGetRequest:
             self.status_code, self.response = get_mocked_fhir_response(nhs_number)
 
         elif "spine-directory" in self.url:
-            ods_code = self.url.split("/")[-1]  # TO DO extract the ODS code  (?<=code\|)((\w){6})(?=&)
+            ods_code = extract_url_parts(self.url)
             self.status_code, self.response = get_mocked_fhir_response(ods_code)
 
         return self
