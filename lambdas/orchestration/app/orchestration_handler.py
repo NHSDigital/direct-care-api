@@ -107,7 +107,7 @@ class LambdaHandler:
         # SDS endpoint call replaces these hardcoded variables
         ######################################################
 
-        org_fhir_endpoint, asid = sds_request(ods_code, self.write_log)  # TO DO why?
+        org_fhir_endpoint, asid = sds_request(ods_code, self.write_log)
             # pylint: disable=line-too-long
             # "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
             # "918999198738",
