@@ -70,7 +70,7 @@ lint:
 	python -m mypy lambdas/orchestration
 	cfn-lint template.yaml
 
-integration-test: guard-BASE_URL
+integration-test: guard-BASE_URL install-ci-requirements
 	echo "Running Integration Tests"
 	python tests/integration/runner.py
 
