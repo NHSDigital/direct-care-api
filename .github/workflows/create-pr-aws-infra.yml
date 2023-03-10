@@ -30,7 +30,7 @@ jobs:
           python-version: 3.9
 
       - name: Switch to PR
-      - run: |
+        run: |
           export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo ${PULL_REQUEST_NUMBER}
           make switch-to-pr-${PULL_REQUEST_NUMBER}
