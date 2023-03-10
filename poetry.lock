@@ -93,15 +93,18 @@ develop = ["coverage", "invoke (>=0.21.0)", "modernize (>=0.5)", "path.py (>=8.1
 docs = ["sphinx (>=1.6)", "sphinx-bootstrap-theme (>=0.6)"]
 
 [[package]]
-name = "behave2cucumber"
-version = "1.0.3"
-description = "Behave to Cucumber json converter"
+name = "behave-cucumber-formatter"
+version = "1.0.1"
+description = "Cucumber JSON formatter for pipeline tests"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "behave2cucumber-1.0.3.tar.gz", hash = "sha256:8612141adca74bbd6dbbc415555841db7b3be7b0d3e204d97f51cdc3f86ecd77"},
+    {file = "behave_cucumber_formatter-1.0.1.tar.gz", hash = "sha256:c74ea2f4560a0b774e8eeb3802d577c59786047ab60d379241aa58cca6dd7046"},
 ]
+
+[package.dependencies]
+behave = ">=1.2.3,<=1.3"
 
 [[package]]
 name = "black"
@@ -2116,4 +2119,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "9fa4dc6916fdfc917cf26e4ea70d73e1ba7a9e11d402f03c3196ae6ab81ba32f"
+content-hash = "e1f851d5a1c55376d947ddfe08bc0e525f7a8b1baaca32f105a9ad6fd35f2ee8"

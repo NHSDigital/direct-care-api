@@ -1,10 +1,7 @@
 import argparse
 import json
-import logging
 import os
 import subprocess
-
-import behave2cucumber
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -30,7 +27,8 @@ if __name__ == "__main__":
 
     # complete command
     command = (
-        f"behave{debug} -f json.pretty -o results/behave_json.json -f pretty tests/integration/features"
+        f"behave{debug} -f behave_cucumber_formatter:PrettyCucumberJSONFormatter -o reports/cucumber_json.json"
+        f" -f pretty tests/integration/features"
         f" --no-logcapture --logging-level={logging_level}{tags}"
     )
     print(f"Running subprocess with command: '{command}'")
@@ -39,8 +37,9 @@ if __name__ == "__main__":
     except subprocess.CalledProcessError as e:
         raise e
     finally:
-        with open("results/behave_json.json", mode="r") as behave_json:
-            cucumber_json = behave2cucumber.convert(json.load(behave_json))
-            os.makedirs(os.path.dirname("reports/"), exist_ok=True)
-            with open("reports/cucumber_json.json", mode="w") as cucumber_json_report:
-                cucumber_json_report.write(json.dumps(cucumber_json[0]))
+        pass
+        # with open("results/behave_json.json", mode="r") as behave_json:
+        #     cucumber_json = behave2cucumber.convert(json.load(behave_json))
+        #     os.makedirs(os.path.dirname("reports/"), exist_ok=True)
+        #     with open("reports/cucumber_json.json", mode="w") as cucumber_json_report:
+        #         cucumber_json_report.write(json.dumps(cucumber_json[0]))
