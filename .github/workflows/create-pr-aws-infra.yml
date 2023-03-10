@@ -42,7 +42,7 @@ jobs:
           make switch-to-pr-${PULL_REQUEST_NUMBER}
 
       - name: Terraform plan
-        run: make terraform-plan
+        run: make tf-plan
 
       - name: Terraform apply
-        run: make terraform-apply
+        run: make tf-apply
