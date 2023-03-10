@@ -75,6 +75,14 @@ class LambdaHandler:
                 HTTPStatus.BAD_REQUEST, {"record": None, "message": str(e)}
             )
 
+        path = event.get("path")
+        if path not in ["/structured", "/html"]:
+            error = f"{path} is not a valid path - use /html or /structured"
+            self.write_log("LAMBDA002", {"reason": error})
+            return self.wrap_lambda_return(
+                HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
+            )
+
         self.write_log("LAMBDA001", {"event": event})
 
         parameters = event.get("queryStringParameters") or {}
