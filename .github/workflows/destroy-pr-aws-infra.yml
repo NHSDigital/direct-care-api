@@ -37,9 +37,3 @@ jobs:
           export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo Pull request number is ${PULL_REQUEST_NUMBER}
           make tf-destroy-pr-${PULL_REQUEST_NUMBER}
-
-      - name: Terraform plan
-        run: make terraform-plan
-
-      - name: Terraform apply
-        run: make terraform-apply
