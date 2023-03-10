@@ -258,3 +258,4 @@ endpoint.pem
 terraform.tfstate.d/*
 terraform/env-config/active-pr.conf
 .terraform/
+terraform/terraform
