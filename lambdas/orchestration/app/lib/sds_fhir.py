@@ -69,7 +69,7 @@ def device_fhir_lookup(ods_code, write_log):  # pylint: disable=redefined-outer-
             f"SDS FHIR found record for ods_code={ods_code} but ASID number not present in record.",
         )
 
-    return nhsMhsPartyKey, asid, "Success"
+    return nhsMhsPartyKey, asid
 
 
 def get_sds_endpoint_data(nhsMhsPartyKey, write_log):  # pylint: disable=redefined-outer-name, invalid-name # noqa: E302
@@ -127,6 +127,6 @@ def get_sds_endpoint_data(nhsMhsPartyKey, write_log):  # pylint: disable=redefin
 
 
 def sds_request(ods_code, write_log):
-    party_key, asid = device_fhir_lookup(ods_code, write_log=write_log)  # TO DO why 2 but 3?
+    party_key, asid = device_fhir_lookup(ods_code, write_log=write_log)
     address = get_sds_endpoint_data(party_key, write_log=write_log)
-    return asid, address
+    return asid, address, "SDS Success"
