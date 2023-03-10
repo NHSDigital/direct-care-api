@@ -1,16 +1,7 @@
 @integration
-Feature: Direct Care API
+Feature: Requesting Summary Care Records
 
   @critical
-  Scenario Outline: I can request my care record
-    When I request my care record with the NHS Number "<NHS_NUMBER>"
-    Then my record is returned
-    Examples:
-      | NHS_NUMBER |
-      | Bob  |
-      | Sean |
-
-  @minor
-  Scenario: I cannot start a new game without a name
-    When I request to start a new game with the name ""
-    Then An error saying I need to include a name is displayed
+  Scenario: I can request a care record using a valid NHS number
+    When I request my care record with the NHS Number 9690937278
+    Then the correct record is returned
