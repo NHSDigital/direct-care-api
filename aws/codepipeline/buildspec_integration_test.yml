@@ -22,8 +22,8 @@ phases:
       - echo BASE_URL ${BASE_URL}
       - make install
       - make integration-test
-  reports:
-    cucumber-reports:
-      files:
-        - "reports/cucumber_json.json"
-      file-format: "CUCUMBERJSON"
+    reports:
+      cucumber-reports:
+        files:
+          - "reports/cucumber_json.json"
+        file-format: "CUCUMBERJSON"
