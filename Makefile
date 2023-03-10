@@ -159,7 +159,12 @@ tf-apply:
 	cd terraform && terraform apply --auto-approve
 
 switch-to-pr-%:
+	if [ -z $* ]; then echo MUST SET PR NUMBER e.g. switch-to-pr-102 && exit 1; fi
 	export PULL_REQUEST_NUMBER=$* && \
 	cat ./terraform/env-config/pull-request-template.conf | envsubst > ./terraform/env-config/active-pr.conf
 	cd terraform && terraform init -backend-config=env-config/active-pr.conf -reconfigure
 	cd terraform && terraform workspace new pr-$* || ./terraform workspace select pr-$* && echo Switching to pr-$*
+
+tf-destroy-pr-%:
+	$(MAKE) switch-to-pr-$*
+	cd terraform && terraform apply -destroy --auto-approve

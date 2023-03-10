@@ -13,7 +13,8 @@
     ".coverage": true,
     "requirements.txt": true,
     "terraform.tfstate.d": true,
-    ".terraform/": true
+    ".terraform/": true,
+    "terraform/.terraform": true
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
