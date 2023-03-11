@@ -7,7 +7,7 @@ REQUIREMENTS_CHANGED=0
 
 # Create the dir
 echo Creating python pacakges dir at ./build/lambdas/python/python/lib/python3.9/site-packages/
-PACKAGES_DIR=./build/lambdas/python/python/lib/python3.9/site-packages/
+PACKAGES_DIR=./build/lambdas/python/python/lib/python3.9/site-packages
 mkdir -p $PACKAGES_DIR
 
 # Generate dependency file
