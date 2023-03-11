@@ -25,6 +25,11 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Install Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
       - name: Switch to PR and package lambdas
         run: |
           export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
