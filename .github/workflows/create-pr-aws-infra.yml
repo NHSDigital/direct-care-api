@@ -13,6 +13,9 @@ jobs:
       contents: read
     steps:
 
+      - name: test
+        run:  URL=test echo ::notice title={Endpoint url}::{$URL}
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -35,4 +38,4 @@ jobs:
         run: make tf-apply
 
       - name: Output Terraform
-        run: cd terraform && export URL=$(terraform output api_gateway_url) && echo $URL && ::notice title={Endpoint url}::{$URL}
+        run: cd terraform && export URL=$(terraform output api_gateway_url) && echo $URL && echo ::notice title={Endpoint url}::{$URL}
