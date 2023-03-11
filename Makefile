@@ -169,6 +169,8 @@ switch-to-pr-%:
 	cd terraform && terraform init -backend-config=env-config/active-pr.conf -reconfigure
 	cd terraform && terraform workspace new pr-$* || terraform workspace select pr-$* && echo Switching to pr-$*
 	aws s3api create-bucket --bucket dcapi-pr-$*-utility-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+	$(MAKE) package-lambdas env=pr-$*
+
 	cd terraform && terraform import 'aws_s3_bucket.utility_bucket' dcapi-pr-$*-utility-bucket
 
 tf-plan:
