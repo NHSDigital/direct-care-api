@@ -16,13 +16,13 @@ python -m poetry export -f requirements.txt --output $PACKAGES_DIR/requirements.
 
 # Pull in the s3 requirements.txt file for comparison
 echo Retrieving requirements.txt from S3 bucket
-aws s3api get-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/requirements.txt s3_requirements.txt > /dev/null 2>&1
+aws s3api get-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/requirements.txt s3_requirements.txt
 
 # Exit code 254 means requirements.txt doesn't exist - probably the first time doing this so just upload
 # requirements.txt
 if [ $(echo $?) = "254" ]; then
     echo No requirements.txt found in S3 bucket - adding current requirements.txt
-    aws s3api put-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/requirements.txt --body $PACKAGES_DIR/requirements.txt > /dev/null 2>&1
+    aws s3api put-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/requirements.txt --body $PACKAGES_DIR/requirements.txt
     REQUIREMENTS_CHANGED=1
 fi
 
@@ -35,7 +35,7 @@ then
 
     # Install dependencies (parent dir must be called 'python' or 'site-packages')
     echo Installing python packages to $PACKAGES_DIR
-    python -m pip install -r $PACKAGES_DIR/requirements.txt --target $PACKAGES_DIR > /dev/null 2>&1
+    python -m pip install -r $PACKAGES_DIR/requirements.txt --target $PACKAGES_DIR
 
     # Zip up the lambda layer for upload
     # -X option means don't add any metadata (which would cause shasum to change)
@@ -45,11 +45,11 @@ then
 
     # Upload the new shared layer package to S3
     echo Uploading new python.zip shared layer to S3
-    aws s3api put-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/python.zip  --body ./build/lambdas/python/python.zip > /dev/null 2>&1
+    aws s3api put-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/python.zip  --body ./build/lambdas/python/python.zip
 
     # Update the requirements file on s3
     echo Uploading new requirements.txt reference for shared_layer to S3
-    aws s3api put-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/requirements.txt --body $PACKAGES_DIR/requirements.txt > /dev/null 2>&1
+    aws s3api put-object --bucket $CODEPIPELINE_BUCKET --key shared_layer/requirements.txt --body $PACKAGES_DIR/requirements.txt
 fi
 
 rm -rf s3_requirements.txt
