@@ -170,7 +170,7 @@ switch-to-pr-%:
 	cd terraform && terraform workspace new pr-$* || terraform workspace select pr-$* && echo Switching to pr-$*
 	aws s3api create-bucket --bucket dcapi-pr-$*-utility-bucket --create-bucket-configuration LocationConstraint=eu-west-2 || echo dcapi-pr-$*-utility-bucket already exists
 	$(MAKE) package-lambdas env=pr-$*
-	cd terraform && terraform import 'aws_s3_bucket.utility_bucket' dcapi-pr-$*-utility-bucket
+	cd terraform && terraform import 'aws_s3_bucket.utility_bucket' dcapi-pr-$*-utility-bucket || echo Resource already imported
 
 tf-plan:
 	# $(MAKE) package-lambdas
