@@ -24,14 +24,6 @@ jobs:
           role-to-assume: arn:aws:iam::436014718090:role/github-role
           role-session-name: github-actions
 
-      - name: Update repo
-        run: sudo apt update
-
-      - name: Install Python 3.9
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-
       - name: Destroy PR resources
         run: |
           export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")

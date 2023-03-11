@@ -144,19 +144,24 @@ prepare-terraform:
 create-terraform-state-resources-%:
 	aws s3api create-bucket --bucket dcapi-$*-tf-bucket --create-bucket-configuration LocationConstraint=eu-west-2
 	aws s3api create-bucket --bucket dcapi-$*-pipeline-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+	aws s3api put-bucket-versioning --bucket dcapi-$*-pipeline-bucket --versioning-configuration Status=Enabled
 	aws dynamodb create-table --table-name dcapi-$*-lock-table --attribute-definitions AttributeName=LockID,AttributeType=S \
 	--key-schema AttributeName=LockID,KeyType=HASH --billing-mode PAY_PER_REQUEST
 
-tf-init-%:
+DANGER-tf-init-dev:
 	mkdir -p $$HOME/.terraform.d/plugin-cache
-	cd terraform && terraform init -backend-config=env-config/$*.conf -reconfigure
-	cd terraform && terraform workspace new $* || ./terraform workspace select $* && echo "$* workspace selected"
+	cd terraform && terraform init -backend-config=env-config/dev.conf -reconfigure
+	cd terraform && terraform workspace new dev || ./terraform workspace select dev && echo "dev workspace selected"
 
-tf-plan:
-	cd terraform && terraform plan
+DANGER-tf-init-int:
+	mkdir -p $$HOME/.terraform.d/plugin-cache
+	cd terraform && terraform init -backend-config=env-config/int.conf -reconfigure
+	cd terraform && terraform workspace new int || ./terraform workspace select int && echo "int workspace selected"
 
-tf-apply:
-	cd terraform && terraform apply --auto-approve
+DANGER-tf-init-prod:
+	mkdir -p $$HOME/.terraform.d/plugin-cache
+	cd terraform && terraform init -backend-config=env-config/prod.conf -reconfigure
+	cd terraform && terraform workspace new prod || ./terraform workspace select prod && echo "prod workspace selected"
 
 switch-to-pr-%:
 	if [ -z $* ]; then echo MUST SET PR NUMBER e.g. switch-to-pr-102 && exit 1; fi
@@ -165,6 +170,17 @@ switch-to-pr-%:
 	cd terraform && terraform init -backend-config=env-config/active-pr.conf -reconfigure
 	cd terraform && terraform workspace new pr-$* || terraform workspace select pr-$* && echo Switching to pr-$*
 
+tf-plan:
+	# $(MAKE) package-lambdas
+	cd terraform && terraform plan
+
+tf-apply:
+	cd terraform && terraform apply --auto-approve
+
 tf-destroy-pr-%:
 	$(MAKE) switch-to-pr-$*
 	cd terraform && terraform apply -destroy --auto-approve
+
+package-lambdas-%:
+	bash terraform/scripts/package-lambdas-source-code.sh $*
+	bash terraform/scripts/package-shared-lambda-layer.sh $*

@@ -20,20 +20,10 @@ jobs:
           role-to-assume: arn:aws:iam::436014718090:role/github-role
           role-session-name: github-actions
 
-
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
-
-
-      - name: Update repo
-        run: sudo apt update
-
-      - name: Install Python 3.9
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
 
       - name: Switch to PR
         run: |
