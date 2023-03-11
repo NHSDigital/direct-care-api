@@ -1,7 +1,8 @@
 
 
 resource "aws_s3_bucket" "utility_bucket" {
-  bucket = "dcapi-${local.env}-utility-bucket"
+  bucket        = "dcapi-${local.env}-utility-bucket"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "utility_bucket_lifecycle" {
