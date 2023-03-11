@@ -4,7 +4,7 @@ import sys
 from logging import DEBUG, INFO
 
 if not os.getenv("BASE_URL"):
-    BASE_URL = "http://localhost:3000"
+    BASE_URL = "http://localhost:3000/record/"
 else:
     BASE_URL = os.getenv("BASE_URL")
 
