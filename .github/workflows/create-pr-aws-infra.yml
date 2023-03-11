@@ -25,11 +25,12 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Switch to PR
+      - name: Switch to PR and package lambdas
         run: |
           export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo Pull request number is ${PULL_REQUEST_NUMBER}
           make switch-to-pr-${PULL_REQUEST_NUMBER}
+          make package-lambdas env=pr-{PULL_REQUEST_NUMBER}
 
       - name: Terraform plan
         run: make tf-plan
