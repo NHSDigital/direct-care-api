@@ -31,7 +31,7 @@ jobs:
           python-version: 3.9
 
       - name: IF ON MAIN - Switch to dev workspace and package lambdas
-        if: github.ref != 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           make DANGER-tf-init env=dev
           make package-lambdas env=dev
