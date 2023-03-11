@@ -1,5 +1,5 @@
 #!/bin/bash
-CODEPIPELINE_BUCKET=dcapi-$1-utility-bucket
+CODEPIPELINE_BUCKET=$2-$1-utility-bucket
 
 echo $CODEPIPELINE_BUCKET
 

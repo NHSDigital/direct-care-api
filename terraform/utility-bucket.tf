@@ -1,7 +1,7 @@
 
 
 resource "aws_s3_bucket" "utility_bucket" {
-  bucket        = "dcapi-${local.env}-utility-bucket"
+  bucket        = "${var.project-name}-${local.env}-utility-bucket"
   force_destroy = true
 }
 

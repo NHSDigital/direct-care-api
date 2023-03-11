@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "cloudwatch_assume_role" {
 }
 
 resource "aws_iam_role" "cloudwatch" {
-  name               = "api_gateway_cloudwatch-${local.env}"
+  name               = "${var.project-name}-api-gateway-cloudwatch-${local.env}"
   assume_role_policy = data.aws_iam_policy_document.cloudwatch_assume_role.json
 }
 
