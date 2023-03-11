@@ -36,6 +36,8 @@ then
     # Install dependencies (parent dir must be called 'python' or 'site-packages')
     echo Installing python packages to $PACKAGES_DIR
     python -m pip install -r $PACKAGES_DIR/requirements.txt --target $PACKAGES_DIR
+    ( cd $PACKAGES_DIR && python -m pip install --upgrade --force-reinstall cffi)
+
 
     # Zip up the lambda layer for upload
     # -X option means don't add any metadata (which would cause shasum to change)
