@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "lambda_assume_role" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "lambda_role"
+  name               = "lambda_role-${local.env}"
   path               = "/system/"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
@@ -29,6 +29,22 @@ data "aws_iam_policy_document" "lambda_permissions" {
       "*"
     ]
   }
+  statement {
+    actions = [
+      "ssm:GetParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/*"
+    ]
+  }
+  statement {
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:key/*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "lambda_permissions" {
@@ -39,10 +55,4 @@ resource "aws_iam_policy" "lambda_permissions" {
 resource "aws_iam_role_policy_attachment" "lambda_log_access" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = aws_iam_policy.lambda_permissions.arn
-}
-
-
-resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  name              = "/aws/lambda/orchestration"
-  retention_in_days = 7
 }

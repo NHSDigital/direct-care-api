@@ -142,9 +142,8 @@ prepare-terraform:
 	unzip ./terraform/terraform-1.2.3 -d terraform
 
 create-terraform-state-resources-%:
-	aws s3api create-bucket --bucket dcapi-$*-tf-bucket --create-bucket-configuration LocationConstraint=eu-west-2
-	aws s3api create-bucket --bucket dcapi-$*-pipeline-bucket --create-bucket-configuration LocationConstraint=eu-west-2
-	aws s3api put-bucket-versioning --bucket dcapi-$*-pipeline-bucket --versioning-configuration Status=Enabled
+	aws s3api create-bucket --bucket dcapi-$*-utility-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+	cd terraform && terraform import 'aws_s3_bucket.utility_bucket' dcapi-dev-utility-bucket
 	aws dynamodb create-table --table-name dcapi-$*-lock-table --attribute-definitions AttributeName=LockID,AttributeType=S \
 	--key-schema AttributeName=LockID,KeyType=HASH --billing-mode PAY_PER_REQUEST
 
@@ -169,6 +168,8 @@ switch-to-pr-%:
 	cat ./terraform/env-config/pull-request-template.conf | envsubst > ./terraform/env-config/active-pr.conf
 	cd terraform && terraform init -backend-config=env-config/active-pr.conf -reconfigure
 	cd terraform && terraform workspace new pr-$* || terraform workspace select pr-$* && echo Switching to pr-$*
+	aws s3api create-bucket --bucket dcapi-pr-$*-utility-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+	cd terraform && terraform import 'aws_s3_bucket.utility_bucket' dcapi-pr-$*-utility-bucket
 
 tf-plan:
 	# $(MAKE) package-lambdas
@@ -181,6 +182,6 @@ tf-destroy-pr-%:
 	$(MAKE) switch-to-pr-$*
 	cd terraform && terraform apply -destroy --auto-approve
 
-package-lambdas-%:
-	bash terraform/scripts/package-lambdas-source-code.sh $*
-	bash terraform/scripts/package-shared-lambda-layer.sh $*
+package-lambdas:
+	bash terraform/scripts/package-lambdas-source-code.sh ${env}
+	bash terraform/scripts/package-shared-lambda-layer.sh ${env}

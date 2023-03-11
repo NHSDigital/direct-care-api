@@ -20,7 +20,7 @@ resource "aws_api_gateway_stage" "lambdas_stage" {
   deployment_id = aws_api_gateway_deployment.api_gateway_deployment.id
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   stage_name    = "record"
-  depends_on    = [aws_api_gateway_account.demo]
+  depends_on    = [aws_api_gateway_account.account]
 }
 
 resource "aws_api_gateway_method_settings" "method_settings" {
@@ -34,7 +34,7 @@ resource "aws_api_gateway_method_settings" "method_settings" {
   }
 }
 
-resource "aws_api_gateway_account" "demo" {
+resource "aws_api_gateway_account" "account" {
   cloudwatch_role_arn = aws_iam_role.cloudwatch.arn
 }
 
@@ -47,7 +47,7 @@ resource "aws_api_gateway_resource" "resource" {
 resource "aws_api_gateway_method" "method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.resource.id
-  http_method   = "POST"
+  http_method   = "GET"
   authorization = "NONE"
 }
 
@@ -61,6 +61,9 @@ resource "aws_api_gateway_integration" "integration" {
 }
 
 resource "aws_api_gateway_method_response" "OK_response" {
+  depends_on = [
+    aws_api_gateway_integration.integration
+  ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_resource.resource.id
   http_method = aws_api_gateway_method.method.http_method

@@ -1,6 +1,6 @@
 data "aws_s3_object" "packages_zip" {
-  bucket = "dcapi-dev-pipeline-bucket"
-  key    = "python.zip"
+  bucket = "dcapi-${local.env}-utility-bucket"
+  key    = "shared_layer/python.zip"
 }
 
 resource "aws_lambda_layer_version" "python-packages" {
@@ -13,7 +13,7 @@ resource "aws_lambda_layer_version" "python-packages" {
 
 resource "aws_lambda_function" "lambda" {
   filename      = "../build/lambda_archives/orchestration.zip"
-  function_name = "orchestration_lambda-${local.env}"
+  function_name = "orchestration-lambda-${local.env}"
   role          = aws_iam_role.lambda_role.arn
   handler       = "app.orchestration_handler.main"
   timeout       = 30
@@ -23,4 +23,17 @@ resource "aws_lambda_function" "lambda" {
 
   source_code_hash = filebase64sha256("../build/lambda_archives/orchestration.zip")
   layers           = [aws_lambda_layer_version.python-packages.arn]
+}
+
+
+resource "aws_lambda_permission" "lambda_permission" {
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_lambda_function.lambda
+  ]
+  statement_id  = "AllowExecutionFromApi"
+  action        = "lambda:InvokeFunction"
+  function_name = "orchestration-lambda-${local.env}"
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.api_gateway.execution_arn}/*/*"
 }
