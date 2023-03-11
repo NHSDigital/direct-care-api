@@ -44,7 +44,7 @@ def is_validate_json(json_data):
 def request_record(context, nhs_number: int):
     headers = get_default_headers()
     context.response = requests.get(
-        headers=headers, url=context.base_url + f"/record/structured?nhs_number={nhs_number}")
+        headers=headers, url=context.base_url + f"structured?nhs_number={nhs_number}")
     context.nhs_number = nhs_number
     log_api_information(context)
 
