@@ -1,6 +1,4 @@
 import argparse
-import json
-import os
 import subprocess
 
 if __name__ == "__main__":
@@ -32,14 +30,4 @@ if __name__ == "__main__":
         f" --no-logcapture --logging-level={logging_level}{tags}"
     )
     print(f"Running subprocess with command: '{command}'")
-    try:
-        process = subprocess.run(command, shell=True, check=True)
-    except subprocess.CalledProcessError as e:
-        raise e
-    finally:
-        pass
-        # with open("results/behave_json.json", mode="r") as behave_json:
-        #     cucumber_json = behave2cucumber.convert(json.load(behave_json))
-        #     os.makedirs(os.path.dirname("reports/"), exist_ok=True)
-        #     with open("reports/cucumber_json.json", mode="w") as cucumber_json_report:
-        #         cucumber_json_report.write(json.dumps(cucumber_json[0]))
+    process = subprocess.run(command, shell=True, check=True)
