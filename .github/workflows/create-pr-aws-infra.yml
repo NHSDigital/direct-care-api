@@ -33,3 +33,6 @@ jobs:
 
       - name: Terraform apply
         run: make tf-apply
+
+      - name: Output Terraform
+        run: cd terraform && export URL=$(terraform output api_gateway_url) && echo $URL && ::notice title={Endpoint url}::{$URL}
