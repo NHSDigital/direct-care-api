@@ -31,8 +31,5 @@ jobs:
           echo Pull request number is ${PULL_REQUEST_NUMBER}
           make switch-to-pr-${PULL_REQUEST_NUMBER}
 
-      - name: Terraform plan
-        run: make tf-plan
-
       - name: Terraform apply
         run: make tf-apply

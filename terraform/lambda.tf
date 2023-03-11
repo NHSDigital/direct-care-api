@@ -4,10 +4,11 @@ data "aws_s3_object" "packages_zip" {
 }
 
 resource "aws_lambda_layer_version" "python-packages" {
-  s3_bucket         = data.aws_s3_object.packages_zip.bucket
-  s3_key            = data.aws_s3_object.packages_zip.key
-  layer_name        = "python-packages"
-  s3_object_version = data.aws_s3_object.packages_zip.version_id
+  s3_bucket           = data.aws_s3_object.packages_zip.bucket
+  s3_key              = data.aws_s3_object.packages_zip.key
+  layer_name          = "python-packages"
+  s3_object_version   = data.aws_s3_object.packages_zip.version_id
+  compatible_runtimes = ["python3.9"]
 }
 
 

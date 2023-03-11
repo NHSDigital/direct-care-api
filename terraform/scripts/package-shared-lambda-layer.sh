@@ -7,7 +7,7 @@ REQUIREMENTS_CHANGED=0
 
 # Create the dir
 echo Creating python pacakges dir at ./build/lambdas/python/python/lib/python3.9/site-packages/
-PACKAGES_DIR=./build/lambdas/python/python/lib/python3.9/site-packages
+PACKAGES_DIR=./build/lambdas/python/python/lib/python3.9/site-packages/
 mkdir -p $PACKAGES_DIR
 
 # Generate dependency file
@@ -41,7 +41,7 @@ then
     # -X option means don't add any metadata (which would cause shasum to change)
     # use touch to set the timestamps for all files to prevent shasum changing
     echo Zipping up $PACKAGES_DIR
-    (cd ./build/lambdas/python && find . -exec touch -d '1985-10-21 09:00:00' {} \; && zip -i \* -rXq python.zip * && pwd)
+    (cd ./build/lambdas/python && find . -exec touch -d '1985-10-21 09:00:00' {} \; && zip -i \* -rXq python.zip *)
 
     # Upload the new shared layer package to S3
     echo Uploading new python.zip shared layer to S3

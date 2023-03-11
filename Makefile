@@ -131,7 +131,7 @@ deploy_pipeline: guard-CODEBUILD_TOKEN guard-CODEBUILD_USER guard-GIT_BRANCH
 
 install-requirements:
 	python -m pip install poetry
-	python -m poetry export -f requirements.txt --output requirements.txt
+	python -m poetry export -f --dev requirements.txt --output requirements.txt
 	python -m pip install -r requirements.txt
 
 pytest-ci:
