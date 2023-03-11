@@ -95,7 +95,9 @@ def get_request_body(nhs_number):
                 },
                 {
                     "name": "includeAllergies",
-                    "part": [{"name": "includeResolvedAllergies", "valueBoolean": True}],
+                    "part": [
+                        {"name": "includeResolvedAllergies", "valueBoolean": True}
+                    ],
                 },
                 {"name": "includeMedication"},
                 {
@@ -112,7 +114,9 @@ def get_request_body(nhs_number):
     )
 
 
-def ssp_request(org_fhir_endpoint, org_asid, patient_nhs_number, write_log, integration_env=False):
+def ssp_request(
+    org_fhir_endpoint, org_asid, patient_nhs_number, write_log, integration_env=False
+):
     write_log(
         "SSP001",
         {

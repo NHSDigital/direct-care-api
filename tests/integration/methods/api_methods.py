@@ -1,4 +1,5 @@
 import logging
+
 import jsonschema
 import requests
 from assertpy import assert_that
@@ -20,17 +21,16 @@ def log_api_information(context):
 def get_expected_schema():
     record_schema = {
         "record": "object",
-        'message': {"type": "string"},
-        'user_id': {"type": "string"},
-        'user_org_code': {"type": "string"},
-        'transaction_id': {"type": "string"}
+        "message": {"type": "string"},
+        "user_id": {"type": "string"},
+        "user_org_code": {"type": "string"},
+        "transaction_id": {"type": "string"},
     }
     return record_schema
 
 
 def get_default_headers():
-    return {"x-user-id": "AutoTests",
-            "x-user-org-code": "Auto001"}
+    return {"x-user-id": "AutoTests", "x-user-org-code": "Auto001"}
 
 
 def is_validate_json(json_data):
@@ -44,12 +44,15 @@ def is_validate_json(json_data):
 def request_record(context, nhs_number: int):
     headers = get_default_headers()
     context.response = requests.get(
-        headers=headers, url=context.base_url + f"structured?nhs_number={nhs_number}")
+        headers=headers, url=context.base_url + f"structured?nhs_number={nhs_number}"
+    )
     context.nhs_number = nhs_number
     log_api_information(context)
 
 
-def the_expected_response_code_is_returned(context, expected_response_code: requests.codes):
+def the_expected_response_code_is_returned(
+    context, expected_response_code: requests.codes
+):
     assert_that(context.response.status_code).is_equal_to(expected_response_code)
 
 

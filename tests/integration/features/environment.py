@@ -44,5 +44,3 @@ def is_debug(context):
     else:
         print("Running in Normal mode")
         return False
-
-
