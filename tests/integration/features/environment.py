@@ -15,6 +15,7 @@ def before_all(context):
     else:
         setup_logging(level=INFO)
     context.base_url = BASE_URL
+    logging.info("Using BASE_URL: '%s'", context.base_url)
 
 
 def after_all(context):

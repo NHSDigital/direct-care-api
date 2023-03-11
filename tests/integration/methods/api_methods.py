@@ -6,15 +6,15 @@ from jsonschema import validate
 
 
 def log_api_information(context):
-    logging.info("REQUEST")
-    logging.info("Headers: %s ", context.response.request.headers)
-    logging.info("Method: %s ", context.response.request.method)
-    logging.info("URL: %s ", context.response.request.url)
-    logging.info("Body: %s ", context.response.request.body)
-    logging.info("RESPONSE")
-    logging.info("Status Code: %s ", context.response.status_code)
-    logging.info("Headers: %s ", context.response.headers)
-    logging.info("Body: %s ", context.response.content)
+    logging.debug("REQUEST")
+    logging.debug("Headers: %s ", context.response.request.headers)
+    logging.debug("Method: %s ", context.response.request.method)
+    logging.debug("URL: %s ", context.response.request.url)
+    logging.debug("Body: %s ", context.response.request.body)
+    logging.debug("RESPONSE")
+    logging.debug("Status Code: %s ", context.response.status_code)
+    logging.debug("Headers: %s ", context.response.headers)
+    logging.debug("Body: %s ", context.response.content)
 
 
 def get_expected_schema():
