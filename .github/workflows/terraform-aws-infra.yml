@@ -1,4 +1,4 @@
-name: Create PR AWS infra
+name: Manage terraform AWS infra
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: create-pr-aws-infra
+    name: terraform-aws-infra
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -30,7 +30,15 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Switch to PR and package lambdas
+      - name: IF ON MAIN - Switch to dev workspace and package lambdas
+        if: github.ref != 'refs/heads/main'
+        run: |
+          make DANGER-tf-init env=dev
+          make package-lambdas env=dev
+          make import-bucket-dev
+
+      - name: IF ON PR BRANCH - Switch to PR workspace
+        if: github.ref != 'refs/heads/main'
         run: |
           export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           echo Pull request number is ${PULL_REQUEST_NUMBER}

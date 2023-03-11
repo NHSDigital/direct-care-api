@@ -1,6 +1,6 @@
 SHELL:=/bin/bash -O globstar
 .SHELLFLAGS = -ecu
-project_name = test-project-9
+project_name = test-project-12
 
 guard-%:
 	@ if [ "${${*}}" = "" ]; then \
@@ -143,24 +143,29 @@ prepare-terraform:
 
 create-terraform-state-resources-%:
 	aws s3api create-bucket --bucket $(project_name)-$*-tf-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+
 	aws s3api create-bucket --bucket $(project_name)-$*-utility-bucket --create-bucket-configuration LocationConstraint=eu-west-2
+
 	AWS_PAGER="" aws dynamodb create-table --table-name $(project_name)-$*-lock-table --attribute-definitions AttributeName=LockID,AttributeType=S \
 		--key-schema AttributeName=LockID,KeyType=HASH --billing-mode PAY_PER_REQUEST
+
 	cd terraform && terraform init \
 		-backend-config="key=$(project_name)-$*.tfstate" \
 		-backend-config="bucket=$(project_name)-$*-tf-bucket" \
 		-backend-config="dynamodb_table=$(project_name)-$*-lock-table" \
 		-reconfigure
-	cd terraform && terraform import -var "project-name=$(project_name)" 'aws_s3_bucket.utility_bucket' $(project_name)-$*-utility-bucket
 
+	$(MAKE) import-bucket-$*
 
 DANGER-tf-init:
 	mkdir -p $$HOME/.terraform.d/plugin-cache
+
 	cd terraform && terraform init \
 		-backend-config="key=$(project_name)-${env}.tfstate" \
 		-backend-config="bucket=$(project_name)-${env}-tf-bucket" \
 		-backend-config="dynamodb_table=$(project_name)-${env}-lock-table" \
 		-reconfigure
+
 	cd terraform && terraform workspace new ${env} || ./terraform workspace select ${env} && echo "${env} workspace selected"
 
 switch-to-pr-%:
@@ -181,12 +186,9 @@ switch-to-pr-%:
 
 	$(MAKE) package-lambdas env=pr-$*
 
-	cd terraform && terraform import -var "project-name=$(project_name)" \
-		'aws_s3_bucket.utility_bucket' $(project_name)-pr-$*-utility-bucket \
-		|| echo Resource already imported
+	$(MAKE) import-bucket-pr-$*
 
 tf-plan:
-	# $(MAKE) package-lambdas
 	cd terraform && terraform plan -var "project-name=$(project_name)"
 
 tf-apply:
@@ -199,3 +201,8 @@ tf-destroy-pr-%:
 package-lambdas:
 	bash terraform/scripts/package-lambdas-source-code.sh
 	bash terraform/scripts/package-shared-lambda-layer.sh ${env} $(project_name)
+
+import-bucket-%:
+	cd terraform && terraform import -var "project-name=$(project_name)" \
+		'aws_s3_bucket.utility_bucket' $(project_name)-$*-utility-bucket \
+		|| echo Resource already imported

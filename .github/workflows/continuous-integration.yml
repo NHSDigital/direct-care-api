@@ -41,25 +41,3 @@ jobs:
       - name: Mocked testing
         if: always()
         run: make pytest-ci
-
-      - name: Set SPEC_VERSION env var
-        run: echo "USE THIS TO SET VERSION NUMBER <TODO>"
-
-      - uses: actions/github-script@v6
-        id: get_issue_number
-        with:
-          script: |
-            if (context.issue.number) {
-              // Return issue number if present
-              return context.issue.number;
-            } else {
-              // Otherwise return issue number from commit
-              return (
-                await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                  commit_sha: context.sha,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                })
-              ).data[0].number;
-            }
-          result-encoding: string
