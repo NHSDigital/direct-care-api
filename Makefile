@@ -15,7 +15,7 @@ lint:
 	python -m pylint lambdas/orchestration --rcfile=tox.ini
 	python -m mypy lambdas/orchestration
 
-integration-test: guard-BASE_URL install-ci-requirements
+integration-test: guard-BASE_URL
 	echo "Running Integration Tests"
 	python tests/integration/runner.py
 
@@ -50,13 +50,13 @@ create-terraform-state-resources-%:
 DANGER-tf-init:
 	mkdir -p $$HOME/.terraform.d/plugin-cache
 
-	cd terraform && ./terraform init \
+	cd terraform && terraform init \
 		-backend-config="key=$(project_name)-${env}.tfstate" \
 		-backend-config="bucket=$(project_name)-${env}-tf-bucket" \
 		-backend-config="dynamodb_table=$(project_name)-${env}-lock-table" \
 		-reconfigure
 
-	cd terraform && ./terraform workspace new ${env} || ./terraform workspace select ${env} && echo "${env} workspace selected"
+	cd terraform && terraform workspace new ${env} || terraform workspace select ${env} && echo "${env} workspace selected"
 
 switch-to-pr-%:
 	if [ -z $* ]; then echo MUST SET PR NUMBER e.g. switch-to-pr-102 && exit 1; fi
