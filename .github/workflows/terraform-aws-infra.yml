@@ -46,14 +46,11 @@ jobs:
       # - name: Terraform apply
       #   run: make tf-apply
 
-      - name: Set URL env
-        run: echo Setting BASE_URL env variable
-        env:
-          BASE_URL: $(cd terraform && terraform output api_gateway_url)
-
-
       - name: Integration testing
         run: |
+          echo $(cd terraform && terraform output api_gateway_url)
           echo API gateway base url = $BASE_URL
           echo ::notice title=API Gateway endpoint::$BASE_URL
           make integration-test
+        env:
+          BASE_URL: $(cd terraform && terraform output api_gateway_url)
