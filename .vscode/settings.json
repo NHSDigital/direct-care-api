@@ -11,7 +11,11 @@
     ".pytest_cache": true,
     ".venv": true,
     ".coverage": true,
-    "requirements.txt": true
+    "requirements.txt": true,
+    "terraform.tfstate.d": true,
+    ".terraform/": true,
+    "terraform/.terraform": true,
+    ".d/": true
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,

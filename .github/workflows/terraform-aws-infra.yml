@@ -1,0 +1,57 @@
+name: Manage terraform AWS infra
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: terraform-aws-infra
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::436014718090:role/github-role
+          role-session-name: github-actions
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Install Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: IF ON MAIN - Switch to dev workspace and package lambdas
+        if: github.ref == 'refs/heads/main'
+        run: |
+          make DANGER-tf-init env=dev
+          make package-lambdas env=dev
+
+      - name: IF ON PR BRANCH - Switch to PR workspace
+        if: github.ref != 'refs/heads/main'
+        run: |
+          export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          echo Pull request number is ${PULL_REQUEST_NUMBER}
+          make switch-to-pr-${PULL_REQUEST_NUMBER}
+
+      - name: Terraform apply
+        run: make tf-apply
+
+      - name: Install requirements
+        run: make install-requirements
+
+      - name: Integration testing
+        run: |
+          export BASE_URL=$(cd terraform && terraform output -raw api_gateway_url)
+          echo API gateway base url = $BASE_URL
+          echo ::notice title=API Gateway endpoint::$BASE_URL
+          make integration-test
