@@ -48,7 +48,7 @@ jobs:
 
       - name: Integration testing
         run: |
-          export BASEURL=$(cd terraform && terraform output api_gateway_url)
+          export BASE_URL=$(cd terraform && terraform output api_gateway_url)
           echo API gateway base url = $BASE_URL
           echo ::notice title=API Gateway endpoint::$BASE_URL
           make integration-test
