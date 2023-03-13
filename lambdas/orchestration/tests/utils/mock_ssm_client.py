@@ -12,7 +12,9 @@ class MockSSMClient:
     def get_parameter(self, Name, **_):
         """Mocking the get_parameter function"""
         if Name not in self.params:
-            raise ValueError({"Error": {"Message": f"Parameter {Name} not found."}}, "testing")
+            raise ValueError(
+                {"Error": {"Message": f"Parameter {Name} not found."}}, "testing"
+            )
         return {"Parameter": {"Value": self.params[Name]}}
 
     def __call__(self, *_):

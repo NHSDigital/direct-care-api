@@ -15,8 +15,9 @@ lint:
 	python -m pylint lambdas/orchestration --rcfile=tox.ini
 	python -m mypy lambdas/orchestration
 
-integration-test: guard-BASE_URL
-	echo "running integration tests"
+integration-test: guard-BASE_URL install-ci-requirements
+	echo "Running Integration Tests"
+	python tests/integration/runner.py
 
 install-requirements:
 	python -m pip install poetry
