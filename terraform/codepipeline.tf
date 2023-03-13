@@ -45,7 +45,7 @@ resource "aws_iam_role" "codepipeline_role" {
 }
 
 resource "aws_iam_policy" "codepipeline_permissions" {
-  name   = "codepipeline-permissions"
+  name   = "codepipeline-permissions-${local.env}"
   policy = data.aws_iam_policy_document.codepipeline_permissions_policy.json
 }
 

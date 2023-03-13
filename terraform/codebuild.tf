@@ -22,7 +22,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_role_policy" {
 }
 
 resource "aws_codebuild_project" "terraform_plan" {
-  name         = "tf-plan"
+  name         = "tf-plan-${local.env}"
   service_role = aws_iam_role.codebuild_role.arn
 
   artifacts {
@@ -50,7 +50,7 @@ resource "aws_codebuild_project" "terraform_plan" {
 
 resource "aws_codebuild_project" "terraform_apply" {
 
-  name         = "tf-apply"
+  name         = "tf-apply-${local.env}"
   service_role = aws_iam_role.codebuild_role.arn
 
   artifacts {
@@ -79,7 +79,7 @@ resource "aws_codebuild_project" "terraform_apply" {
 }
 
 resource "aws_codebuild_project" "integration-tests" {
-  name         = "integration-tests"
+  name         = "integration-tests-${local.env}"
   service_role = aws_iam_role.codebuild_role.arn
   depends_on = [
     aws_api_gateway_stage.lambdas_stage
