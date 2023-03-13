@@ -41,18 +41,21 @@ def is_validate_json(json_data):
     return True
 
 
-def request_record(context, nhs_number: int):
+def request_record(context, **kwargs):
+    nhs_number = kwargs.get("nhs_number")
+    if nhs_number:
+        url = context.base_url + f"structured?nhs_number={nhs_number}"
+    else:
+        url = context.base_url + "structured"
     headers = get_default_headers()
     context.response = requests.get(
-        headers=headers, url=context.base_url + f"structured?nhs_number={nhs_number}"
+        headers=headers, url=url
     )
     context.nhs_number = nhs_number
     log_api_information(context)
 
 
-def the_expected_response_code_is_returned(
-    context, expected_response_code: requests.codes
-):
+def the_expected_response_code_is_returned(context, expected_response_code: requests.codes):
     assert_that(context.response.status_code).is_equal_to(expected_response_code)
 
 
@@ -61,6 +64,17 @@ def a_structured_record_is_returned(context):
     assert_that(is_validate_json(response)).is_true()
     assert_that(response["record"]).is_not_none()
     assert_that(response["message"]).is_equal_to("success")
+    assert_meta_data(response)
+
+
+def error_is_returned(context, error_message: str):
+    response = context.response.json()
+    assert_that(response["record"]).is_none()
+    assert_that(response["message"]).is_equal_to(error_message)
+    assert_meta_data(response)
+
+
+def assert_meta_data(response):
     assert_that(response["user_id"]).is_equal_to("AutoTests")
     assert_that(response["user_org_code"]).is_equal_to("Auto001")
     assert_that(response["transaction_id"]).is_not_none()
