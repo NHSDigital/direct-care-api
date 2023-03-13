@@ -43,15 +43,15 @@ jobs:
           echo Pull request number is ${PULL_REQUEST_NUMBER}
           make switch-to-pr-${PULL_REQUEST_NUMBER}
 
-      # - name: Terraform apply
-      #   run: make tf-apply
+      - name: Terraform apply
+        run: make tf-apply
 
       - name: Install requirements
         run: make install-requirements
 
       - name: Integration testing
         run: |
-          export BASE_URL=$(cd terraform && terraform output api_gateway_url -raw )
+          export BASE_URL=$(cd terraform && terraform output -raw api_gateway_url)
           echo API gateway base url = $BASE_URL
           echo ::notice title=API Gateway endpoint::$BASE_URL
           make integration-test
