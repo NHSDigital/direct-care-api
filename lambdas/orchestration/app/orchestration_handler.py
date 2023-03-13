@@ -38,7 +38,9 @@ class LambdaHandler:
         }
 
         if not self.user_id:
-            raise MissingAuditInfoException("User Id must be included in headers as x-user-id")
+            raise MissingAuditInfoException(
+                "User Id must be included in headers as x-user-id"
+            )
 
         if not self.user_org_code:
             raise MissingAuditInfoException(
@@ -115,7 +117,9 @@ class LambdaHandler:
             "918999198738",
         )
 
-        record, message = ssp_request(org_fhir_endpoint, asid, nhs_number, self.write_log)
+        record, message = ssp_request(
+            org_fhir_endpoint, asid, nhs_number, self.write_log
+        )
 
         if not record:
             # Logging is done for this in the pds function

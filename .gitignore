@@ -218,6 +218,9 @@ venv.bak/
 !.vscode/extensions.json
 .history
 
+### Pycharm/IntelliJ ###
+/.idea/
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -247,11 +250,11 @@ $RECYCLE.BIN/
 
 logs/
 reports/
+/results/
 rendered/
+coverage_html_report/
 
 int-1.pem
 api_key.txt
-coverage_html_report/
 ./requirements.txt
-endpoint.cert
-endpoint.pem
+/requirements.txt

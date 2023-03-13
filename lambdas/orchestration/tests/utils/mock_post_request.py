@@ -55,7 +55,9 @@ class MockPostRequest:
         self.response = {"error": f"mocked response not found for url={self.url}"}
 
         if "gpconnect/structured" in self.url:
-            nhs_number = get_dict_value(json.loads(self.body), "/parameter/0/valueIdentifier/value")
+            nhs_number = get_dict_value(
+                json.loads(self.body), "/parameter/0/valueIdentifier/value"
+            )
             self.status_code, self.response = get_mocked_ssp_response(nhs_number)
 
         return self
