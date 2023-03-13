@@ -32,6 +32,9 @@ resource "aws_api_gateway_method_settings" "method_settings" {
 }
 
 resource "aws_api_gateway_account" "account" {
+  depends_on = [
+    aws_iam_role.cloudwatch
+  ]
   cloudwatch_role_arn = aws_iam_role.cloudwatch.arn
 }
 
