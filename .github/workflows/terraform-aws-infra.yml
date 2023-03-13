@@ -43,14 +43,17 @@ jobs:
           echo Pull request number is ${PULL_REQUEST_NUMBER}
           make switch-to-pr-${PULL_REQUEST_NUMBER}
 
-      - name: Terraform apply
-        run: make tf-apply
+      # - name: Terraform apply
+      #   run: make tf-apply
 
-      - name: Output Terraform
-        run: |
-          cd terraform && echo BASE_URL=$(terraform output api_gateway_url) >> $GITHUB_ENV
-          echo API gateway base url = $BASE_URL
-          echo ::notice title=API Gateway endpoint::$BASE_URL
+      - name: Set URL env
+        run: echo Setting BASE_URL env variable
+        env:
+          BASE_URL: $(cd terraform && terraform output api_gateway_url)
+
 
       - name: Integration testing
-        run: make integration-test
+        run: |
+          echo API gateway base url = $BASE_URL
+          echo ::notice title=API Gateway endpoint::$BASE_URL
+          make integration-test

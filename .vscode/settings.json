@@ -14,7 +14,8 @@
     "requirements.txt": true,
     "terraform.tfstate.d": true,
     ".terraform/": true,
-    "terraform/.terraform": true
+    "terraform/.terraform": true,
+    ".d/": true
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
