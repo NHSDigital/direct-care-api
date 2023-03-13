@@ -62,4 +62,6 @@ To test you've logged in successfully you can use `aws lambda list-functions` an
 
 ### Use commands
 
+Use command `make package-lambdas env=<env>` to create the zip files needed for terraform to plan/apply the lambda functions
+
 To see what changes you would be making use `make tf-plan` and to then apply those changes use `make tf-apply`

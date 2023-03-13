@@ -77,7 +77,7 @@ resource "aws_codepipeline" "codepipeline_resource" {
 
       configuration = {
         S3Bucket             = aws_s3_bucket.utility_bucket.bucket
-        S3ObjectKey          = "codepipeline-dev/source/${terraform.workspace}-codebase-bundle.zip"
+        S3ObjectKey          = "codepipeline-${local.env}/source/${terraform.workspace}-codebase-bundle.zip"
         PollForSourceChanges = true
       }
     }
