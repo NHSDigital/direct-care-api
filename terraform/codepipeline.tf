@@ -134,7 +134,7 @@ resource "aws_codepipeline" "codepipeline_resource" {
 
     action {
       run_order        = 4
-      name             = "Smoketests"
+      name             = "Inegration-tests"
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"

@@ -27,10 +27,14 @@ resource "aws_s3_bucket_versioning" "utility_bucket_versioning" {
 
 }
 
-resource "aws_s3_bucket_acl" "utility_bucket_acl" {
+resource "aws_s3_bucket_ownership_controls" "full_ownership" {
   bucket = resource.aws_s3_bucket.utility_bucket.id
-  acl    = "private"
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
 }
+
 
 
 # If we're on the int environment, allow dev environment to upload the codebase

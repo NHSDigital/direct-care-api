@@ -6,8 +6,6 @@ phases:
     commands:
       - make prepare-terraform
 
-
-
   build:
     commands:
       - echo ENV is $ENV
