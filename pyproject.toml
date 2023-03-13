@@ -33,7 +33,7 @@ nhs-number = "^1.2.1"
 dpath = "^2.1.4"
 requests = "^2.28.2"
 pyjwt = "^2.6.0"
-cryptography = "3.4.2"
+cryptography = "39.0.1"
 cffi = "^1.15.1"
 openpyxl = "^3.1.1"
 
