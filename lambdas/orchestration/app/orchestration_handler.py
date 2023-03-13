@@ -14,6 +14,42 @@ from .lib.pds_fhir import lookup_nhs_number
 from .lib.ssp_request import ssp_request
 from .lib.write_log import write_log
 
+ALLOWED_HEADERS = [
+    "Content-Type",
+    "Authorization",
+    "X-Amz-Date",
+    "X-Api-Key",
+    "X-Amz-Security-Token",
+    "X-Internal-ID",
+    "X-Session-ID",
+]
+ALLOWED_METHODS = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+ALLOWED_CSP_RESOURCES = [
+    "default-src 'none'",
+    "img-src 'self'",
+    "script-src 'self'",
+    "style-src 'self'",
+    "connect-src 'self'",
+    "frame-ancestors 'none'",
+    "object-src 'none'",
+]
+
+
+def get_response_headers():
+    """Get the response headers"""
+    return {
+        "Access-Control-Allow-Headers": ",".join(ALLOWED_HEADERS),
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": ",".join(ALLOWED_METHODS),
+        # Security headers
+        "strict-transport-security": "max-age=63072000; includeSubdomains; preload",
+        "content-security-policy": "; ".join(ALLOWED_CSP_RESOURCES),
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+    }
+
 
 class MissingAuditInfoException(ValueError):
     """Exception to raise when either user_id or user_org_code is missing"""
@@ -57,7 +93,7 @@ class LambdaHandler:
         return {
             "statusCode": status,
             "body": json.dumps(body | self.audit_dict),
-            "headers": {"test_header": "test_value"},
+            "headers": get_response_headers(),
             "isBase64Encoded": False,
         }
 
