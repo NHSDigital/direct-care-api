@@ -13,7 +13,9 @@ def test_orchestration_lambda_success(logger: LogHelper):
     user_org_code = "ODS1234"
     transaction_id = str(uuid4())
 
-    event = mock_orchestration_event(nhs_number, user_id=user_id, user_org_code=user_org_code)
+    event = mock_orchestration_event(
+        nhs_number, user_id=user_id, user_org_code=user_org_code
+    )
 
     # Patch UUID4 so that we can insert our own uuid
     with patch("lambdas.orchestration.app.orchestration_handler.uuid4") as mock_uuid:
@@ -23,7 +25,9 @@ def test_orchestration_lambda_success(logger: LogHelper):
     assert lambda_response.status_code == 200
 
     # Check the record ID returned matches what we expected from the mock SSP return
-    assert lambda_response.body["record"]["id"] == "71f48f67-8055-4cbc-9a30-ecba6915a0d2"
+    assert (
+        lambda_response.body["record"]["id"] == "71f48f67-8055-4cbc-9a30-ecba6915a0d2"
+    )
 
     assert logger.was_value_logged("PDS001", "nhs_number", nhs_number)
 
@@ -47,7 +51,8 @@ def test_orchestration_bad_path(logger: LogHelper):
     assert lambda_response.status_code == 400
 
     assert (
-        lambda_response.body["message"] == "/invalid is not a valid path - use /html or /structured"
+        lambda_response.body["message"]
+        == "/invalid is not a valid path - use /html or /structured"
     )
 
     assert logger.was_value_logged("LAMBDA002", "reason", "")
@@ -58,13 +63,18 @@ def test_orchestration_missing_user_id(logger: LogHelper):
     user_id = ""
     user_org_code = "ODS1234"
 
-    event = mock_orchestration_event(nhs_number, user_id=user_id, user_org_code=user_org_code)
+    event = mock_orchestration_event(
+        nhs_number, user_id=user_id, user_org_code=user_org_code
+    )
 
     lambda_response = parse_response(main(event, ""))
 
     assert lambda_response.status_code == 400
 
-    assert lambda_response.body["message"] == "User Id must be included in headers as x-user-id"
+    assert (
+        lambda_response.body["message"]
+        == "User Id must be included in headers as x-user-id"
+    )
 
     assert logger.was_value_logged(
         "LAMBDA002", "reason", "User Id must be included in headers as x-user-id"
@@ -76,7 +86,9 @@ def test_orchestration_missing_user_org_code(logger: LogHelper):
     user_id = "USER1234"
     user_org_code = ""
 
-    event = mock_orchestration_event(nhs_number, user_id=user_id, user_org_code=user_org_code)
+    event = mock_orchestration_event(
+        nhs_number, user_id=user_id, user_org_code=user_org_code
+    )
 
     lambda_response = parse_response(main(event, ""))
 
@@ -189,7 +201,8 @@ def test_orchestration_lambda_no_match_on_ssp(logger: LogHelper):
     lambda_response = parse_response(main(event, ""))
 
     assert (
-        lambda_response.body["message"] == "SSP failed to find patient with nhs_number=9999999999"
+        lambda_response.body["message"]
+        == "SSP failed to find patient with nhs_number=9999999999"
     )
 
     assert logger.was_value_logged("SSP004", "nhs_number", nhs_number)
@@ -204,7 +217,10 @@ def test_orchestration_lambda_error_on_ssp(logger: LogHelper):
 
     lambda_response = parse_response(main(event, ""))
 
-    assert lambda_response.body["message"] == "SSP request returned non-200 status_code=500"
+    assert (
+        lambda_response.body["message"]
+        == "SSP request returned non-200 status_code=500"
+    )
 
     assert logger.was_value_logged("SSP005", "status_code", 500)
 
@@ -224,6 +240,8 @@ def test_orchestration_exception_in_on_ssp(logger: LogHelper):
     ):
         lambda_response = parse_response(main(event, ""))
 
-    assert lambda_response.body["message"] == "Exception in SSP request with error=Boom!"
+    assert (
+        lambda_response.body["message"] == "Exception in SSP request with error=Boom!"
+    )
 
     assert logger.was_value_logged("SSP003", "error", "Boom!")

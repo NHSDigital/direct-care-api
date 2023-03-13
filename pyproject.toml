@@ -25,10 +25,13 @@ aws-sam-translator = "1.59.0"
 jsonschema = "4.17.3"
 nhs-number = "^1.2.1"
 pyjwt = "^2.6.0"
+behave = "^1.2.6"
+assertpy = "^1.1"
 pytest-cov = "^4.0.0"
 flake8 = "^6.0.0"
 cryptography = "*"
 dpath = "^2.1.4"
+behave-cucumber-formatter = "^1.0.1"
 
 [tool.pytest.ini_options]
 pythonpath = [

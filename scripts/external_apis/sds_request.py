@@ -13,6 +13,7 @@ https://digital.nhs.uk/developer/api-catalogue/spine-directory-service-fhir
 
 import sys
 from uuid import uuid4
+
 import requests
 
 
@@ -29,10 +30,7 @@ def device_fhir_lookup(ods_code):   # pylint: disable=redefined-outer-name
     """Send lookup request to SDS FHIR Device Endpoint"""
     x_request_id = str(uuid4())
     gp_code = f"https://fhir.nhs.uk/Id/ods-organization-code|{ods_code}"
-    device_params = {
-        "organization": gp_code,
-        "identifier": [SERVICE_INTERACTION_ID]
-    }
+    device_params = {"organization": gp_code, "identifier": [SERVICE_INTERACTION_ID]}
 
     headers = {
         "x-request-id": x_request_id,
@@ -41,10 +39,7 @@ def device_fhir_lookup(ods_code):   # pylint: disable=redefined-outer-name
     endpoint = SDS_FHIR_ENDPOINT
     device_url = f"{endpoint}/Device"
     response = requests.get(
-        url=device_url,
-        params=device_params,
-        headers=headers,
-        timeout=500
+        url=device_url, params=device_params, headers=headers, timeout=500
     )
     return response.status_code, response.json()
 
@@ -55,7 +50,9 @@ def extract_nhsMhsPartyKey(body):  # pylint: disable=redefined-outer-name, inval
     if len(entry_key) == 0:
         raise IndexError
 
-    party_key = body["entry"][0]["resource"]["identifier"][1]["value"]  # pylint: disable=redefined-outer-name
+    party_key = body["entry"][0]["resource"]["identifier"][1][
+        "value"
+    ]  # pylint: disable=redefined-outer-name
     return party_key
 
 def extract_asid(body):  # pylint: disable=redefined-outer-name, invalid-name # noqa: E302
@@ -71,9 +68,13 @@ def get_sds_endpoint_data(nhsMhsPartyKey):  # pylint: disable=redefined-outer-na
     """Retrieves the whole response from the /Endpoint endpoint"""
     x_request_id = str(uuid4())
 
-    service_interraction_party_key = f"https://fhir.nhs.uk/Id/nhsMhsPartyKey|{nhsMhsPartyKey}"
+    service_interraction_party_key = (
+        f"https://fhir.nhs.uk/Id/nhsMhsPartyKey|{nhsMhsPartyKey}"
+    )
 
-    endpoint_params = {"identifier": [SERVICE_INTERACTION_ID, service_interraction_party_key]}
+    endpoint_params = {
+        "identifier": [SERVICE_INTERACTION_ID, service_interraction_party_key]
+    }
     headers = {
         "x-request-id": x_request_id,
         "apikey": api_key(),
@@ -81,10 +82,7 @@ def get_sds_endpoint_data(nhsMhsPartyKey):  # pylint: disable=redefined-outer-na
     endpoint = SDS_FHIR_ENDPOINT
     endpoint_url = f"{endpoint}/Endpoint"
     response = requests.get(
-        url=endpoint_url,
-        params=endpoint_params,
-        headers=headers,
-        timeout=500
+        url=endpoint_url, params=endpoint_params, headers=headers, timeout=500
     )
     print(response.json())
     return response.status_code, response.json()
