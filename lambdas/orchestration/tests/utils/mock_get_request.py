@@ -2,8 +2,9 @@ import json
 import pathlib
 from http import HTTPStatus
 
-from ...app.lib.extract_url_code import extract_url_parts
 from ...app.lib.absolute_file_path import absolute_file_path
+from ...app.lib.extract_url_code import extract_url_parts
+from ...app.lib.get_dict_value import get_dict_value
 
 
 def get_mocked_fhir_response(nhs_number):
@@ -32,6 +33,34 @@ def get_mocked_fhir_response(nhs_number):
     return status_code, content
 
 
+def get_mocked_device_response(ods_code):
+    status_code = HTTPStatus.OK
+    content = {}
+
+    data_dir = absolute_file_path(__file__, "../data/sds_responses/")
+    mocked_response_file = pathlib.Path(data_dir) / f"device_ods_code_{ods_code}.json"
+
+    with open(mocked_response_file, "r", encoding="utf-8") as _file:
+        status_code = HTTPStatus.OK
+        content = json.loads(_file.read())
+
+    return status_code, content
+
+
+def get_mocked_endpoint_response(party_key):
+    status_code = HTTPStatus.OK
+    content = {}
+
+    data_dir = absolute_file_path(__file__, "../data/sds_responses/")
+    mocked_response_file = pathlib.Path(data_dir) / f"endpoint_party_key_{party_key}.json"
+
+    with open(mocked_response_file, "r", encoding="utf-8") as _file:
+        status_code = HTTPStatus.OK
+        content = json.loads(_file.read())
+
+    return status_code, content
+
+
 class MockGetRequest:
     """Process incoming get requests and send back the correct mocked response"""
 
@@ -55,8 +84,12 @@ class MockGetRequest:
             nhs_number = self.url.split("/")[-1]
             self.status_code, self.response = get_mocked_fhir_response(nhs_number)
 
-        elif "spine-directory" in self.url:
-            ods_code = extract_url_parts(self.url)
-            self.status_code, self.response = get_mocked_fhir_response(ods_code)
+        elif "Device" in self.url:
+            ods_code = get_dict_value(kwargs, "/params/organization").split("|")[-1]
+            self.status_code, self.response = get_mocked_device_response(ods_code)
+
+        elif "Endpoint" in self.url:
+            party_key = get_dict_value(kwargs, "/params/identifier/1").split("|")[-1]
+            self.status_code, self.response = get_mocked_endpoint_response(party_key)
 
         return self

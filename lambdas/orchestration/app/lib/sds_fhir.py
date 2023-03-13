@@ -28,7 +28,7 @@ def device_fhir_lookup(ods_code, write_log):  # pylint: disable=redefined-outer-
     }
     endpoint = SDS_FHIR_ENDPOINT
     device_url = f"{endpoint}/Device"
-    response = make_get_request(device_url, device_params, headers)
+    response = make_get_request(device_url, headers, device_params)
 
     # FHIR api returns 400 status code if it doesn't find a matching ODS_CODE
     if response.status_code == HTTPStatus.BAD_REQUEST:
@@ -50,9 +50,10 @@ def device_fhir_lookup(ods_code, write_log):  # pylint: disable=redefined-outer-
             None,
             f"SDS FHIR returned a non-200 status code with status_code={response.status_code}",
         )
-
-    nhsMhsPartyKey = get_dict_value(response.json(), "entry/0/resource/identifier/1/value")  # pylint: disable=invalid-name
-    asid = get_dict_value(response.json(), "entry/0/resource/identifier/0/value")
+    nhsMhsPartyKey = get_dict_value(
+        response.json(), "/entry/0/resource/identifier/1/value"
+    )  # pylint: disable=invalid-name
+    asid = get_dict_value(response.json(), "/entry/0/resource/identifier/0/value")
 
     # Account for the situation where a record has been retrieved
     # but it does not contain and ods code
@@ -72,7 +73,9 @@ def device_fhir_lookup(ods_code, write_log):  # pylint: disable=redefined-outer-
     return nhsMhsPartyKey, asid
 
 
-def get_sds_endpoint_data(nhsMhsPartyKey, write_log):  # pylint: disable=redefined-outer-name, invalid-name # noqa: E302
+def get_sds_endpoint_data(
+    nhsMhsPartyKey, write_log
+):  # pylint: disable=redefined-outer-name, invalid-name # noqa: E302
     """Retrieves the whole response from the /Endpoint endpoint"""
     x_request_id = str(uuid4())
 
@@ -85,11 +88,7 @@ def get_sds_endpoint_data(nhsMhsPartyKey, write_log):  # pylint: disable=redefin
     }
     endpoint = SDS_FHIR_ENDPOINT
     endpoint_url = f"{endpoint}/Endpoint"
-    response = make_get_request(
-        endpoint_url,
-        endpoint_params,
-        headers
-    )
+    response = make_get_request(endpoint_url, headers, endpoint_params)
 
     # FHIR api returns 400 status code if it doesn't find a matching party key
     if response.status_code == HTTPStatus.BAD_REQUEST:
@@ -112,7 +111,9 @@ def get_sds_endpoint_data(nhsMhsPartyKey, write_log):  # pylint: disable=redefin
             f"SDS FHIR returned a non-200 status code with status_code={response.status_code}",
         )
 
-    address = get_dict_value(response.json(), "entry/0/resource/address")  # pylint: disable=invalid-name
+    address = get_dict_value(
+        response.json(), "entry/0/resource/address"
+    )  # pylint: disable=invalid-name
 
     # Account for the situation where a record has been retrieved
     # but it does not contain address
@@ -128,5 +129,5 @@ def get_sds_endpoint_data(nhsMhsPartyKey, write_log):  # pylint: disable=redefin
 
 def sds_request(ods_code, write_log):
     party_key, asid = device_fhir_lookup(ods_code, write_log=write_log)
-    address = get_sds_endpoint_data(party_key, write_log=write_log)
-    return asid, address, "SDS Success"
+    address, message = get_sds_endpoint_data(party_key, write_log=write_log)
+    return asid, address, message

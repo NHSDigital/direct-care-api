@@ -1,0 +1,256 @@
+{
+  "resourceType": "Bundle",
+  "id": "6F00C53D-985A-4255-8589-9F6069B7CB9A",
+  "type": "searchset",
+  "total": 1,
+  "link": [
+    {
+      "relation": "self",
+      "url": "http://int.apis.ptl.api.platform.nhs.uk/Device?organization=https://fhir.nhs.uk/Id/ods-organization-code|B82617&identifier=https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1"
+    }
+  ],
+  "entry": [
+    {
+      "fullUrl": "http://int.apis.ptl.api.platform.nhs.uk/Device/8EA1FEFC-3B50-4FE4-98C4-D9B99584592A",
+      "resource": {
+        "resourceType": "Device",
+        "id": "8EA1FEFC-3B50-4FE4-98C4-D9B99584592A",
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/nhsSpineASID",
+            "value": "200000001329"
+          },
+          {
+            "system": "https://fhir.nhs.uk/Id/nhsMhsPartyKey",
+            "value": "B82617-822289"
+          }
+        ],
+        "extension": [
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-ManufacturingOrganisation",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                "value": "X26"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:cancel:appointment-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:create:appointment-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:read:appointment-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:search:patient_appointments-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:search:slot-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:update:appointment-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:read:metadata-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:documents:fhir:rest:read:binary-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:documents:fhir:rest:read:metadata-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:documents:fhir:rest:search:documentreference-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:documents:fhir:rest:search:patient-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:operation:gpc.registerpatient-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:read:location-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:read:organization-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:read:patient-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:read:practitioner-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:search:organization-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:search:patient-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:rest:search:practitioner-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:documents:fhir:rest:migrate:binary-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:operation:gpc.migratestructuredrecord-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1"
+              }
+            }
+          },
+          {
+            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-SDS-NhsServiceInteractionId",
+            "valueReference": {
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhsServiceInteractionId",
+                "value": "urn:nhs:names:services:gpconnect:structured:fhir:rest:read:metadata-1"
+              }
+            }
+          }
+        ],
+        "owner": {
+          "identifier": {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "B82617"
+          }
+        }
+      },
+      "search": { "mode": "match" }
+    }
+  ]
+}
