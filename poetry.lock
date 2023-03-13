@@ -4,7 +4,7 @@
 name = "assertpy"
 version = "1.1"
 description = "Simple assertion library for unit testing in python with a fluent API"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -78,7 +78,7 @@ saml = ["xmltodict"]
 name = "behave"
 version = "1.2.6"
 description = "behave is behaviour-driven development, Python style"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
@@ -99,7 +99,7 @@ docs = ["sphinx (>=1.6)", "sphinx-bootstrap-theme (>=0.6)"]
 name = "behave-cucumber-formatter"
 version = "1.0.1"
 description = "Cucumber JSON formatter for pipeline tests"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1158,7 +1158,7 @@ files = [
 name = "parse"
 version = "1.19.0"
 description = "parse() is the opposite of format()"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1169,7 +1169,7 @@ files = [
 name = "parse-type"
 version = "0.6.0"
 description = "Simplifies to build parse types based on the parse module"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*"
 files = [
@@ -1545,7 +1545,7 @@ crt = ["botocore[crt] (>=1.20.29,<2.0a.0)"]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
@@ -1748,4 +1748,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "29f43a2f92da9aa897e51e2943e997d1f2a6ee6acfc29aa5ed0852db4c2f7140"
+content-hash = "79edf6ceba49792b57f5e212fb5098fa0fabb81fdd9e71ebccb294b13756b861"

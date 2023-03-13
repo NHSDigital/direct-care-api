@@ -46,6 +46,9 @@ jobs:
       # - name: Terraform apply
       #   run: make tf-apply
 
+      - name: Install requirements
+        run: make install-requirements
+
       - name: Integration testing
         run: |
           export BASE_URL=$(cd terraform && terraform output api_gateway_url)
