@@ -1,0 +1,13 @@
+{
+  "resourceType": "Bundle",
+  "id": "6F00C53D-985A-4255-8589-9F6069B7CB9A",
+  "type": "searchset",
+  "total": 1,
+  "link": [
+    {
+      "relation": "self",
+      "url": "http://int.apis.ptl.api.platform.nhs.uk/Device?organization=https://fhir.nhs.uk/Id/ods-organization-code|B82617&identifier=https://fhir.nhs.uk/Id/nhsServiceInteractionId|urn:nhs:names:services:gpconnect:fhir:operation:gpc.getstructuredrecord-1"
+    }
+  ],
+  "entry": []
+}

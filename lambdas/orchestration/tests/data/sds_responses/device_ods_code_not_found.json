@@ -1,0 +1,20 @@
+{
+    "resourceType": "OperationOutcome",
+    "id": "4E6909E5-7692-4F3B-9C16-7B69358DB1DC",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "required",
+            "details": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/STU3/ValueSet/Spine-ErrorOrWarningCode-1",
+                        "code": "BAD_REQUEST",
+                        "display": "Bad request"
+                    }
+                ]
+            },
+            "diagnostics": "HTTP 400: Bad Request (Missing or invalid 'organization' query parameter. Should be 'organization=https://fhir.nhs.uk/Id/ods-organization-code|value')"
+        }
+    ]
+}
