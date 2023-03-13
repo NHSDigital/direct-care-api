@@ -88,5 +88,5 @@ resource "aws_api_gateway_integration_response" "mockapi_integration_response" {
 }
 
 output "api_gateway_url" {
-  value = replace(aws_api_gateway_stage.lambdas_stage.invoke_url, "wss://", "https://")
+  value = "${replace(aws_api_gateway_stage.lambdas_stage.invoke_url, "wss://", "https://")}/"
 }

@@ -47,4 +47,10 @@ jobs:
         run: make tf-apply
 
       - name: Output Terraform
-        run: cd terraform && export URL=$(terraform output api_gateway_url) && echo $URL && echo ::notice title=API Gateway endpoint::$URL
+        run: |
+          cd terraform && echo BASE_URL=$(terraform output api_gateway_url) >> $GITHUB_ENV
+          echo API gateway base url = $BASE_URL
+          echo ::notice title=API Gateway endpoint::$BASE_URL
+
+      - name: Integration testing
+        run: make integration-test
