@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
   pull_request:
-    # The branches below must be a subset of the branches above
     branches: [main]
 
 jobs:
@@ -18,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # This causes all history to be fetched, which is required for calculate-version to function
+          fetch-depth: 1
 
       - name: Install Python 3.9
         uses: actions/setup-python@v4

@@ -1,12 +1,17 @@
 # Terraform for AWS
 
-## Manual steps to create the necessary terraform resources
+## Pipelines
 
-This only needs to be done once but the process is here for reference
+All terraform commands are handled automatically by the various pipelines:
 
-`make create-terraform-state-resources-[env]`
+1. On PR open / update - terraform will create a new workspace with a separate state file that creates the resources from scratch for that PR (github actions)
+2. On PR close / merge - terraform uses the state file for that PR to destroy all associated resources (github actions)
+3. On merge to main - terraform updates the `dev` resources with any changes from the PR (github actions)
+4. On release - terraform updates the `int` resources with any changes from the release cut (codepipeline)
 
-## Assuming the nhs-direct-care-dev role locally
+## If you need to use terraform commands locally
+
+### Assume the nhs-direct-care-<env> role
 
 The best way to assume into a role is using the python package awsume (which is automatically installed by the `make install-requirements` command)
 
@@ -18,6 +23,12 @@ In `~/.aws/config`
 [profile nhs-direct-care-dev]
 source_profile = <your aws username>
 role_arn = arn:aws:iam::436014718090:role/NHSDAdminRole
+mfa_serial = arn:aws:iam::347250048819:mfa/<your aws username>
+output = json
+
+[profile nhs-direct-care-int]
+source_profile = <your aws username>
+role_arn = arn:aws:iam::503308544674:role/NHSDAdminRole
 mfa_serial = arn:aws:iam::347250048819:mfa/<your aws username>
 output = json
 ```
@@ -38,3 +49,17 @@ You should then be able to use command `awsume nhs-direct-care-dev` which will p
 Once submitted you will have access to the CLI for one hour until and then you will need to use the `awsume` command again.
 
 To test you've logged in successfully you can use `aws lambda list-functions` and it should return with a list of the lambdas currently on dev
+
+
+### Init the correct terraform workspace
+
+1. To work directly on the `dev` environment, awsume into the dev environment then use `make DANGER-tf-init env=dev`. As the name implies, this should not be done as standard practice
+
+2. To work directly on the `int` environment, awsume into the dev environment then use `make DANGER-tf-init env=int`. As the name implies, this should not be done as standard practice
+
+3. To work directly on a pull request environment, use `make switch-to-pr-<PR number>`
+
+
+### Use commands
+
+To see what changes you would be making use `make tf-plan` and to then apply those changes use `make tf-apply`

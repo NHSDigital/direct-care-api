@@ -1,0 +1,22 @@
+# Takes the terraform plan artifact generated from the codebuild-plan stage and applies it
+version: 0.2
+phases:
+
+  install:
+    commands:
+      - make prepare-terraform
+
+
+
+  build:
+    commands:
+      - echo ENV is $ENV
+
+      # Copy the zip artifacts into the correct location for terraform to identify
+      - mkdir build
+      - cp -r ${CODEBUILD_SRC_DIR_tfplan}/build/lambda_archives ./build/lambda_archives
+
+      # Apply changes
+      - make DANGER-tf-init env=$ENV
+      - make tf-apply-from-plan-output dir=${CODEBUILD_SRC_DIR_tfplan} version=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - cd ..

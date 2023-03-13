@@ -35,7 +35,6 @@ jobs:
         run: |
           make DANGER-tf-init env=dev
           make package-lambdas env=dev
-          make import-bucket-dev
 
       - name: IF ON PR BRANCH - Switch to PR workspace
         if: github.ref != 'refs/heads/main'

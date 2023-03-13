@@ -1,0 +1,16 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - make install-requirements
+
+  build:
+    commands:
+      - echo API gateway url = $BASE_URL
+      - make integration-test
+
+reports:
+  cucumber-reports:
+    files:
+      - "reports/cucumber_json.json"
+    file-format: "CUCUMBERJSON"
