@@ -2,13 +2,14 @@
 
 import json
 from http import HTTPStatus
-from typing import Dict
+from typing import Dict, Optional
 from uuid import uuid4
 
-from nhs_number import is_valid  # type: ignore
+from nhs_number import is_valid
 
 from .lib.get_dict_value import get_dict_value
 from .lib.pds_fhir import lookup_nhs_number
+from .lib.sds_fhir import sds_request
 from .lib.ssp_request import ssp_request
 from .lib.write_log import write_log
 
@@ -59,7 +60,7 @@ class LambdaHandler:
     transaction_id = None
     user_id = None
     user_org_code = None
-    audit_dict: Dict[str, str] = {}
+    audit_dict: Dict[str, Optional[str]] = {}
 
     def set_audit_info(self, event):
         # Set a new transaction ID for each request that comes into that lambda
@@ -74,9 +75,7 @@ class LambdaHandler:
         }
 
         if not self.user_id:
-            raise MissingAuditInfoException(
-                "User Id must be included in headers as x-user-id"
-            )
+            raise MissingAuditInfoException("User Id must be included in headers as x-user-id")
 
         if not self.user_org_code:
             raise MissingAuditInfoException(
@@ -147,15 +146,24 @@ class LambdaHandler:
                 HTTPStatus.BAD_REQUEST, {"record": None, "message": error}
             )
 
-        org_fhir_endpoint, asid = (
-            # pylint: disable=line-too-long
-            "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
-            "918999198738",
-        )
+        ######################################################
+        # SDS endpoint call replaces these hardcoded variables
+        ######################################################
 
-        record, message = ssp_request(
-            org_fhir_endpoint, asid, nhs_number, self.write_log
-        )
+        org_fhir_endpoint, asid, message = sds_request(
+            ods_code, self.write_log
+        )  # org_fhir_endpoint is the address
+        # pylint: disable=line-too-long
+        # "https://messagingportal.opentest.hscic.gov.uk:19192/B82617/STU3/1/gpconnect/structured/fhir/",
+        # "918999198738",
+
+        if not org_fhir_endpoint:
+            # Logging is done for this in the sds function
+            return self.wrap_lambda_return(
+                HTTPStatus.BAD_REQUEST, {"record": None, "message": message}
+            )
+
+        record, message = ssp_request(asid, org_fhir_endpoint, nhs_number, self.write_log)
 
         if not record:
             # Logging is done for this in the pds function
