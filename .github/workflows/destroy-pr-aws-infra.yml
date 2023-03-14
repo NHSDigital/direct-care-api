@@ -24,6 +24,10 @@ jobs:
           role-to-assume: arn:aws:iam::436014718090:role/github-role
           role-session-name: github-actions
 
+      - name: Prepare terraform
+        run: make prepare-terraform
+
+
       - name: Destroy PR resources
         run: |
           export PULL_REQUEST_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
