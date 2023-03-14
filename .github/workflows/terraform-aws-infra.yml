@@ -32,6 +32,9 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Prepare terraform
+        run: make prepare-terraform
+
       - name: IF ON MAIN - Switch to dev workspace and package lambdas
         if: github.ref == 'refs/heads/main'
         run: |

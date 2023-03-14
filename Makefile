@@ -29,7 +29,8 @@ pytest-ci:
 	--cov-report html --cov-report term --cov=lambdas/orchestration
 
 prepare-terraform:
-	unzip ./terraform/terraform-1.2.3 -d terraform
+	unzip terraform/terraform-1.2.3 -d terraform
+	sudo mv terraform/terraform /usr/local/bin
 
 create-terraform-state-resources-%:
 	aws s3api create-bucket --bucket $(project_name)-$*-tf-bucket --create-bucket-configuration LocationConstraint=eu-west-2
@@ -50,13 +51,16 @@ create-terraform-state-resources-%:
 DANGER-tf-init:
 	mkdir -p $$HOME/.terraform.d/plugin-cache
 
-	cd terraform && ./terraform init \
+	cd terraform && terraform init \
 		-backend-config="key=$(project_name)-${env}.tfstate" \
 		-backend-config="bucket=$(project_name)-${env}-tf-bucket" \
 		-backend-config="dynamodb_table=$(project_name)-${env}-lock-table" \
 		-reconfigure
 
-	cd terraform && ./terraform workspace new ${env} || ./terraform workspace select ${env} && echo "${env} workspace selected"
+	cd terraform && terraform workspace new ${env} || terraform workspace select ${env} && echo "${env} workspace selected"
+
+	$(MAKE) import-bucket-${env}
+
 
 switch-to-pr-%:
 	if [ -z $* ]; then echo MUST SET PR NUMBER e.g. switch-to-pr-102 && exit 1; fi
@@ -102,7 +106,7 @@ zip-codebase-%:
 	awk '{ print "\""$$0"\""}' ./.gitignore | xargs zip -r $*-codebase-bundle.zip . -x
 
 tf-plan-with-output:
-	cd terraform && ./terraform plan -out=tf_plan_commit_${version} -var "project-name=$(project_name)"
+	cd terraform && terraform plan -out=tf_plan_commit_${version} -var "project-name=$(project_name)"
 
 tf-apply-from-plan-output:
-	cd terraform && ./terraform apply ${dir}/terraform/tf_plan_commit_${version}
+	cd terraform && terraform apply ${dir}/terraform/tf_plan_commit_${version}
