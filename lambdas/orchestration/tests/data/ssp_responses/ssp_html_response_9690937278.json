@@ -1,0 +1,190 @@
+{
+  "resourceType": "Bundle",
+  "type": "searchset",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Composition",
+        "meta": {
+          "profile": [
+            "http://fhir.nhs.net/StructureDefinition/gpconnect-carerecord-composition-1"
+          ]
+        },
+        "date": "2023-03-14T10:48:17+00:00",
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "425173008",
+              "display": "record extract (record artifact)"
+            }
+          ],
+          "text": "record extract (record artifact)"
+        },
+        "class": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "700232004",
+              "display": "general medical service (qualifier value)"
+            }
+          ],
+          "text": "general medical service (qualifier value)"
+        },
+        "title": "Patient Care Record",
+        "status": "final",
+        "subject": { "reference": "Patient/2" },
+        "author": [{ "reference": "Practitioner/1" }],
+        "section": [
+          {
+            "title": "Allergies and Adverse Reactions",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://fhir.nhs.net/ValueSet/gpconnect-record-section-1",
+                  "code": "ALL",
+                  "display": "Allergies and Adverse Reactions"
+                }
+              ],
+              "text": "Allergies and Adverse Reactions"
+            },
+            "text": {
+              "status": "generated",
+              "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h1>Allergies and Adverse Reactions</h1><div><h2>Current Allergies and Adverse Reactions</h2><table id=\"all-tab-curr\"><thead><tr><th>Start Date</th><th>Details</th></tr></thead><tbody><tr><td class=\"date-column\">15-Mar-2016</td><td>Allergy to Penicillin, Patient experienced rash, nausea and vomiting</td></tr></tbody></table></div><div><h2>Historical Allergies and Adverse Reactions</h2><table id=\"all-tab-hist\"><thead><tr><th>Start Date</th><th>End Date</th><th>Details</th></tr></thead><tbody><tr><td class=\"date-column\">02-Jun-1963</td><td></td><td>Hayfever, allergy to pollen</td></tr></tbody></table></div></div>"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Practitioner/1",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "1",
+        "meta": {
+          "versionId": "1469444400000",
+          "lastUpdated": "2016-07-25T12:00:00.000+01:00",
+          "profile": [
+            "http://fhir.nhs.net/StructureDefinition/gpconnect-practitioner-1"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "http://fhir.nhs.net/Id/sds-user-id",
+            "value": "G13579135"
+          },
+          {
+            "system": "http://fhir.nhs.net/Id/sds-role-profile-id",
+            "value": "PT1234"
+          }
+        ],
+        "name": {
+          "use": "usual",
+          "family": ["Gilbert"],
+          "given": ["Nichole"],
+          "prefix": ["Miss"]
+        },
+        "gender": "female",
+        "practitionerRole": [
+          {
+            "managingOrganization": { "reference": "Organization/8" },
+            "role": {
+              "coding": [
+                {
+                  "system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1",
+                  "code": "R0050",
+                  "display": "Consultant"
+                }
+              ]
+            }
+          }
+        ],
+        "communication": [
+          {
+            "coding": [
+              {
+                "system": "http://fhir.nhs.net/ValueSet/human-language-1",
+                "code": "en",
+                "display": "English"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Organization/8",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "8",
+        "meta": {
+          "versionId": "1548849600000",
+          "lastUpdated": "2019-01-30T12:00:00.000+00:00",
+          "profile": [
+            "http://fhir.nhs.net/StructureDefinition/gpconnect-organization-1"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "http://fhir.nhs.net/Id/ods-organization-code",
+            "value": "A20047"
+          }
+        ],
+        "name": "Dr Legg's Surgery",
+        "telecom": [{ "system": "phone", "value": "12345678", "use": "work" }],
+        "address": [
+          {
+            "use": "work",
+            "line": ["NHS NPFIT", "Test Data Manager", "Princes Exchange"],
+            "city": "Leeds",
+            "postalCode": "LS1 4HY"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Patient/2",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "2",
+        "meta": {
+          "versionId": "1521806400000",
+          "lastUpdated": "2018-03-23T12:00:00.000+00:00",
+          "profile": [
+            "http://fhir.nhs.net/StructureDefinition/gpconnect-patient-1"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "http://fhir.nhs.net/Id/nhs-number",
+            "value": "9658218873"
+          }
+        ],
+        "name": [
+          {
+            "use": "usual",
+            "text": "Mike MEAKIN",
+            "family": ["MEAKIN"],
+            "given": ["Mike"],
+            "prefix": ["MR"]
+          }
+        ],
+        "telecom": [
+          { "system": "phone", "value": "01454587554", "use": "home" }
+        ],
+        "gender": "male",
+        "birthDate": "1927-06-19",
+        "address": [
+          {
+            "use": "home",
+            "type": "physical",
+            "text": "1 KNIGHTS COURT, DN16 3PL"
+          }
+        ],
+        "careProvider": [
+          { "reference": "Practitioner/1", "display": "Miss Nichole Gilbert" }
+        ]
+      }
+    }
+  ]
+}
