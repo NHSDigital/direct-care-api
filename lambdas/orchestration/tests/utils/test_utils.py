@@ -20,9 +20,7 @@ def parse_response(lambda_response):
     return LambdaResponse()
 
 
-def mock_orchestration_event(
-    nhs_number, path="structured", user_org_code=None, user_id=None
-):
+def mock_orchestration_event(nhs_number, path="structured", user_org_code=None, user_id=None):
     return {
         "path": f"/{path}",
         "body": None,

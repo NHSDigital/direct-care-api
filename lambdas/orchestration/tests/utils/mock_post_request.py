@@ -8,12 +8,12 @@ from ...app.lib.absolute_file_path import absolute_file_path
 from ...app.lib.get_dict_value import get_dict_value
 
 
-def get_mocked_ssp_response(nhs_number):
+def get_mocked_ssp_response(nhs_number, path):
     status_code = HTTPStatus.OK
     content = {}
 
     data_dir = absolute_file_path(__file__, "../data/ssp_responses/")
-    mocked_response_file = pathlib.Path(data_dir) / f"ssp_response_{nhs_number}.json"
+    mocked_response_file = pathlib.Path(data_dir) / f"ssp_{path}_response_{nhs_number}.json"
 
     if nhs_number == "1111111111":
         status_code = HTTPStatus.INTERNAL_SERVER_ERROR
@@ -54,10 +54,9 @@ class MockPostRequest:
         self.status_code = 200
         self.response = {"error": f"mocked response not found for url={self.url}"}
 
-        if "gpconnect/structured" in self.url:
-            nhs_number = get_dict_value(
-                json.loads(self.body), "/parameter/0/valueIdentifier/value"
-            )
-            self.status_code, self.response = get_mocked_ssp_response(nhs_number)
+        if "gpconnect" in self.url:
+            path = "structured" if "structured" in self.url else "html"
+            nhs_number = get_dict_value(json.loads(self.body), "/parameter/0/valueIdentifier/value")
+            self.status_code, self.response = get_mocked_ssp_response(nhs_number, path)
 
         return self

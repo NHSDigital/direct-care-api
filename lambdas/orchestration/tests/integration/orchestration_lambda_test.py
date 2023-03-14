@@ -1,6 +1,7 @@
 from unittest.mock import Mock, patch
 from uuid import uuid4
 
+from ...app.lib.get_dict_value import get_dict_value
 from ...app.orchestration_handler import main
 from ..utils.log_helper import LogHelper
 from ..utils.mock_post_request import MockPostRequest
@@ -13,9 +14,7 @@ def test_orchestration_lambda_success(logger: LogHelper):
     user_org_code = "ODS1234"
     transaction_id = str(uuid4())
 
-    event = mock_orchestration_event(
-        nhs_number, user_id=user_id, user_org_code=user_org_code
-    )
+    event = mock_orchestration_event(nhs_number, user_id=user_id, user_org_code=user_org_code)
 
     # Patch UUID4 so that we can insert our own uuid
     with patch("lambdas.orchestration.app.orchestration_handler.uuid4") as mock_uuid:
@@ -25,9 +24,7 @@ def test_orchestration_lambda_success(logger: LogHelper):
     assert lambda_response.status_code == 200
 
     # Check the record ID returned matches what we expected from the mock SSP return
-    assert (
-        lambda_response.body["record"]["id"] == "71f48f67-8055-4cbc-9a30-ecba6915a0d2"
-    )
+    assert lambda_response.body["record"]["id"] == "71f48f67-8055-4cbc-9a30-ecba6915a0d2"
 
     assert logger.was_value_logged("PDS001", "nhs_number", nhs_number)
 
@@ -51,8 +48,7 @@ def test_orchestration_bad_path(logger: LogHelper):
     assert lambda_response.status_code == 400
 
     assert (
-        lambda_response.body["message"]
-        == "/invalid is not a valid path - use /html or /structured"
+        lambda_response.body["message"] == "/invalid is not a valid path - use /html or /structured"
     )
 
     assert logger.was_value_logged("LAMBDA002", "reason", "")
@@ -63,18 +59,13 @@ def test_orchestration_missing_user_id(logger: LogHelper):
     user_id = ""
     user_org_code = "ODS1234"
 
-    event = mock_orchestration_event(
-        nhs_number, user_id=user_id, user_org_code=user_org_code
-    )
+    event = mock_orchestration_event(nhs_number, user_id=user_id, user_org_code=user_org_code)
 
     lambda_response = parse_response(main(event, ""))
 
     assert lambda_response.status_code == 400
 
-    assert (
-        lambda_response.body["message"]
-        == "User Id must be included in headers as x-user-id"
-    )
+    assert lambda_response.body["message"] == "User Id must be included in headers as x-user-id"
 
     assert logger.was_value_logged(
         "LAMBDA002", "reason", "User Id must be included in headers as x-user-id"
@@ -86,9 +77,7 @@ def test_orchestration_missing_user_org_code(logger: LogHelper):
     user_id = "USER1234"
     user_org_code = ""
 
-    event = mock_orchestration_event(
-        nhs_number, user_id=user_id, user_org_code=user_org_code
-    )
+    event = mock_orchestration_event(nhs_number, user_id=user_id, user_org_code=user_org_code)
 
     lambda_response = parse_response(main(event, ""))
 
@@ -201,14 +190,13 @@ def test_orchestration_lambda_no_match_on_ssp(logger: LogHelper):
     lambda_response = parse_response(main(event, ""))
 
     assert (
-        lambda_response.body["message"]
-        == "SSP failed to find patient with nhs_number=9999999999"
+        lambda_response.body["message"] == "SSP failed to find patient with nhs_number=9999999999"
     )
 
     assert logger.was_value_logged("SSP004", "nhs_number", nhs_number)
 
 
-def test_orchestration_lambda_error_on_ssp(logger: LogHelper):
+def test_orchestration_lambda_error_on_ssp_structured(logger: LogHelper):
     """Test case for when PDS finds a match but SSP returns other non-200 status"""
 
     nhs_number = "1111111111"
@@ -217,15 +205,12 @@ def test_orchestration_lambda_error_on_ssp(logger: LogHelper):
 
     lambda_response = parse_response(main(event, ""))
 
-    assert (
-        lambda_response.body["message"]
-        == "SSP request returned non-200 status_code=500"
-    )
+    assert lambda_response.body["message"] == "SSP request returned non-200 status_code=500"
 
     assert logger.was_value_logged("SSP005", "status_code", 500)
 
 
-def test_orchestration_exception_in_on_ssp(logger: LogHelper):
+def test_orchestration_exception_in_on_ssp_structured(logger: LogHelper):
     nhs_number = "1111111111"
 
     event = mock_orchestration_event(nhs_number)
@@ -240,8 +225,72 @@ def test_orchestration_exception_in_on_ssp(logger: LogHelper):
     ):
         lambda_response = parse_response(main(event, ""))
 
+    assert lambda_response.body["message"] == "Exception in SSP request with error=Boom!"
+
+    assert logger.was_value_logged("SSP003", "error", "Boom!")
+
+
+def test_orchestration_ssp_html_request(logger: LogHelper):
+    nhs_number = "9690937278"
+
+    event = mock_orchestration_event(nhs_number, path="html")
+
+    lambda_response = parse_response(main(event, ""))
+
+    assert lambda_response.status_code == 200
+
+    # Check the record ID returned matches what we expected from the mock SSP return
+    div = get_dict_value(lambda_response.body, "record/entry/0/resource/section/0/text/div")
+    assert "<td>Hayfever, allergy to pollen</td>" in div  # type: ignore
+
+    assert logger.was_value_logged("LAMBDA001", "transactionId", "")
+
+
+def test_orchestration_lambda_no_match_on_ssp_html(logger: LogHelper):
+    """Test case for when PDS finds a match but SSP fails to find the provided nhs number"""
+
+    nhs_number = "9999999999"
+
+    event = mock_orchestration_event(nhs_number, path="html")
+
+    lambda_response = parse_response(main(event, ""))
+
     assert (
-        lambda_response.body["message"] == "Exception in SSP request with error=Boom!"
+        lambda_response.body["message"] == "SSP failed to find patient with nhs_number=9999999999"
     )
+
+    assert logger.was_value_logged("SSP004", "nhs_number", nhs_number)
+
+
+def test_orchestration_lambda_error_on_ssp_html(logger: LogHelper):
+    """Test case for when PDS finds a match but SSP returns other non-200 status"""
+
+    nhs_number = "1111111111"
+
+    event = mock_orchestration_event(nhs_number, path="html")
+
+    lambda_response = parse_response(main(event, ""))
+
+    assert lambda_response.body["message"] == "SSP request returned non-200 status_code=500"
+
+    assert logger.was_value_logged("SSP005", "status_code", 500)
+
+
+def test_orchestration_exception_in_on_ssp_html(logger: LogHelper):
+    nhs_number = "1111111111"
+
+    event = mock_orchestration_event(nhs_number, path="html")
+
+    # Re-patch the make request function so that it throws an error
+    # The first side effect needs to remain as MockPostRequest as the first time requests.post is
+    # called is on the oauth endpoint for the PDS request
+    # Patch the second time it's called to throw the exception by passing a list to side_effect
+    with patch(
+        "lambdas.orchestration.app.lib.make_request.requests.post",
+        Mock(side_effect=[MockPostRequest(), Exception("Boom!")]),
+    ):
+        lambda_response = parse_response(main(event, ""))
+
+    assert lambda_response.body["message"] == "Exception in SSP request with error=Boom!"
 
     assert logger.was_value_logged("SSP003", "error", "Boom!")
