@@ -29,7 +29,7 @@ pytest-ci:
 	--cov-report html --cov-report term --cov=lambdas/orchestration
 
 prepare-terraform:
-	unzip ./terraform/terraform-1.2.3 -d terraform
+	unzip ./terraform/terraform-1.2.3 -d ./terraform/terraform
 
 create-terraform-state-resources-%:
 	aws s3api create-bucket --bucket $(project_name)-$*-tf-bucket --create-bucket-configuration LocationConstraint=eu-west-2
