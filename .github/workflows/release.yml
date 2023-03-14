@@ -1,0 +1,33 @@
+name: Release process
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+jobs:
+  build:
+    name: release-process
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - name: Update repo
+        run: sudo apt update
+
+      - name: Add release version to release.txt
+        run: echo $GITHUB_REF | sed 's/.*\///' > release.txt
+
+      - name: Zip up code
+        run: make zip-codebase-int
+
+      - name: Copy bundle to int codepipeline source bucket
+        run: aws s3 cp int-codebase-bundle.zip s3://direct-care-api-int-utility-bucket/codepipeline-int/source/int-codebase-bundle.zip

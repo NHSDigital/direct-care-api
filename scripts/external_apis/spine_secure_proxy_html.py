@@ -146,7 +146,7 @@ def make_request(org_fhir_url, org_asid, patient_nhs_number, integration_env=Fal
         data=body,
         timeout=300,
     )
-
+    print(response.json())
     print(dpath.get(response.json(), "/entry/0/resource/section/0/text/div"))
 
 

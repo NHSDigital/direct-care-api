@@ -11,7 +11,11 @@
     ".pytest_cache": true,
     ".venv": true,
     ".coverage": true,
-    "requirements.txt": true
+    "requirements.txt": true,
+    "terraform.tfstate.d": true,
+    ".terraform/": true,
+    "terraform/.terraform": true,
+    ".d/": true
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
@@ -39,7 +43,7 @@
   "python.linting.pylintEnabled": true,
   "python.linting.pylintArgs": ["--rcfile=tox.ini"],
   "python.testing.pytestArgs": [
-    "lambdas", "--capture=no"
+    "lambdas/orchestration", "--capture=no"
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
