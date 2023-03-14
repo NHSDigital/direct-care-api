@@ -21,3 +21,4 @@ terraform/terraform
 terraform/.terraform/*
 results/*
 .d/*
+poetry.lock
